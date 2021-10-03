@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/login/login_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
@@ -9,8 +10,10 @@ import 'package:flutter_frontend/widgets/login/build_wide_social.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class LoginScreen extends StatelessWidget {
+  final LoginController loginController = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +140,10 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         height: ScreenUtil().setHeight(20.0),
                       ),
-                      size.height <= 960 ? BuildNarrowSocial() : BuildWideSocial(),
+                      if (size.height <= 960)
+                        BuildNarrowSocial(),
+                      if (size.height > 960)
+                        BuildWideSocial(),
                       SizedBox(
                         height: ScreenUtil().setHeight(25),
                       ),
@@ -154,7 +160,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: loginController.navigateToSignUpScreen,
                             child: Text(
                               "REGISTER",
                               style: TextStyle(
