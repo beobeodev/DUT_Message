@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/config/constants/font_family.dart';
+import 'package:flutter_frontend/config/constants/image_path.dart';
+import 'package:flutter_frontend/config/theme/palette.dart';
 import 'package:flutter_frontend/controller/login/login_controller.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/constants/image_path.dart';
-import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/core/widgets/custom_text_form_field.dart';
 import 'package:flutter_frontend/widgets/login/build_narrow_social.dart';
 import 'package:flutter_frontend/widgets/login/build_wide_social.dart';
+import 'package:flutter_frontend/widgets/widgets/custom_text_form_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -64,6 +64,7 @@ class LoginScreen extends StatelessWidget {
                         height: ScreenUtil().setHeight(25),
                       ),
                       CustomTextFormField(
+                        textEditingController: loginController.usernameEditingController,
                         width: double.infinity,
                         // height: ScreenUtil().setHeight(85.0),
                         hintText: "Username or phone number",
@@ -74,6 +75,7 @@ class LoginScreen extends StatelessWidget {
                         borderColor: Palette.celticBlue,
                       ),
                       CustomTextFormField(
+                        textEditingController: loginController.passwordEditingController,
                         width: double.infinity,
                         height: ScreenUtil().setHeight(85.0),
                         hintText: "Password",
@@ -90,22 +92,25 @@ class LoginScreen extends StatelessWidget {
                       SizedBox(
                         height: ScreenUtil().setHeight(5),
                       ),
-                      DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Palette.sweetRed,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        child: SizedBox(
-                          width: double.infinity,
-                          height: ScreenUtil().setHeight(55),
-                          child: Center(
-                            child: Text(
-                              "Log in",
-                              style: TextStyle(
-                                fontFamily: FontFamily.fontPoppins,
-                                color: Colors.white,
-                                fontWeight: FontWeight.w700,
-                                fontSize: ScreenUtil().setSp(22),
+                      GestureDetector(
+                        onTap: loginController.onTapLoginButton,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            color: Palette.sweetRed,
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: ScreenUtil().setHeight(55),
+                            child: Center(
+                              child: Text(
+                                "Log in",
+                                style: TextStyle(
+                                  fontFamily: FontFamily.fontPoppins,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: ScreenUtil().setSp(22),
+                                ),
                               ),
                             ),
                           ),

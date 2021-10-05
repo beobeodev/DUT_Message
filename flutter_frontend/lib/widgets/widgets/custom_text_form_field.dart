@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
+import 'package:flutter_frontend/config/constants/font_family.dart';
 
 class CustomTextFormField extends StatelessWidget {
   const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget});
