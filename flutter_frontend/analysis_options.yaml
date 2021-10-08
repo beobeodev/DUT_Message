@@ -14,3 +14,5 @@ linter:
     prefer_const_constructors: false
     avoid_classes_with_only_static_members: false
     avoid_bool_literals_in_conditional_expressions: false
+    eol_at_end_of_file: false
+    avoid_print: false

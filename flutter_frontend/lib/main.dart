@@ -18,7 +18,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'DUT Message',
         getPages: GetRouter.pages,
-        initialRoute: GetRouter.login,
+        initialRoute: GetRouter.splash,
       ),
     );
   }

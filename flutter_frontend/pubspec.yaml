@@ -37,10 +37,10 @@ dependencies:
   font_awesome_flutter: ^9.1.0
   http: ^0.13.3
 
-
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_native_splash: ^1.2.4
   lint: ^1.7.2
 
 # For information on the generic Dart part of this file, see the
@@ -58,6 +58,7 @@ flutter:
    - assets/images/
    - assets/images/decorate_images/
    - assets/images/icons/
+   - assets/images/logos/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
@@ -77,6 +78,13 @@ flutter:
         - asset: assets/fonts/poppins/Poppins-Regular.ttf
           weight: 400
         - asset: assets/fonts/poppins/Poppins-Bold.ttf
+          weight: 700
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/nunito/Nunito-Light.ttf
+        - asset: assets/fonts/nunito/Nunito-Regular.ttf
+          weight: 400
+        - asset: assets/fonts/nunito/Nunito-Bold.ttf
           weight: 700
   #   - family: Trajan Pro
   #     fonts:
