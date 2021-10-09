@@ -16,3 +16,5 @@ linter:
     avoid_bool_literals_in_conditional_expressions: false
     eol_at_end_of_file: false
     avoid_print: false
+    directives_ordering: false
+    sort_pub_dependencies: false

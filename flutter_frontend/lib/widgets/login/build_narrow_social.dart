@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/config/constants/font_family.dart';
-import 'package:flutter_frontend/config/constants/image_path.dart';
-import 'package:flutter_frontend/config/theme/palette.dart';
+import 'package:flutter_frontend/core/constants/font_family.dart';
+import 'package:flutter_frontend/core/constants/image_path.dart';
+import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';

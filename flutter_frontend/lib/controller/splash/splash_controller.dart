@@ -1,4 +1,4 @@
-import 'package:flutter_frontend/config/router/router.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:get/get.dart';
 
 class SplashController extends GetxController {

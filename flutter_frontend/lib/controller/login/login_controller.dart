@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/config/router/router.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/repositories/login_repository.dart';
 import 'package:get/get.dart';
 
