@@ -18,3 +18,4 @@ linter:
     avoid_print: false
     directives_ordering: false
     sort_pub_dependencies: false
+    use_setters_to_change_properties: false
