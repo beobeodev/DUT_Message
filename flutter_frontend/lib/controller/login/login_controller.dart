@@ -15,4 +15,15 @@ class LoginController extends GetxController {
   void onTapLoginButton() {
     loginRepository.login(usernameEditingController.text, passwordEditingController.text);
   }
+
+  //This function to hide keyboard and unfocus textfield
+  void onUnFocus() {
+    FocusScope.of(Get.context).requestFocus(FocusNode());
+  }
+
+  @override
+  void onClose() {
+    super.onClose();
+    print('Close cc');
+  }
 }
