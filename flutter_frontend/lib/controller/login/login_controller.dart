@@ -13,7 +13,8 @@ class LoginController extends GetxController {
   }
 
   void onTapLoginButton() {
-    loginRepository.login(usernameEditingController.text, passwordEditingController.text);
+    // loginRepository.login(usernameEditingController.text, passwordEditingController.text);
+    Get.offAndToNamed<dynamic>(GetRouter.home);
   }
 
   //This function to hide keyboard and unfocus textfield
@@ -21,9 +22,10 @@ class LoginController extends GetxController {
     FocusScope.of(Get.context).requestFocus(FocusNode());
   }
 
+
+
   @override
   void onClose() {
     super.onClose();
-    print('Close cc');
   }
 }
