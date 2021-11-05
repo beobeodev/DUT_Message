@@ -10,6 +10,6 @@ class SplashController extends GetxController {
 
   Future<void> completeAnimation() async {
     await Future<void>.delayed(Duration(milliseconds: 1600));
-    Get.offAndToNamed<dynamic>(GetRouter.login);
+    Get.offAndToNamed<dynamic>(GetRouter.onboard);
   }
 }

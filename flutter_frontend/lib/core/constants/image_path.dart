@@ -5,6 +5,9 @@ class ImagePath {
   static const appLogo = "assets/images/logos/app_logo.svg";
   static const dutLogo = "assets/images/logos/dut_logo.png";
   static const addUser = "assets/images/lotties/add_user.json";
+
+  // path for file json
   static const chatLottie = "assets/images/lotties/chat.json";
-  static const transitionLottie = "assets/images/lotties/transition.json";
+  static const addUserLottie = 'assets/images/lotties/add_user.json';
+  static const transitionLottie = 'assets/images/lotties/transition.json';
 }

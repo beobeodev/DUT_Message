@@ -15,17 +15,16 @@ class SignUpScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: Palette.aliceBlue,
-            ),
-            child: SizedBox(
-              width: size.width,
-              height: size.height,
+      body: GestureDetector(
+        onTap: signUpController.onUnFocus,
+        child: SafeArea(
+          child: SingleChildScrollView(
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: Palette.aliceBlue,
+              ),
               child: Padding(
                 padding: EdgeInsets.only(
                   top: ScreenUtil().setHeight(30),

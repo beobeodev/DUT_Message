@@ -66,7 +66,7 @@ class BuildNarrowSocial extends StatelessWidget {
                     color: Colors.white,
                     fontFamily: FontFamily.fontPoppins,
                     fontWeight: FontWeight.w700,
-                    fontSize: ScreenUtil().setSp(13),
+                    fontSize: ScreenUtil().setSp(12),
                   ),
                 )
               ],
