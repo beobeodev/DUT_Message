@@ -88,7 +88,7 @@ class OnboardScreen extends StatelessWidget {
                           child: DecoratedBox(
                             decoration: BoxDecoration(
                               color: Palette.americanSilver,
-                              borderRadius: BorderRadius.circular(30),
+                              borderRadius: BorderRadius.circular(50),
                             ),
                             child: SizedBox(
                               width: ScreenUtil().setWidth(50),
@@ -107,7 +107,7 @@ class OnboardScreen extends StatelessWidget {
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: Palette.orangeRed,
-                            borderRadius: BorderRadius.circular(30),
+                            borderRadius: BorderRadius.circular(50),
                           ),
                           child: SizedBox(
                             width: ScreenUtil().setWidth(50),
