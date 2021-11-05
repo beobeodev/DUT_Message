@@ -93,6 +93,6 @@ class AppBarChat extends StatelessWidget {
           ),
         ),
       ),
-    );
+    ) ;
   }
 }
