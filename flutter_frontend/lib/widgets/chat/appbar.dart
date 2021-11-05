@@ -28,7 +28,8 @@ AppBar buildAppBarChat() {
                 fontSize: ScreenUtil().setSp(18),
                 color: Palette.zodiacBlue,
               ),
-            )
+            ),
+
           ],
         )
       ],

@@ -95,13 +95,13 @@ class ListMessage extends StatelessWidget {
                                 ),
                               )
                             ],
-                          )
+                          ),
                         ),
                       ),
                     ),
                   ),
                 );
-              }
+              },
           ),
         ),
       ),
