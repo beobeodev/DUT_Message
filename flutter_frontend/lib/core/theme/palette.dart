@@ -14,6 +14,6 @@ class Palette {
   static const Color orangeRed = Color(0xFFFF4A4A);
 
   static const Color americanSilver = Color(0xFFCDD0D4);
-  // static const Color lavenderSilver = Color(0xFFFDEFEF);
+  static const Color lavenderSilver = Color(0xFFFDEFEF);
 
 }
