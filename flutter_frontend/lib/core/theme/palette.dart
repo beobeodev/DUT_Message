@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 class Palette {
+  static const Color blue = Color(0xFF0040FF);
   static const Color aliceBlue = Color(0xFFF4F8FD);
   static const Color darkAliceBlue = Color(0xFFECF2FF);
   static const Color zodiacBlue = Color(0xFF0F2D52);
@@ -15,5 +16,4 @@ class Palette {
 
   static const Color americanSilver = Color(0xFFCDD0D4);
   static const Color lavenderSilver = Color(0xFFFDEFEF);
-
 }

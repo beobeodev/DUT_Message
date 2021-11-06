@@ -36,8 +36,8 @@ class AppBarChat extends StatelessWidget {
                   borderRadius: BorderRadius.circular(60),
                 ),
                 child: SizedBox(
-                  width: 50,
-                  height: 50,
+                  width: ScreenUtil().setWidth(45),
+                  height: ScreenUtil().setWidth(45),
                 ),
               ),
               SizedBox(
