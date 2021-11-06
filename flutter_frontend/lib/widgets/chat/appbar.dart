@@ -41,7 +41,7 @@ class AppBarChat extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: 10,
+                width: ScreenUtil().setWidth(10),
               ),
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -67,7 +67,7 @@ class AppBarChat extends StatelessWidget {
                   ),
                 ],
               ),
-              Expanded(
+              const Expanded(
                 child: SizedBox(),
               ),
               IconButton(
