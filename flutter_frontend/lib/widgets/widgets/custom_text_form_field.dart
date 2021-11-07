@@ -2,23 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget});
+  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor});
 
   final String label;
   final bool isObsecure;
   final double width;
   final double height;
+  //This gap between label and text field
   final double gap;
   final TextEditingController textEditingController;
   final double borderRadius;
   final String hintText;
   final Color borderColor;
   final Widget suffixIconWidget;
+  final Widget prefixIconWidget;
+  final Color fillColor;
 
   @override
   Widget build(BuildContext context) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         if (label != null) Text(
           label,
@@ -73,11 +77,12 @@ class CustomTextFormField extends StatelessWidget {
                 color: Color(0xFFd1c4df),
                 fontSize: 14,
               ),
-              fillColor: Colors.white,
+              fillColor: fillColor ?? Colors.white,
               filled: true,
               contentPadding: EdgeInsets.only(left: 14),
               helperText: "",
               suffixIcon: suffixIconWidget,
+              prefixIcon: prefixIconWidget,
             ),
           ),
         ),

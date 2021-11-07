@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/chat/chat_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppBarChat extends StatelessWidget {
+  const AppBarChat({this.chatController});
+
+  final ChatController chatController;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +27,7 @@ class AppBarChat extends StatelessWidget {
           child: Row(
             children: [
               IconButton(
-                onPressed: () {},
+                onPressed: chatController.onTapBackIcon,
                 icon: Icon(
                   FontAwesomeIcons.chevronLeft,
                   color: Palette.orangeRed,
