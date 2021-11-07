@@ -23,17 +23,17 @@ class ChatScreen extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: ListView(
-                padding: EdgeInsets.only(top: 0.0),
+                padding: EdgeInsets.only(top: 0.0, left: 10, right: 16),
                 children: [
                   ChatItem(
                     isSender: false,
                     time: '18:00',
-                    message: 'Mi push code lên chưa?',
+                    message: 'Bạn push code lên chưa?',
                   ),
                   ChatItem(
                     isSender: true,
                     time: '18:00',
-                    message: 'Push push cái địt con mẹ mày',
+                    message: 'Đợi xí',
                   ),
                 ],
               ),
@@ -42,7 +42,7 @@ class ChatScreen extends StatelessWidget {
           ColoredBox(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 25.0, top: 6),
+              padding: const EdgeInsets.only(bottom: 25.0, top: 6, left: 15, right: 15),
               child: Row(
                 children: [
                   GestureDetector(
@@ -54,7 +54,9 @@ class ChatScreen extends StatelessWidget {
                     ),
                   ),
                   SizedBox(
-                    width: 250,
+                    width: 15,
+                  ),
+                  Expanded(
                     child: TextField(
                       decoration: InputDecoration(
                         hintText: 'Type your message...',
@@ -69,13 +71,20 @@ class ChatScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25),
                         ),
                         isDense: true,
-                        contentPadding: EdgeInsets.all(12),
+                        contentPadding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
                       ),
                       style: TextStyle(
                         fontSize: 13,
                       ),
                     ),
                   ),
+                  IconButton(
+                    onPressed: () {},
+                    icon: Icon(
+                      FontAwesomeIcons.solidPaperPlane,
+                      color: Palette.orangeRed,
+                    ),
+                  )
                 ],
               ),
             ),
