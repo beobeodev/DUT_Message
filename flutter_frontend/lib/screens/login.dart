@@ -35,12 +35,19 @@ class LoginScreen extends StatelessWidget {
                     // SizedBox(
                     //   height: MediaQuery.of(context).padding.top + 20,
                     // ),
-                    SizedBox(
-                      width: ScreenUtil().screenWidth - 50,
-                      height: ScreenUtil().setHeight(230),
-                      child: SvgPicture.asset(
-                        ImagePath.chatLogin,
-                        fit: BoxFit.fill,
+                    ClipRRect(
+                      borderRadius: BorderRadius.circular(20),
+                      child: SizedBox(
+                        width: ScreenUtil().screenWidth - 50,
+                        height: ScreenUtil().setHeight(230),
+                        // child: SvgPicture.asset(
+                        //   ImagePath.chatLogin,
+                        //   fit: BoxFit.fill,
+                        // ),
+                        child: Image.asset(
+                          ImagePath.schoolPicture,
+                          fit: BoxFit.fill,
+                        ),
                       ),
                     ),
                     Padding(
