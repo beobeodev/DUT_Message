@@ -11,7 +11,7 @@ class LoginRepository {
 
   static final LoginRepository _singleton = LoginRepository._init();
 
-  Future<dynamic> login(String username, String password) async {
+  Future<http.Response> login(String username, String password) async {
     try {
       final Map<String, String> body = <String, String>{
         "username": username,
@@ -19,13 +19,16 @@ class LoginRepository {
       };
 
       final http.Response response = await http.post(
-        Uri.parse("http://192.168.1.8:3000/api/auth/login"),
+        Uri.parse("http://192.168.1.6:3000/api/auth/login"),
         body: body,
       );
 
-      if (response.statusCode == 200 ) {
-        final dynamic loginResponse = jsonDecode(response.body);
-      }
+      // print(jsonDecode(response.body));
+
+      // if (response.statusCode == 200 ) {
+      //   final dynamic loginResponse = jsonDecode(response.body);
+      // }
+      return response;
     } catch (err) {
       print(err);
     }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor});
+  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor, this.errorText});
 
   final String label;
   final bool isObsecure;
@@ -17,6 +17,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget suffixIconWidget;
   final Widget prefixIconWidget;
   final Color fillColor;
+  final String errorText;
 
   @override
   Widget build(BuildContext context) {
@@ -81,6 +82,7 @@ class CustomTextFormField extends StatelessWidget {
               filled: true,
               contentPadding: EdgeInsets.only(left: 14),
               helperText: "",
+              errorText: errorText,
               suffixIcon: suffixIconWidget,
               prefixIcon: prefixIconWidget,
             ),
