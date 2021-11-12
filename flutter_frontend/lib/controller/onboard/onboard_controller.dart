@@ -12,7 +12,7 @@ class OnboardController extends GetxController {
       'content': 'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
     },
     {
-      'imagePath': ImagePath.addUserLottie,
+      'imagePath': ImagePath.chatLottie,
       'title': 'Trò chuyện',
       'content': 'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
     },
