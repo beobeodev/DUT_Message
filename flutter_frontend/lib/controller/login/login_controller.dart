@@ -21,7 +21,7 @@ class LoginController extends GetxController {
     http.Response response = await loginRepository.login(usernameEditingController.text, passwordEditingController.text);
     if (response.statusCode == 200) {
       final dynamic loginResponse = jsonDecode(response.body);
-      Get.offAndToNamed<dynamic>(GetRouter.home, arguments: loginResponse);
+      Get.offAndToNamed<dynamic>(GetRouter.drawer, arguments: loginResponse);
     } else if (response.statusCode == 500) {
       errorText.value = "Incorrect username or password";
       print(errorText.value);
