@@ -8,7 +8,6 @@ import 'package:flutter_frontend/widgets/login/build_narrow_social.dart';
 import 'package:flutter_frontend/widgets/login/build_wide_social.dart';
 import 'package:flutter_frontend/widgets/widgets/custom_text_form_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 

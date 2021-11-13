@@ -23,8 +23,8 @@ class ChatScreen extends StatelessWidget {
             child: SizedBox(
               width: double.infinity,
               child: ListView(
-                padding: EdgeInsets.only(top: 0.0, left: 10, right: 16),
-                children: [
+                padding: EdgeInsets.only(left: 10, right: 16),
+                children: const [
                   ChatItem(
                     isSender: false,
                     time: '18:00',

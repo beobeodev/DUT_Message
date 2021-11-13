@@ -18,7 +18,7 @@ class LoginController extends GetxController {
   }
 
   Future<void> onTapLoginButton() async {
-    http.Response response = await loginRepository.login(usernameEditingController.text, passwordEditingController.text);
+    final http.Response response = await loginRepository.login(usernameEditingController.text, passwordEditingController.text);
     if (response.statusCode == 200) {
       final dynamic loginResponse = jsonDecode(response.body);
       Get.offAndToNamed<dynamic>(GetRouter.drawer, arguments: loginResponse);

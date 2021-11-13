@@ -30,7 +30,7 @@ class BuildPage extends StatelessWidget {
             ),
           ),
         ),
-      )
+      ),
     );
   }
 }

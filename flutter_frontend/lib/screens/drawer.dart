@@ -6,8 +6,7 @@ import 'package:flutter_frontend/widgets/drawer/drawer_page.dart';
 import 'package:get/get.dart';
 
 class DrawerScreen extends StatelessWidget {
-  final DrawerScreenController drawerController = Get.put(
-      DrawerScreenController());
+  final DrawerScreenController drawerController = Get.put(DrawerScreenController());
 
   @override
   Widget build(BuildContext context) {

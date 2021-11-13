@@ -32,7 +32,7 @@ class ListMessage extends StatelessWidget {
           child: ListView.builder(
               itemCount: 10,
               padding: EdgeInsets.only(
-                top: 0.0,
+                top: 0.1,
               ),
               itemBuilder: (context, index) {
                 return Padding(
