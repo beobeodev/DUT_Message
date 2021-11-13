@@ -21,6 +21,7 @@ class BuildPage extends StatelessWidget {
         onTap: closeDrawer,
         child: AnimatedContainer(
           duration: Duration(milliseconds: 250),
+          curve: Curves.easeInOutCirc,
           transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
           child: AbsorbPointer(
             absorbing: isDrawerOpen,
