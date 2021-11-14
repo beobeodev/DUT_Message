@@ -55,9 +55,14 @@ class DrawerPage extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding:  EdgeInsets.only(bottom: ScreenUtil().setHeight(20)),
-                  child: MenuItem(
-                    title: drawerController.listMenuItem[index]['title'] as String,
-                    icon: drawerController.listMenuItem[index]['icon'] as IconData,
+                  child: GestureDetector(
+                    onTap: () {
+                      drawerController.onTapMenuItem(drawerController.listMenuItem[index]['icon'] as IconData);
+                    },
+                    child: MenuItem(
+                      title: drawerController.listMenuItem[index]['title'] as String,
+                      icon: drawerController.listMenuItem[index]['icon'] as IconData,
+                    ),
                   ),
                 );
               },

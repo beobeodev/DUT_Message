@@ -18,7 +18,7 @@ class LoginRepository {
       };
 
       final http.Response response = await http.post(
-        Uri.parse("http://192.168.1.8:3000/api/auth/login"),
+        Uri.parse("http://localhost:3000/api/auth/login"),
         body: body,
       );
 

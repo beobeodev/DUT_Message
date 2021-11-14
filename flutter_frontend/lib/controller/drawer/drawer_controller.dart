@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +10,8 @@ class DrawerScreenController extends GetxController {
   final RxDouble xOffset = 0.0.obs;
   final RxDouble yOffset = 0.0.obs;
   final RxDouble scaleFactor  = 1.0.obs;
+
+  final Rx<CurrentScreen> currentPage = CurrentScreen.message.obs;
 
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
@@ -45,4 +49,17 @@ class DrawerScreenController extends GetxController {
     isDrawerOpen.value = true;
   }
 
+  //This function to handle onTap event of menu item
+  void onTapMenuItem(IconData icon) {
+    if (icon == FontAwesomeIcons.commentAlt) {
+      currentPage.value = CurrentScreen.message;
+    } else if (icon == FontAwesomeIcons.userFriends) {
+      currentPage.value = CurrentScreen.friend;
+    } else if (icon == FontAwesomeIcons.idBadge) {
+      currentPage.value = CurrentScreen.profile;
+    } else {
+      currentPage.value = CurrentScreen.addFriend;
+    }
+    closeDrawer();
+  }
 }
