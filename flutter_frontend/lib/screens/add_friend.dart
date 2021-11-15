@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/widgets/friend/add_friend_page.dart';
 import 'package:flutter_frontend/widgets/friend/list_friend_page.dart';
@@ -12,8 +11,7 @@ import 'package:get/get.dart';
 
 class AddFriendScreen extends StatelessWidget {
   final FriendController friendController = Get.put(FriendController());
-  final DrawerScreenController drawerController = Get.put(
-      DrawerScreenController());
+  final DrawerScreenController drawerController = Get.put(DrawerScreenController());
 
   @override
   Widget build(BuildContext context) {
