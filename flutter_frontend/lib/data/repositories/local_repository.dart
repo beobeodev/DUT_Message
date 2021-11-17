@@ -25,6 +25,11 @@ class LocalRepository {
     await authBox.put('refresh_token', refreshToken);
   }
 
+  Future<void> deleteToken() async {
+    await authBox.delete('access_token');
+    await authBox.delete('refresh_token');
+  }
+
   String getAccessToken() {
     return authBox.get('access_token');
   }
@@ -36,4 +41,5 @@ class LocalRepository {
   bool getNewUser() {
     return authBox.get('new_user');
   }
+
 }
