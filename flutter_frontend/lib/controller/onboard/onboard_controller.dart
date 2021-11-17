@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/router/router.dart';
+import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:get/get.dart';
 
 class OnboardController extends GetxController {
+  final LocalRepository localRepository = LocalRepository();
+
   //This is list data include of imagepath, title, content in onboard screen
   final List<Map<String, String>> pageData = [
     {
@@ -52,6 +55,7 @@ class OnboardController extends GetxController {
 
   //This function to skip intro
   void onSkip() {
-    Get.offAndToNamed<dynamic>(GetRouter.login);
+    localRepository.setNewUser();
+    Get.offAllNamed(GetRouter.login);
   }
 }

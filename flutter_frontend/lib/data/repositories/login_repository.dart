@@ -12,7 +12,7 @@ class LoginRepository {
 
   Future<http.Response> login(String username, String password) async {
     try {
-      final Map<String, String> body = <String, String>{
+      final Map<String, String> body = {
         "username": username,
         "password": password
       };

@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/router/router.dart';
+import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/login_repository.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -9,8 +10,10 @@ import 'package:http/http.dart' as http;
 class LoginController extends GetxController {
   final TextEditingController usernameEditingController = TextEditingController();
   final TextEditingController passwordEditingController = TextEditingController();
+  
   final LoginRepository loginRepository = LoginRepository();
-
+  final LocalRepository localRepository = LocalRepository();
+  
   final RxString errorText = "".obs;
 
   void navigateToSignUpScreen() {
@@ -21,6 +24,7 @@ class LoginController extends GetxController {
     final http.Response response = await loginRepository.login(usernameEditingController.text, passwordEditingController.text);
     if (response.statusCode == 200) {
       final dynamic loginResponse = jsonDecode(response.body);
+      localRepository.writeToken(loginResponse['accessToken'], loginResponse['refreshToken']);
       Get.offAndToNamed<dynamic>(GetRouter.drawer, arguments: loginResponse);
     } else if (response.statusCode == 500) {
       errorText.value = "Incorrect username or password";
