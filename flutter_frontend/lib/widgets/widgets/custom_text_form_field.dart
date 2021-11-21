@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor, this.errorText});
+  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor, this.errorText, this.validateFunc});
 
   final String label;
   final bool isObsecure;
@@ -18,6 +18,7 @@ class CustomTextFormField extends StatelessWidget {
   final Widget prefixIconWidget;
   final Color fillColor;
   final String errorText;
+  final String Function(String value) validateFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -42,6 +43,7 @@ class CustomTextFormField extends StatelessWidget {
             textInputAction: TextInputAction.done,
             onChanged: (val) {},
             onTap: () {},
+            validator: validateFunc,
             obscureText: isObsecure == null ? false : true,
             decoration: InputDecoration(
               hintText: hintText,
@@ -82,7 +84,7 @@ class CustomTextFormField extends StatelessWidget {
               filled: true,
               contentPadding: EdgeInsets.only(left: 14),
               helperText: "",
-              errorText: errorText,
+              errorText: (errorText == null || errorText == "") ? null : errorText,
               suffixIcon: suffixIconWidget,
               prefixIcon: prefixIconWidget,
             ),
