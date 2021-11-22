@@ -2,6 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/router/router.dart';
+import 'package:flutter_frontend/data/models/custom_response.dart';
+import 'package:flutter_frontend/data/repositories/auth_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/login_repository.dart';
 import 'package:get/get.dart';
@@ -10,25 +12,44 @@ import 'package:http/http.dart' as http;
 class LoginController extends GetxController {
   final TextEditingController usernameEditingController = TextEditingController();
   final TextEditingController passwordEditingController = TextEditingController();
-  
-  final LoginRepository loginRepository = LoginRepository();
-  final LocalRepository localRepository = LocalRepository();
+
+  final GlobalKey<FormState> loginFormKey = GlobalKey<FormState>();
+
+  final AuthRepository authRepository = AuthRepository();
   
   final RxString errorText = "".obs;
+
+  String validateUsername(String value) {
+    if (value == "") {
+      return "Vui lòng nhập tên đăng nhập";
+    }
+    return null;
+  }
+
+  String validatePassword(String value) {
+    if (value == "") {
+      return "Vui lòng nhập mật khẩu";
+    }
+    return null;
+  }
 
   void navigateToSignUpScreen() {
     Get.offAndToNamed<dynamic>(GetRouter.signUp);
   }
 
   Future<void> onTapLoginButton() async {
-    final http.Response response = await loginRepository.login(usernameEditingController.text, passwordEditingController.text);
-    if (response.statusCode == 200) {
-      final dynamic loginResponse = jsonDecode(response.body);
-      localRepository.writeToken(loginResponse['accessToken'], loginResponse['refreshToken']);
-      Get.offAndToNamed<dynamic>(GetRouter.drawer, arguments: loginResponse);
-    } else if (response.statusCode == 500) {
-      errorText.value = "Incorrect username or password";
-      print(errorText.value);
+    errorText.value = "";
+    if (!loginFormKey.currentState.validate()) {
+      return;
+    } else {
+      final CustomResponse response = await authRepository.login(usernameEditingController.text, passwordEditingController.text);
+      if (response.statusCode == 200) {
+        Get.offAllNamed(GetRouter.home);
+      } else if (response.statusCode == 500) {
+        if (response.errorMaps['errorPassword'] != null) {
+          errorText.value = "Sai tên đăng nhập hoặc mật khẩu";
+        }
+      }
     }
   }
 

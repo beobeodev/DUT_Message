@@ -9,6 +9,7 @@ class CustomResponse {
 
   CustomResponse({
     this.statusCode = 200,
+    this.responseBody,
     this.error = false,
     this.errorMaps,
   });

@@ -18,4 +18,12 @@ class AuthProvider {
     );
     return response;
   }
+
+  static Future<http.Response> login(Map<String, String> body) async {
+    final http.Response response = await http.post(
+      Uri.parse("${ApiPath.authServerUrl}/login"),
+      body: body,
+    );
+    return response;
+  }
 }

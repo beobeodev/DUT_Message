@@ -21,7 +21,7 @@ class LocalRepository {
   }
 
   //
-  Future<void> writeToken(String accessToken, String refreshToken) async {
+  Future<void> setToken(String accessToken, String refreshToken) async {
     await authBox.put('access_token', accessToken);
     await authBox.put('refresh_token', refreshToken);
   }
