@@ -16,6 +16,7 @@ class LocalRepository {
   //This function to init box to store token when login
   Future<void> initJWTBoxHive() async {
     await Hive.openBox('authBox');
+    await Hive.openBox('currentUserBox');
     authBox = Hive.box('authBox');
   }
 
@@ -42,4 +43,11 @@ class LocalRepository {
     return authBox.get('new_user');
   }
 
+  Future<void> setCurrentUser(Map<String, dynamic> data) async {
+    await authBox.put('current_user', data);
+  }
+
+  Map<String, dynamic> getCurrentUser() {
+    return authBox.get('current_user');
+  }
 }

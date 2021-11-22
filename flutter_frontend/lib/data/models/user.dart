@@ -1,13 +1,17 @@
 import 'dart:convert';
 
 class User {
+  String id;
+  String name;
+  String username;
+  String avatar;
+  String phone;
+  List<String> friends;
+
   User({
     this.id,
-    this.firstName,
-    this.lastName,
-    this.email,
+    this.name,
     this.username,
-    this.password,
     this.avatar,
     this.phone,
     this.friends,
@@ -17,37 +21,23 @@ class User {
 
   factory User.fromMap(Map<String, dynamic> json) => User(
     id: json["_id"].toString(),
-    firstName: json["firstName"].toString(),
-    lastName: json["lastName"].toString(),
-    email: json["email"].toString(),
+    name: json["name"].toString(),
     username: json["username"].toString(),
-    password: json["password"].toString(),
     avatar: json["avatar"].toString(),
     phone: json["phone"].toString(),
-    friends: List<dynamic>.from((json["friends"] as Iterable<dynamic>).map<dynamic>((dynamic x) => x)),
+    friends: List<String>.from((json["friends"] as Iterable<String>).map<String>((String x) => x)),
   );
 
   String toJson() => json.encode(toMap());
 
   Map<String, dynamic> toMap() => <String, dynamic>{
     "_id": id,
-    "firstName": firstName,
-    "lastName": lastName,
-    "email": email,
+    "name": name,
     "username": username,
-    "password": password,
     "avatar": avatar,
     "phone": phone,
-    "friends": List<dynamic>.from(friends.map<dynamic>((dynamic x) => x)),
+    "friends": List<String>.from(friends.map((String x) => x)),
   };
 
-  String id;
-  String firstName;
-  String lastName;
-  String email;
-  String username;
-  String password;
-  String avatar;
-  String phone;
-  List<dynamic> friends;
+
 }
