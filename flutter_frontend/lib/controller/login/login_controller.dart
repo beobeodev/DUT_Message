@@ -1,13 +1,9 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/repositories/auth_repository.dart';
-import 'package:flutter_frontend/data/repositories/local_repository.dart';
-import 'package:flutter_frontend/data/repositories/login_repository.dart';
 import 'package:get/get.dart';
-import 'package:http/http.dart' as http;
+
 
 class LoginController extends GetxController {
   final TextEditingController usernameEditingController = TextEditingController();

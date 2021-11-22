@@ -9,7 +9,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:lottie/lottie.dart';
 
 class SignUpScreen extends StatelessWidget {
   final SignUpController signUpController = Get.put(SignUpController());

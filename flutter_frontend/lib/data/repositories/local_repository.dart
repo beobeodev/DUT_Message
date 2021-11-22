@@ -35,6 +35,10 @@ class LocalRepository {
     return authBox.get('access_token');
   }
 
+  String getRefreshToken() {
+    return authBox.get('refresh_token');
+  }
+
   Future<void> setNewUser() async {
     await authBox.put('new_user', true);
   }
@@ -47,7 +51,7 @@ class LocalRepository {
     await authBox.put('current_user', data);
   }
 
-  Map<String, dynamic> getCurrentUser() {
+  Map<dynamic, dynamic> getCurrentUser() {
     return authBox.get('current_user');
   }
 }

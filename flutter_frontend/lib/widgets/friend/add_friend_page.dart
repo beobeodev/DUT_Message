@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AddFriendPage extends StatelessWidget {
+  final FriendController friendController;
+
+  const AddFriendPage({this.friendController});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +30,8 @@ class AddFriendPage extends StatelessWidget {
                     ),
                   ],
                 ),
-                child: TextField(
+                child: TextFormField(
+                  controller: friendController.phoneNumberEditingController,
                   decoration: InputDecoration(
                     hintText: 'Nhập số điện thoại cần tìm',
                     filled: true,
@@ -57,27 +62,30 @@ class AddFriendPage extends StatelessWidget {
             const SizedBox(
               width: 15,
             ),
-            DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: const [
-                    Color(0xFFDA5AFA),
-                    Color(0xFF3570EC),
-                  ],
+            GestureDetector(
+              onTap: friendController.onTapFindButton,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: const [
+                      Color(0xFFDA5AFA),
+                      Color(0xFF3570EC),
+                    ],
+                  ),
+                  borderRadius: BorderRadius.circular(10),
                 ),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: SizedBox(
-                width: 70,
-                height: 40,
-                child: Center(
-                  child: Text(
-                    "Tìm",
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.w700,
-                      fontFamily: FontFamily.fontNunito,
-                      fontSize: 16,
+                child: SizedBox(
+                  width: 70,
+                  height: 40,
+                  child: Center(
+                    child: Text(
+                      "Tìm",
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w700,
+                        fontFamily: FontFamily.fontNunito,
+                        fontSize: 16,
+                      ),
                     ),
                   ),
                 ),

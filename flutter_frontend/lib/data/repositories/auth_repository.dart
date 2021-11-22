@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'package:flutter_frontend/data/models/custom_error.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/providers/auth_provider.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
-import 'package:flutter_frontend/data/repositories/login_repository.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
