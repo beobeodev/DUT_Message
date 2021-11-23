@@ -20,12 +20,12 @@ class User {
   factory User.fromJson(String str) => User.fromMap(json.decode(str) as Map<String, dynamic>);
 
   factory User.fromMap(Map<String, dynamic> json) => User(
-    id: json["user"]["_id"].toString(),
-    name: json["user"]["name"].toString(),
-    username: json["user"]["username"].toString(),
-    avatar: json["user"]["avatar"].toString(),
-    phone: json["user"]["phone"].toString(),
-    friends: List<String>.from((json["user"]["friends"] as Iterable<dynamic>).map((dynamic x) => x.toString())),
+    id: json["_id"].toString(),
+    name: json["name"].toString(),
+    username: json["username"].toString(),
+    avatar: json["avatar"].toString(),
+    phone: json["phone"].toString(),
+    friends: List<String>.from((json["friends"] as Iterable<dynamic>).map((dynamic x) => x.toString())),
   );
 
   String toJson() => json.encode(toMap());

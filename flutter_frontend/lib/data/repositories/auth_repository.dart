@@ -81,7 +81,7 @@ class AuthRepository {
         // Get response body
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
 
-        final User currentUser = User.fromMap(responseBody);
+        final User currentUser = User.fromMap(responseBody["user"]);
         // save data of user and token to local database
         localRepository.setCurrentUser(currentUser.toMap());
         // save access token and refresh token to local database

@@ -4,6 +4,7 @@ import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class AddFriendPage extends StatelessWidget {
   final FriendController friendController;
@@ -16,65 +17,68 @@ class AddFriendPage extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Expanded(
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(200),
-                  boxShadow: const [
-                    BoxShadow(
-                      color: Color.fromRGBO(0, 0, 0, 0.25),
-                      blurRadius: 8,
-                      offset: Offset(2, 1),
-                    ),
-                  ],
-                ),
-                child: TextFormField(
+              child: Obx(() {
+                return TextFormField(
                   controller: friendController.phoneNumberEditingController,
+                  onTap: friendController.onTapTextField,
                   decoration: InputDecoration(
                     hintText: 'Nhập số điện thoại cần tìm',
                     filled: true,
                     fillColor: Colors.white,
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: BorderSide(color: Palette.celticBlue),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.white),
+                      borderSide: BorderSide(color: Palette.celticBlue),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.red),
                       borderRadius: BorderRadius.circular(12),
                     ),
                     hintStyle: TextStyle(
                       fontSize: 15,
                       color: Palette.americanSilver,
                     ),
+                    errorText: friendController.errorPhoneNumber.value == "" ? null : friendController.errorPhoneNumber.value,
                     isDense: true,
-                    contentPadding: EdgeInsets.only(left: 12, top: 16, bottom: 16),
+                    contentPadding: EdgeInsets.only(
+                        left: 12, top: 16, bottom: 16,
+                    ),
                   ),
                   keyboardType: TextInputType.number,
                   style: TextStyle(
                     fontSize: 15,
                     color: Palette.zodiacBlue,
                   ),
-                ),
-              ),
+                );
+              }),
             ),
             const SizedBox(
               width: 15,
             ),
             GestureDetector(
               onTap: friendController.onTapFindButton,
-              child: DecoratedBox(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: const [
-                      Color(0xFFDA5AFA),
-                      Color(0xFF3570EC),
-                    ],
+              child: Hero(
+                tag: "find",
+                child: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: const [
+                        Color(0xFFDA5AFA),
+                        Color(0xFF3570EC),
+                      ],
+                    ),
+                    borderRadius: BorderRadius.circular(10),
                   ),
-                  borderRadius: BorderRadius.circular(10),
-                ),
-                child: SizedBox(
                   width: 70,
                   height: 40,
                   child: Center(
@@ -90,7 +94,7 @@ class AddFriendPage extends StatelessWidget {
                   ),
                 ),
               ),
-            )
+            ),
           ],
         ),
         const SizedBox(
@@ -105,10 +109,8 @@ class AddFriendPage extends StatelessWidget {
             fontFamily: FontFamily.fontNunito,
           ),
         ),
-        const SizedBox(
-          height: 15,
-        ),
         Container(
+          margin: EdgeInsets.only(top: 15.0),
           decoration: BoxDecoration(
             border: Border.all(
               color: Palette.crayolaBlue,

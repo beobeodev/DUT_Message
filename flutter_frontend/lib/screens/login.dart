@@ -6,7 +6,7 @@ import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/widgets/login/build_narrow_social.dart';
 import 'package:flutter_frontend/widgets/login/build_wide_social.dart';
-import 'package:flutter_frontend/widgets/widgets/custom_text_form_field.dart';
+import 'package:flutter_frontend/widgets/custom/custom_text_form_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

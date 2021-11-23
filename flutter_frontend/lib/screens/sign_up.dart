@@ -4,7 +4,7 @@ import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/controller/sign_up/sign_up_controller.dart';
-import 'package:flutter_frontend/widgets/widgets/custom_text_form_field.dart';
+import 'package:flutter_frontend/widgets/custom/custom_text_form_field.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
