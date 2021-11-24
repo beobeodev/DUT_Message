@@ -1,8 +1,8 @@
 import 'dart:convert';
-
+import 'package:flutter_frontend/core/constants/api_path.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
-import 'package:flutter_frontend/data/providers/user_provider.dart';
+import 'package:flutter_frontend/data/providers/http_provider.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -29,7 +29,7 @@ class UserRepository{
         "id": localRepository.getCurrentUser()["_id"],
       };
 
-      final http.Response response = await UserProvider.getUserByPhoneNumber(body, header);
+      final http.Response response = await HttpProvider.postRequest("${ApiPath.userServerUrl}/find-by-phone", body: body, header: header);
 
       if (response.statusCode == 200) {
         return CustomResponse(

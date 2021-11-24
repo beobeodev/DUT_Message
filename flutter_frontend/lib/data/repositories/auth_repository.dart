@@ -1,7 +1,8 @@
 import 'dart:convert';
+import 'package:flutter_frontend/core/constants/api_path.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
-import 'package:flutter_frontend/data/providers/auth_provider.dart';
+import 'package:flutter_frontend/data/providers/http_provider.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,7 +22,8 @@ class AuthRepository {
       "username": username,
     };
 
-    final http.Response response = await AuthProvider.checkUsernameExist(body);
+    // final http.Response response = await AuthProvider.checkUsernameExist(body);
+    final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/checkUsernameExist", body: body);
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -33,11 +35,9 @@ class AuthRepository {
 
   Future<CustomResponse> signUp(Map<String, String> body) async {
     try {
-      final http.Response response = await AuthProvider.signUp(body);
+      final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/signup", body: body);
 
       final dynamic signUpResponse = jsonDecode(response.body);
-
-      // print(signUpResponse);
 
       if (response.statusCode == 400) {
         return CustomResponse(
@@ -74,7 +74,7 @@ class AuthRepository {
         "password": password
       };
 
-      final http.Response response = await AuthProvider.login(body);
+      final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/login", body: body);
 
       // if login SUCCESS
       if (response.statusCode == 200) {
