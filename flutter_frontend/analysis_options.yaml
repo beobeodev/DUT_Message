@@ -2,15 +2,16 @@ include: package:lint/analysis_options.yaml
 
 analyzer:
   strong-mode:
-    implicit-casts: false
-    implicit-dynamic: false
+    implicit-casts: true
+    implicit-dynamic: true
   errors:
     missing_required_param: warning
     missing_return: warning
     unnecessary_import: ignore
 linter:
   rules:
-    sort_constructors_first: true
+    sort_unnamed_constructors_first: false
+    sort_constructors_first: false
     prefer_const_constructors: false
     avoid_classes_with_only_static_members: false
     avoid_bool_literals_in_conditional_expressions: false

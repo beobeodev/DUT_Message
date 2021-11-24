@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
+import 'package:flutter_frontend/core/router/router.dart';
+import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class DrawerScreenController extends GetxController {
+  final LocalRepository localRepository = LocalRepository();
+  final SocketController socketController = Get.put(SocketController());
+
   //Check whether drawer is open or not
   final RxBool isDrawerOpen = false.obs;
 
@@ -27,10 +33,6 @@ class DrawerScreenController extends GetxController {
       "title": "Hồ sơ",
       "icon": FontAwesomeIcons.idBadge,
     },
-    <String, dynamic>{
-      "title": "Kết bạn",
-      "icon": FontAwesomeIcons.userPlus,
-    }
   ];
 
   //This function to implement close drawer
@@ -61,5 +63,11 @@ class DrawerScreenController extends GetxController {
       currentPage.value = CurrentScreen.addFriend;
     }
     closeDrawer();
+  }
+
+  //This function to handle event onTap of logout button
+  Future<void> onTapLogoutButton() async {
+    await localRepository.deleteToken();
+    Get.offAllNamed(GetRouter.login);
   }
 }

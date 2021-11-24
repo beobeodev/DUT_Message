@@ -53,7 +53,9 @@ class TabNavigationBar extends StatelessWidget {
                 child: Text(
                   "Danh sách",
                   style: TextStyle(
-                    color: Colors.white,
+                    color: !isOpenListTab
+                        ? Palette.crayolaBlue
+                        : Colors.white,
                     fontSize: ScreenUtil().setSp(17),
                     fontFamily: FontFamily.fontNunito,
                     fontWeight: FontWeight.w700,

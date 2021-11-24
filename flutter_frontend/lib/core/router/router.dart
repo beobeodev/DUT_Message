@@ -1,3 +1,4 @@
+import 'package:flutter_frontend/bindings/drawer_binding.dart';
 import 'package:flutter_frontend/screens/chat.dart';
 import 'package:flutter_frontend/screens/drawer.dart';
 import 'package:flutter_frontend/screens/home.dart';
@@ -17,12 +18,12 @@ class GetRouter {
   static const drawer = "/drawer";
 
   static List<GetPage> pages = [
-    GetPage<dynamic>(name: login, page: () => LoginScreen()),
-    GetPage<dynamic>(name: signUp, page: () => SignUpScreen()),
-    GetPage<dynamic>(name: splash, page: () => SplashScreen()),
-    GetPage<dynamic>(name: onboard, page: () => OnboardScreen()),
-    GetPage<dynamic>(name: home, page: () => HomeScreen()),
-    GetPage<dynamic>(name: chat, page: () => ChatScreen()),
-    GetPage<dynamic>(name: drawer, page: () => DrawerScreen()),
+    GetPage(name: login, page: () =>  LoginScreen()),
+    GetPage(name: signUp, page: () =>  SignUpScreen()),
+    GetPage(name: splash, page: () => SplashScreen()),
+    GetPage(name: onboard, page: () => OnboardScreen()),
+    GetPage(name: home, page: () => HomeScreen()),
+    GetPage(name: chat, page: () => ChatScreen()),
+    GetPage(name: drawer, page: () => DrawerScreen(), binding: DrawerBinding()),
   ];
 }

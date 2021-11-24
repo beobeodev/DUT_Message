@@ -1,10 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/models/custom_response.dart';
+import 'package:flutter_frontend/data/models/friend_request.dart';
+import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/widgets/custom/hero_popup_route.dart';
+import 'package:flutter_frontend/widgets/friend/popup_profile_friend.dart';
 import 'package:get/get.dart';
 
 class FriendController extends GetxController {
+  final UserRepository userRepository = UserRepository();
+
+  final SocketController socketController = Get.put(SocketController());
+
+  final TextEditingController phoneNumberEditingController = TextEditingController();
+
   final PageController pageController = PageController();
+
   final RxBool isOpenListTab = true.obs;
   final RxInt indexPage = 0.obs;
+  final RxString errorPhoneNumber = "".obs;
+  final RxList<FriendRequest> listFriendRequest = <FriendRequest>[].obs;
 
   void onTapListTab() {
     pageController.jumpToPage(0);
@@ -18,5 +33,46 @@ class FriendController extends GetxController {
   void onPageChange(int index) {
     isOpenListTab.value = !isOpenListTab.value;
     indexPage.value = index;
+  }
+
+  void onTapTextField() {
+    errorPhoneNumber.value = "";
+  }
+
+  Future<void> onTapFindButton() async {
+    errorPhoneNumber.value = "";
+    if (phoneNumberEditingController.text == "") {
+      errorPhoneNumber.value = "Vui lòng nhập số điện thoại cần tìm";
+      return;
+    } else if (phoneNumberEditingController.text.length != 10) {
+      errorPhoneNumber.value = "Số điện thoại không hợp lệ";
+      return ;
+    } else {
+      final CustomResponse response = await userRepository.getUserByPhoneNumber(phoneNumberEditingController.text);
+      // check if user not exist with phone number need get
+      if (response.error && response.statusCode == 500) {
+        errorPhoneNumber.value = "Số điện thoại này chưa được đăng ký";
+      } else if (response.statusCode == 200) {
+        final Map<String, dynamic> responseBody = response.responseBody;
+
+        Navigator.of(Get.context).push(
+          HeroPopupRoute(
+            builder: (context) => Center(
+              child: PopUpProfileFriend(
+                imageURL: responseBody["avatar"],
+                name: responseBody["name"],
+                id: responseBody["_id"],
+                friendController: this,
+              ),
+            ),
+          ),
+        );
+      }
+    }
+  }
+
+  void onPressAddFriend(String id) {
+    socketController.emitAddFriend(id);
+    Get.back();
   }
 }

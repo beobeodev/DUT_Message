@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
-import 'package:flutter_frontend/screens/add_friend.dart';
 import 'package:flutter_frontend/screens/friend.dart';
 import 'package:flutter_frontend/screens/home.dart';
 import 'package:flutter_frontend/screens/profile.dart';
@@ -38,13 +37,10 @@ class DrawerScreen extends StatelessWidget {
                 closeDrawer: drawerController.closeDrawer,
                 pageItem: drawerController.currentPage.value == CurrentScreen.message
                     ? HomeScreen()
-                    : (drawerController.currentPage.value == CurrentScreen.addFriend
-                    ?  AddFriendScreen()
                     : (drawerController.currentPage.value == CurrentScreen.friend
-                    ? FriendScreen()
+                    ?  FriendScreen()
                     : ProfileScreen()
-                    )
-                ),
+                    ),
               ),
             ],
           );

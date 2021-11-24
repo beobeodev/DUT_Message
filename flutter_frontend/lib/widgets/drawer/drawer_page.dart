@@ -104,26 +104,29 @@ class DrawerPage extends StatelessWidget {
                       ),
                     ),
                     Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "Đăng xuất",
-                            style: TextStyle(
-                              fontFamily: FontFamily.fontNunito,
-                              color: Palette.zodiacBlue,
-                              fontSize: ScreenUtil().setSp(18),
-                              fontWeight: FontWeight.w700,
+                      child: GestureDetector(
+                        onTap: drawerController.onTapLogoutButton,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "Đăng xuất",
+                              style: TextStyle(
+                                fontFamily: FontFamily.fontNunito,
+                                color: Palette.zodiacBlue,
+                                fontSize: ScreenUtil().setSp(18),
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Icon(
-                            FontAwesomeIcons.signOutAlt,
-                            color: Palette.zodiacBlue,
-                          ),
-                        ],
+                            const SizedBox(
+                              width: 15,
+                            ),
+                            Icon(
+                              FontAwesomeIcons.signOutAlt,
+                              color: Palette.zodiacBlue,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],

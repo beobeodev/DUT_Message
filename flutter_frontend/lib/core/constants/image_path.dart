@@ -10,4 +10,5 @@ class ImagePath {
   static const chatLottie = "assets/images/lotties/chat.json";
   static const addUserLottie = 'assets/images/lotties/add_user.json';
   static const transitionLottie = 'assets/images/lotties/transition.json';
+  static const loadingLottie = 'assets/images/lotties/loading.json';
 }
