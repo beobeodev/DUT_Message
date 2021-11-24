@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
+import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/widgets/custom/hero_popup_route.dart';
 import 'package:flutter_frontend/widgets/friend/popup_profile_friend.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class FriendController extends GetxController {
   final UserRepository userRepository = UserRepository();
+
+  final SocketController socketController = Get.put(SocketController());
 
   final TextEditingController phoneNumberEditingController = TextEditingController();
 
@@ -18,6 +19,7 @@ class FriendController extends GetxController {
   final RxBool isOpenListTab = true.obs;
   final RxInt indexPage = 0.obs;
   final RxString errorPhoneNumber = "".obs;
+  final RxList<FriendRequest> listFriendRequest = <FriendRequest>[].obs;
 
   void onTapListTab() {
     pageController.jumpToPage(0);
@@ -59,6 +61,8 @@ class FriendController extends GetxController {
               child: PopUpProfileFriend(
                 imageURL: responseBody["avatar"],
                 name: responseBody["name"],
+                id: responseBody["_id"],
+                friendController: this,
               ),
             ),
           ),
@@ -67,5 +71,8 @@ class FriendController extends GetxController {
     }
   }
 
-
+  void onPressAddFriend(String id) {
+    socketController.emitAddFriend(id);
+    Get.back();
+  }
 }

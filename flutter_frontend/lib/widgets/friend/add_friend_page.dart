@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/widgets/friend/add_friend_request_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -48,10 +49,12 @@ class AddFriendPage extends StatelessWidget {
                       fontSize: 15,
                       color: Palette.americanSilver,
                     ),
-                    errorText: friendController.errorPhoneNumber.value == "" ? null : friendController.errorPhoneNumber.value,
+                    errorText: friendController.errorPhoneNumber.value == ""
+                        ? null
+                        : friendController.errorPhoneNumber.value,
                     isDense: true,
                     contentPadding: EdgeInsets.only(
-                        left: 12, top: 16, bottom: 16,
+                      left: 12, top: 16, bottom: 16,
                     ),
                   ),
                   keyboardType: TextInputType.number,
@@ -109,65 +112,22 @@ class AddFriendPage extends StatelessWidget {
             fontFamily: FontFamily.fontNunito,
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(top: 15.0),
-          decoration: BoxDecoration(
-            border: Border.all(
-              color: Palette.crayolaBlue,
+        Obx(() {
+          return Expanded(
+            child: ListView.builder(
+              itemCount: friendController.listFriendRequest.length,
+              itemBuilder: (context, index) {
+                return RequestAddFriendCard(
+                  avatar: friendController.listFriendRequest[index].avatar,
+                  name: friendController.listFriendRequest[index].name,
+                );
+              },
             ),
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          width: double.infinity,
-          height: 55,
-          padding: EdgeInsets.symmetric(
-            horizontal: 10,
-          ),
-          child: Row(
-            children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: SizedBox(
-                  width: 40,
-                  height: 40,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              Expanded(
-                child: Text(
-                  "Nguyễn Đình Quốc Đạt",
-                  style: TextStyle(
-                    color: Palette.zodiacBlue,
-                    fontWeight: FontWeight.w700,
-                    fontSize: ScreenUtil().setSp(15),
-                    fontFamily: FontFamily.fontNunito,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                color: Colors.red,
-                icon: Icon(
-                  FontAwesomeIcons.times,
-                ),
-              ),
-              IconButton(
-                onPressed: () {},
-                color: Colors.green,
-                icon: Icon(
-                  FontAwesomeIcons.check,
-                ),
-              )
-            ],
-          ),
-        )
+          );
+        })
       ],
     );
   }
 }
+
+

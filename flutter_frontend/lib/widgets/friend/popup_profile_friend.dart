@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,8 +7,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class PopUpProfileFriend extends StatelessWidget {
   final String imageURL;
   final String name;
+  final String id;
+  final FriendController friendController;
 
-  const PopUpProfileFriend({this.imageURL, this.name});
+  const PopUpProfileFriend({this.imageURL, this.name, this.id, this.friendController});
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +53,9 @@ class PopUpProfileFriend extends StatelessWidget {
                   backgroundColor: Color(0xFF3570EC),
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
-                onPressed: () { },
+                onPressed: () {
+                  friendController.onPressAddFriend(id);
+                },
                 child: Text(
                   'Kết bạn',
                   style: TextStyle(
@@ -62,7 +67,7 @@ class PopUpProfileFriend extends StatelessWidget {
             ],
           ),
         ),
-      )
+      ),
     );
   }
 }

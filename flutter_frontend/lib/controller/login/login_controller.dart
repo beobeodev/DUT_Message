@@ -40,7 +40,7 @@ class LoginController extends GetxController {
     } else {
       final CustomResponse response = await authRepository.login(usernameEditingController.text, passwordEditingController.text);
       if (response.statusCode == 200) {
-        Get.offAllNamed(GetRouter.home);
+        Get.offAllNamed(GetRouter.drawer);
       } else if (response.statusCode == 500) {
         if (response.errorMaps['errorPassword'] != null) {
           errorText.value = "Sai tên đăng nhập hoặc mật khẩu";
