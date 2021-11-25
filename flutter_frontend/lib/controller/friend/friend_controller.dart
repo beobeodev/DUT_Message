@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/widgets/custom/hero_popup_route.dart';
-import 'package:flutter_frontend/widgets/friend/popup_profile_friend.dart';
+import 'package:flutter_frontend/widgets/friend/popup/popup_profile_friend.dart';
 import 'package:get/get.dart';
 
 class FriendController extends GetxController {
@@ -50,10 +51,23 @@ class FriendController extends GetxController {
     } else {
       final CustomResponse response = await userRepository.getUserByPhoneNumber(phoneNumberEditingController.text);
       // check if user not exist with phone number need get
-      if (response.error && response.statusCode == 500) {
+      if (response.error && response.statusCode == 404) {
         errorPhoneNumber.value = "Số điện thoại này chưa được đăng ký";
       } else if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = response.responseBody;
+        final Map<String, dynamic> responseCheckAddFriendRequest = (await userRepository.checkAddFriendRequest(responseBody["_id"])).responseBody;
+
+        AddFriendStatus addFriendStatus;
+
+        if (responseCheckAddFriendRequest["message"] == "is friend") {
+          addFriendStatus = AddFriendStatus.isFriend;
+        } else if (responseCheckAddFriendRequest["message"] == "have send add friend request") {
+          addFriendStatus = AddFriendStatus.haveSendAddFriendRequest;
+        } else if (responseCheckAddFriendRequest["message"] == "have receive add friend request") {
+          addFriendStatus = AddFriendStatus.haveReceiveAddFriendRequest;
+        } else {
+          addFriendStatus = AddFriendStatus.noAddFriendRequest;
+        }
 
         Navigator.of(Get.context).push(
           HeroPopupRoute(
@@ -61,8 +75,9 @@ class FriendController extends GetxController {
               child: PopUpProfileFriend(
                 imageURL: responseBody["avatar"],
                 name: responseBody["name"],
-                id: responseBody["_id"],
+                id: responseBody["_id"], // id of user being find
                 friendController: this,
+                addFriendStatus: addFriendStatus,
               ),
             ),
           ),

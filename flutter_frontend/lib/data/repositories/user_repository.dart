@@ -17,6 +17,7 @@ class UserRepository{
 
   UserRepository._init();
 
+  // this function to get info of user by phone number
   Future<CustomResponse> getUserByPhoneNumber(String phoneNumber) async {
     try {
       final Map<String, String> body = {
@@ -29,18 +30,18 @@ class UserRepository{
         "id": localRepository.getCurrentUser()["_id"],
       };
 
-      final http.Response response = await HttpProvider.postRequest("${ApiPath.userServerUrl}/find-by-phone", body: body, header: header);
+      final http.Response responseGetUser = await HttpProvider.postRequest("${ApiPath.userServerUrl}/find-by-phone", body: body, header: header);
 
-      if (response.statusCode == 200) {
+      if (responseGetUser.statusCode == 200) {
         return CustomResponse(
-          responseBody: User.fromMap(jsonDecode(response.body)).toMap(),
+          responseBody: User.fromMap(jsonDecode(responseGetUser.body)).toMap(),
         );
-      } else if (response.statusCode == 500) {
+      } else if (responseGetUser.statusCode == 404) {
         return CustomResponse(
-          statusCode: 500,
+          statusCode: 404,
           error: true,
           errorMaps: {
-            "message": "internal server error",
+            "message": "phone number not found",
           },
         );
       }
@@ -59,7 +60,57 @@ class UserRepository{
         error: true,
         errorMaps: {
           "message": "invalid request",
-        }
+        },
     );
+  }
+
+  // this function to check status of add friend request
+  Future<CustomResponse> checkAddFriendRequest(String toId) async {
+    try {
+      final Map<String, String> body = {
+        "toId": toId
+      };
+
+      final Map<String, String> header = {
+        "id": localRepository.getCurrentUser()["_id"],
+      };
+
+      final http.Response responseGetUser = await HttpProvider.postRequest("${ApiPath.userServerUrl}/checkFriendRequest", body: body, header: header);
+
+      if (responseGetUser.statusCode == 200) {
+        return CustomResponse(
+          responseBody: jsonDecode(responseGetUser.body),
+        );
+      } else if (responseGetUser.statusCode == 500) {
+        return CustomResponse(
+          statusCode: 500,
+          error: true,
+          errorMaps: {
+            "message": "internal server error",
+          },
+        );
+      }
+    } catch (err) {
+      print(err);
+      return CustomResponse(
+        statusCode: 500,
+        error: true,
+        errorMaps: {
+          "message": err,
+        },
+      );
+    }
+    return CustomResponse(
+      statusCode: 500,
+      error: true,
+      errorMaps: {
+        "message": "invalid request",
+      },
+    );
+  }
+
+  // this function to get list add friend request
+  Future<CustomResponse> getListAddFriendRequest() async {
+
   }
 }

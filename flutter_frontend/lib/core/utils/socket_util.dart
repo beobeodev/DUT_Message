@@ -25,8 +25,8 @@ class SocketController extends GetxController {
       );
       socket.onConnect((_) {
         print('HAVE CONNECTED to socket');
+        onAddFriend();
       });
-      onAddFriend();
     } catch (e) {
       print("Error in SocketUtil._init() $e");
     }
