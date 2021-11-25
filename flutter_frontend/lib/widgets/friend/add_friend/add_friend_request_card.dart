@@ -7,13 +7,16 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class RequestAddFriendCard extends StatelessWidget {
   final String avatar;
   final String name;
+  final void Function() onTapAccept;
+  final void Function() onTapRefuse;
 
-  const RequestAddFriendCard({this.avatar, this.name});
+
+  const RequestAddFriendCard({this.avatar, this.name, this.onTapAccept, this.onTapRefuse});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.0),
+      // margin: EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
         border: Border.all(
           color: Palette.crayolaBlue,
@@ -28,46 +31,36 @@ class RequestAddFriendCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // DecoratedBox(
-          //   decoration: BoxDecoration(
-          //     color: Colors.red,
-          //     borderRadius: BorderRadius.circular(40),
-          //   ),
-          //   child: SizedBox(
-          //     width: 40,
-          //     height: 40,
-          //   ),
-          // ),
           CircleAvatar(
             backgroundImage: NetworkImage(
               avatar == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : avatar,
             ),
-            radius: 30,
+            radius: 18,
           ),
           const SizedBox(
             width: 10,
           ),
           Expanded(
             child: Text(
-              "Nguyễn Đình Quốc Đạt",
+              name,
               style: TextStyle(
                 color: Palette.zodiacBlue,
                 fontWeight: FontWeight.w700,
-                fontSize: ScreenUtil().setSp(15),
+                fontSize: ScreenUtil().setSp(16),
                 fontFamily: FontFamily.fontNunito,
                 overflow: TextOverflow.ellipsis,
               ),
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: onTapRefuse,
             color: Colors.red,
             icon: Icon(
               FontAwesomeIcons.times,
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: onTapAccept,
             color: Colors.green,
             icon: Icon(
               FontAwesomeIcons.check,

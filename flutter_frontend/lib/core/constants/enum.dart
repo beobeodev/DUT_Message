@@ -4,3 +4,10 @@ enum CurrentScreen {
   profile,
   addFriend,
 }
+
+enum AddFriendStatus  {
+  isFriend,
+  haveSendAddFriendRequest,
+  haveReceiveAddFriendRequest,
+  noAddFriendRequest
+}

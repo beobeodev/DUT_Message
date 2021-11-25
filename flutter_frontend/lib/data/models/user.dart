@@ -25,7 +25,7 @@ class User {
     username: json["username"].toString(),
     avatar: json["avatar"].toString(),
     phone: json["phone"].toString(),
-    friends: List<String>.from((json["friends"] as Iterable<dynamic>).map((dynamic x) => x.toString())),
+    friends: json["friends"] == null ? <String>[] : List<String>.from((json["friends"] as Iterable<dynamic>).map((dynamic x) => x.toString())),
   );
 
   String toJson() => json.encode(toMap());
@@ -38,6 +38,6 @@ class User {
     "phone": phone,
     "friends": List<String>.from(friends.map((String x) => x)),
   };
-
-
 }
+
+

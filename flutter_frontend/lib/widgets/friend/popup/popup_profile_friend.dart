@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
+import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/widgets/friend/popup/have_receive_content.dart';
+import 'package:flutter_frontend/widgets/friend/popup/have_send_content.dart';
+import 'package:flutter_frontend/widgets/friend/popup/is_friend_content.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class PopUpProfileFriend extends StatelessWidget {
@@ -9,8 +13,9 @@ class PopUpProfileFriend extends StatelessWidget {
   final String name;
   final String id;
   final FriendController friendController;
+  final AddFriendStatus addFriendStatus;
 
-  const PopUpProfileFriend({this.imageURL, this.name, this.id, this.friendController});
+  const PopUpProfileFriend({this.imageURL, this.name, this.id, this.friendController, this.addFriendStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +37,7 @@ class PopUpProfileFriend extends StatelessWidget {
                 radius: 50,
               ),
               SizedBox(
-                height: ScreenUtil().setHeight(35),
+                height: ScreenUtil().setHeight(20),
               ),
               Text(
                 name,
@@ -44,23 +49,26 @@ class PopUpProfileFriend extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(35),
-              ),
-              TextButton(
-                style: TextButton.styleFrom(
-                  primary: Colors.white,
-                  backgroundColor: Color(0xFF3570EC),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                ),
-                onPressed: () {
-                  friendController.onPressAddFriend(id);
-                },
-                child: Text(
-                  'Kết bạn',
-                  style: TextStyle(
-                    fontFamily: FontFamily.fontNunito,
-                    fontSize: ScreenUtil().setSp(16),
+              if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent()
+              else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
+              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent()
+              else if (addFriendStatus == AddFriendStatus.noAddFriendRequest) Padding(
+                padding: const EdgeInsets.only(top: 35.0),
+                child: TextButton(
+                  style: TextButton.styleFrom(
+                    primary: Colors.white,
+                    backgroundColor: Color(0xFF3570EC),
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  ),
+                  onPressed: () {
+                    friendController.onPressAddFriend(id);
+                  },
+                  child: Text(
+                    'Kết bạn',
+                    style: TextStyle(
+                      fontFamily: FontFamily.fontNunito,
+                      fontSize: ScreenUtil().setSp(16),
+                    ),
                   ),
                 ),
               )

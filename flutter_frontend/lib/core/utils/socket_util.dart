@@ -1,6 +1,7 @@
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -18,15 +19,16 @@ class SocketController extends GetxController {
       final String id = localRepository.getCurrentUser()["_id"];
       socket = IO.io("http://localhost:3000",
         IO.OptionBuilder()
-            .setTransports(['websocket']) // for Flutter or Dart VM
-            .enableAutoConnect()  // enable auto-connection
-            .setQuery({'userId': id})
-            .build(),
+        .setTransports(['websocket']) // for Flutter or Dart VM
+        .enableAutoConnect()  // enable auto-connection
+        .setQuery({'userId': id})
+        .build(),
       );
       socket.onConnect((_) {
         print('HAVE CONNECTED to socket');
+        onAddFriend();
+        onNotifyAcceptAddFriendRequest();
       });
-      onAddFriend();
     } catch (e) {
       print("Error in SocketUtil._init() $e");
     }
@@ -42,7 +44,7 @@ class SocketController extends GetxController {
     try {
       final String fromId = localRepository.getCurrentUser()["_id"];
       print("From emitAddFriend(): current id is $fromId");
-      socket.emit(SocketEvent.sendFriendRequest, {
+      socket.emit(SocketEvent.sendAddFriendRequest, {
         "fromId": fromId,
         "toId": toId,
       });
@@ -56,7 +58,7 @@ class SocketController extends GetxController {
     try {
       final String currentId = localRepository.getCurrentUser()["_id"];
       print("From onAddFriend(): current id is $currentId");
-      socket.on(SocketEvent.receiveFriendRequest, (data) {
+      socket.on(SocketEvent.receiveAddFriendRequest, (data) {
         final FriendRequest friendRequest = FriendRequest(
           friendRequestId: data["_id"],
           fromId: data["from"]["_id"],
@@ -65,12 +67,33 @@ class SocketController extends GetxController {
           avatar: data["from"]["avatar"],
         );
         print(friendRequest);
-        if (!friendController.listFriendRequest.any((element) => element.fromId == friendRequest.fromId)) {
-          friendController.listFriendRequest.add(friendRequest);
-        }
+        friendController.listAddFriendRequest.add(friendRequest);
       });
     } catch (e) {
       print("Error in onAddFriend() from SocketUtil $e");
+    }
+  }
+
+  void emitAcceptAddFriendRequest(String fromId, String toId) {
+    try {
+      socket.emit(SocketEvent.acceptAddFriendRequest, {
+        "fromId": fromId,
+        "toId": toId,
+      });
+      friendController.listAddFriendRequest.removeWhere((element) => element.fromId == fromId);
+    } catch (e) {
+      print("Error in onAcceptAddFriendRequest() from SocketUtil $e");
+    }
+  }
+
+  void onNotifyAcceptAddFriendRequest() {
+    try {
+      socket.on(SocketEvent.notifyAcceptAddFriendRequest, (data) {
+        final User user = User.fromMap(data);
+        friendController.listFriend.add(user);
+      });
+    } catch (e) {
+      print("Error in notifyAcceptAddFriendRequest() from SocketUtil $e");
     }
   }
 }
