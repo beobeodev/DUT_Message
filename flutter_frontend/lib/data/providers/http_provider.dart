@@ -4,6 +4,7 @@ class HttpProvider {
   static Future<http.Response> getRequest(String apiLink, {Map<String, String> header = const <String, String>{}}) async {
     final http.Response response = await http.get(
       Uri.parse(apiLink),
+      headers: header,
     );
     return response;
   }

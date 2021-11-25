@@ -65,9 +65,7 @@ class SocketController extends GetxController {
           avatar: data["from"]["avatar"],
         );
         print(friendRequest);
-        if (!friendController.listFriendRequest.any((element) => element.fromId == friendRequest.fromId)) {
-          friendController.listFriendRequest.add(friendRequest);
-        }
+        friendController.listAddFriendRequest.add(friendRequest);
       });
     } catch (e) {
       print("Error in onAddFriend() from SocketUtil $e");

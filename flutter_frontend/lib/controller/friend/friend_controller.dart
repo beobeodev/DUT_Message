@@ -20,12 +20,24 @@ class FriendController extends GetxController {
   final RxBool isOpenListTab = true.obs;
   final RxInt indexPage = 0.obs;
   final RxString errorPhoneNumber = "".obs;
-  final RxList<FriendRequest> listFriendRequest = <FriendRequest>[].obs;
+  final RxList<FriendRequest> listAddFriendRequest = <FriendRequest>[].obs;
+
+  @override
+  void onReady() {
+    super.onReady();
+    getListAddFriendRequest();
+  }
+
+  Future<void> getListAddFriendRequest() async {
+    final List<FriendRequest> result = (await userRepository.getListAddFriendRequest()).responseBody["result"];
+    listAddFriendRequest.value = result;
+  }
 
   void onTapListTab() {
     pageController.jumpToPage(0);
     isOpenListTab.value = true;
   }
+
   void onTapAddTab() {
     pageController.jumpToPage(1);
     isOpenListTab.value = false;
@@ -89,5 +101,9 @@ class FriendController extends GetxController {
   void onPressAddFriend(String id) {
     socketController.emitAddFriend(id);
     Get.back();
+  }
+
+  Future<void> testFunc() async {
+    await userRepository.getListAddFriendRequest();
   }
 }

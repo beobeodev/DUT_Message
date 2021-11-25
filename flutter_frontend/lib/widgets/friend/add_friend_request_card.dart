@@ -13,7 +13,7 @@ class RequestAddFriendCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(top: 10.0),
+      // margin: EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
         border: Border.all(
           color: Palette.crayolaBlue,
@@ -28,21 +28,11 @@ class RequestAddFriendCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          // DecoratedBox(
-          //   decoration: BoxDecoration(
-          //     color: Colors.red,
-          //     borderRadius: BorderRadius.circular(40),
-          //   ),
-          //   child: SizedBox(
-          //     width: 40,
-          //     height: 40,
-          //   ),
-          // ),
           CircleAvatar(
             backgroundImage: NetworkImage(
               avatar == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : avatar,
             ),
-            radius: 30,
+            radius: 18,
           ),
           const SizedBox(
             width: 10,
@@ -53,7 +43,7 @@ class RequestAddFriendCard extends StatelessWidget {
               style: TextStyle(
                 color: Palette.zodiacBlue,
                 fontWeight: FontWeight.w700,
-                fontSize: ScreenUtil().setSp(15),
+                fontSize: ScreenUtil().setSp(16),
                 fontFamily: FontFamily.fontNunito,
                 overflow: TextOverflow.ellipsis,
               ),
