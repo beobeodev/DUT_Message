@@ -54,4 +54,8 @@ class LocalRepository {
   Map<dynamic, dynamic> getCurrentUser() {
     return authBox.get('current_user');
   }
+
+  Future<void> deleteCurrentUser() async {
+    await authBox.delete('current_user');
+  }
 }

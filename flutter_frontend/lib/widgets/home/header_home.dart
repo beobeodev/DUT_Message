@@ -57,7 +57,7 @@ class HeaderHome extends StatelessWidget {
                       borderRadius: BorderRadius.circular(50),
                     ),
                     child: SizedBox(
-                      width: ScreenUtil().setWidth(50),
+                      width: ScreenUtil().setHeight(50),
                       height: ScreenUtil().setHeight(50),
                     ),
                   )
