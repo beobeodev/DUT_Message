@@ -39,7 +39,7 @@ class RequestAddFriendCard extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              "Nguyễn Đình Quốc Đạt",
+              name,
               style: TextStyle(
                 color: Palette.zodiacBlue,
                 fontWeight: FontWeight.w700,

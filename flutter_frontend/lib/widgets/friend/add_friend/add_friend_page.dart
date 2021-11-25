@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/widgets/friend/add_friend_request_card.dart';
+import 'package:flutter_frontend/widgets/friend/add_friend/add_friend_request_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

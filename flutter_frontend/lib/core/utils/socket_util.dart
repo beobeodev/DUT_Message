@@ -42,7 +42,7 @@ class SocketController extends GetxController {
     try {
       final String fromId = localRepository.getCurrentUser()["_id"];
       print("From emitAddFriend(): current id is $fromId");
-      socket.emit(SocketEvent.sendFriendRequest, {
+      socket.emit(SocketEvent.sendAddFriendRequest, {
         "fromId": fromId,
         "toId": toId,
       });
@@ -56,7 +56,7 @@ class SocketController extends GetxController {
     try {
       final String currentId = localRepository.getCurrentUser()["_id"];
       print("From onAddFriend(): current id is $currentId");
-      socket.on(SocketEvent.receiveFriendRequest, (data) {
+      socket.on(SocketEvent.receiveAddFriendRequest, (data) {
         final FriendRequest friendRequest = FriendRequest(
           friendRequestId: data["_id"],
           fromId: data["from"]["_id"],
@@ -69,6 +69,14 @@ class SocketController extends GetxController {
       });
     } catch (e) {
       print("Error in onAddFriend() from SocketUtil $e");
+    }
+  }
+
+  void onAcceptAddFriendRequest() {
+    try {
+
+    } catch (e) {
+      print("Error in onAcceptAddFriendRequest() from SocketUtil $e");
     }
   }
 }

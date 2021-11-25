@@ -41,7 +41,7 @@ class TabNavigationBar extends StatelessWidget {
             child: AnimatedContainer(
               decoration: BoxDecoration(
                 color: isOpenListTab
-                    ? Palette.crayolaBlue
+                    ? Palette.metallicViolet
                     : Colors.white,
                 borderRadius: BorderRadius.circular(60),
               ),

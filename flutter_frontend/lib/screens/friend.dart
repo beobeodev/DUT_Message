@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/widgets/friend/add_friend_page.dart';
-import 'package:flutter_frontend/widgets/friend/list_friend_page.dart';
+import 'package:flutter_frontend/widgets/friend/add_friend/add_friend_page.dart';
+import 'package:flutter_frontend/widgets/friend/friend_page/list_friend_page.dart';
 import 'package:flutter_frontend/widgets/friend/tab_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -50,7 +50,7 @@ class FriendScreen extends StatelessWidget {
                     onTap: drawerController.openDrawer,
                     child: DecoratedBox(
                       decoration: BoxDecoration(
-                        color: Palette.crayolaBlue,
+                        color: Palette.zodiacBlue,
                         borderRadius: BorderRadius.circular(40),
                       ),
                       child: SizedBox(
