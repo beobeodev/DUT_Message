@@ -7,8 +7,11 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class RequestAddFriendCard extends StatelessWidget {
   final String avatar;
   final String name;
+  final void Function() onTapAccept;
+  final void Function() onTapRefuse;
 
-  const RequestAddFriendCard({this.avatar, this.name});
+
+  const RequestAddFriendCard({this.avatar, this.name, this.onTapAccept, this.onTapRefuse});
 
   @override
   Widget build(BuildContext context) {
@@ -50,14 +53,14 @@ class RequestAddFriendCard extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: onTapRefuse,
             color: Colors.red,
             icon: Icon(
               FontAwesomeIcons.times,
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: onTapAccept,
             color: Colors.green,
             icon: Icon(
               FontAwesomeIcons.check,

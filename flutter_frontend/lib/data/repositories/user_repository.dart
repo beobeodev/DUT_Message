@@ -168,4 +168,54 @@ class UserRepository{
       },
     );
   }
+
+  // this function to get list friend r
+  Future<CustomResponse> getListFriend() async {
+    try {
+      final Map<String, String> header = {
+        "accessToken": localRepository.getAccessToken(),
+        "refreshToken": localRepository.getRefreshToken(),
+        "id": localRepository.getCurrentUser()["_id"],
+      };
+
+      final http.Response response = await HttpProvider.getRequest("${ApiPath.userServerUrl}/friends", header: header);
+
+      if (response.statusCode == 200) {
+        final List<dynamic> listRequest = jsonDecode(response.body);
+        final List<User> listFriend = <User>[];
+        for (final element in listRequest) {
+          listFriend.add(User.fromMap(element),);
+        }
+        return CustomResponse(
+          responseBody: {
+            "result": listFriend,
+          },
+        );
+      } else if (response.statusCode == 500) {
+        return CustomResponse(
+          statusCode: 404,
+          error: true,
+          errorMaps: {
+            "message": "internal server error",
+          },
+        );
+      }
+    } catch (err) {
+      print("Error in getListFriend() from UserRepository: $err");
+      return CustomResponse(
+        statusCode: 500,
+        error: true,
+        errorMaps: {
+          "message": err,
+        },
+      );
+    }
+    return CustomResponse(
+      statusCode: 500,
+      error: true,
+      errorMaps: {
+        "message": "invalid request",
+      },
+    );
+  }
 }

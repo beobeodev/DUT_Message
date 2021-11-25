@@ -103,16 +103,13 @@ class AddFriendPage extends StatelessWidget {
         const SizedBox(
           height: 30,
         ),
-        GestureDetector(
-          onTap: friendController.testFunc,
-          child: Text(
-            "Lời mời kết bạn:",
-            style: TextStyle(
-              color: Palette.zodiacBlue,
-              fontWeight: FontWeight.w700,
-              fontSize: ScreenUtil().setSp(20),
-              fontFamily: FontFamily.fontNunito,
-            ),
+        Text(
+          "Lời mời kết bạn:",
+          style: TextStyle(
+            color: Palette.zodiacBlue,
+            fontWeight: FontWeight.w700,
+            fontSize: ScreenUtil().setSp(20),
+            fontFamily: FontFamily.fontNunito,
           ),
         ),
         Obx(() {
@@ -123,11 +120,17 @@ class AddFriendPage extends StatelessWidget {
                 return RequestAddFriendCard(
                   avatar: friendController.listAddFriendRequest[index].avatar,
                   name: friendController.listAddFriendRequest[index].name,
+                  onTapAccept: () {
+                    friendController.onTapAcceptAddFriendRequest(
+                      friendController.listAddFriendRequest[index].fromId,
+                      friendController.listAddFriendRequest[index].toId,
+                    );
+                  },
                 );
               },
             ),
           );
-        })
+        }),
       ],
     );
   }

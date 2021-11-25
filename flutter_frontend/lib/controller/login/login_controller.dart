@@ -54,4 +54,5 @@ class LoginController extends GetxController {
     FocusScope.of(Get.context).requestFocus(FocusNode());
   }
 
+
 }

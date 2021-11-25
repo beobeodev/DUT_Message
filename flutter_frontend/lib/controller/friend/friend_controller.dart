@@ -3,6 +3,7 @@ import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/widgets/custom/hero_popup_route.dart';
 import 'package:flutter_frontend/widgets/friend/popup/popup_profile_friend.dart';
@@ -19,13 +20,18 @@ class FriendController extends GetxController {
 
   final RxBool isOpenListTab = true.obs;
   final RxInt indexPage = 0.obs;
+  // this variable to check error when user find user by phone number
   final RxString errorPhoneNumber = "".obs;
+  // This variable to store list add friend request
   final RxList<FriendRequest> listAddFriendRequest = <FriendRequest>[].obs;
+  // this variable to store list friend of current user
+  final RxList<User> listFriend = <User>[].obs;
 
   @override
   void onReady() {
     super.onReady();
     getListAddFriendRequest();
+    getListFriend();
   }
 
   Future<void> getListAddFriendRequest() async {
@@ -33,11 +39,17 @@ class FriendController extends GetxController {
     listAddFriendRequest.value = result;
   }
 
+  Future<void> getListFriend() async {
+    listFriend.value = (await userRepository.getListFriend()).responseBody["result"];
+  }
+
+  // this function to handle event onTap "DANH SÁCH"
   void onTapListTab() {
     pageController.jumpToPage(0);
     isOpenListTab.value = true;
   }
 
+  // this function to handle event onTap BUTTON "KẾT BẠN"
   void onTapAddTab() {
     pageController.jumpToPage(1);
     isOpenListTab.value = false;
@@ -48,10 +60,14 @@ class FriendController extends GetxController {
     indexPage.value = index;
   }
 
+  // this function to handle event onTap
+  // textfield input phone number
   void onTapTextField() {
     errorPhoneNumber.value = "";
   }
 
+  // this function to handle event onTap button
+  // find user by phone number
   Future<void> onTapFindButton() async {
     errorPhoneNumber.value = "";
     if (phoneNumberEditingController.text == "") {
@@ -67,6 +83,7 @@ class FriendController extends GetxController {
         errorPhoneNumber.value = "Số điện thoại này chưa được đăng ký";
       } else if (response.statusCode == 200) {
         final Map<String, dynamic> responseBody = response.responseBody;
+        // check add friend request status
         final Map<String, dynamic> responseCheckAddFriendRequest = (await userRepository.checkAddFriendRequest(responseBody["_id"])).responseBody;
 
         AddFriendStatus addFriendStatus;
@@ -98,12 +115,14 @@ class FriendController extends GetxController {
     }
   }
 
+  // this function to handle event onPress BUTTON "KẾT BẠN"
   void onPressAddFriend(String id) {
+    // emit event to socket
     socketController.emitAddFriend(id);
     Get.back();
   }
 
-  Future<void> testFunc() async {
-    await userRepository.getListAddFriendRequest();
+  void onTapAcceptAddFriendRequest(String fromId, String toId) {
+    socketController.emitAcceptAddFriendRequest(fromId, toId);
   }
 }
