@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/widgets/home/header_home.dart';
-import 'package:flutter_frontend/widgets/home/list_message.dart';
+import 'package:flutter_frontend/widgets/home/list_conversation.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
+  final HomeController homeController = Get.put(HomeController());
+
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +26,9 @@ class HomeScreen extends StatelessWidget {
               color: Palette.crayolaBlue,
             ),
           ),
-          ListMessage(),
+          ListConversation(
+            homeController: homeController,
+          ),
         ],
       ),
       backgroundColor: Colors.white,

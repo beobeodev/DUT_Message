@@ -26,12 +26,14 @@ class FriendController extends GetxController {
   final RxList<FriendRequest> listAddFriendRequest = <FriendRequest>[].obs;
   // this variable to store list friend of current user
   final RxList<User> listFriend = <User>[].obs;
+  final RxList<User> listFriendFilter = <User>[].obs;
 
   @override
   void onReady() {
     super.onReady();
     getListAddFriendRequest();
     getListFriend();
+    listenChangeOfListFriend();
   }
 
   Future<void> getListAddFriendRequest() async {
@@ -41,6 +43,13 @@ class FriendController extends GetxController {
 
   Future<void> getListFriend() async {
     listFriend.value = (await userRepository.getListFriend()).responseBody["result"];
+    listFriendFilter.value = listFriend;
+  }
+
+  void listenChangeOfListFriend() {
+    listFriend.listen((p0) {
+      listFriendFilter.value = p0;
+    });
   }
 
   // this function to handle event onTap "DANH SÁCH"
@@ -124,5 +133,12 @@ class FriendController extends GetxController {
 
   void onTapAcceptAddFriendRequest(String fromId, String toId) {
     socketController.emitAcceptAddFriendRequest(fromId, toId);
+  }
+
+  // void onSubmitFindFriend(String value) {
+  //
+  // }
+  void onChangeTextFieldFindFriend(String value) {
+    listFriendFilter.value = listFriend.where((e) => e.name.toLowerCase().contains(value.toLowerCase())).toList();
   }
 }
