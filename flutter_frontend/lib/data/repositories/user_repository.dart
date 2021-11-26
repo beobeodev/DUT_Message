@@ -16,7 +16,15 @@ class UserRepository{
     return _singleton;
   }
 
+  List<FriendRequest> listAddFriendRequest;
+  List<User> listFriend;
+
   UserRepository._init();
+
+  Future<void> initData() async {
+    await getListFriend();
+    await getListAddFriendRequest();
+  }
 
   // this function to get info of user by phone number
   Future<CustomResponse> getUserByPhoneNumber(String phoneNumber) async {
@@ -26,9 +34,9 @@ class UserRepository{
       };
 
       final Map<String, String> header = {
-        "accessToken": localRepository.getAccessToken(),
-        "refreshToken": localRepository.getRefreshToken(),
-        "id": localRepository.getCurrentUser()["_id"],
+        "accessToken": localRepository.accessToken,
+        "refreshToken": localRepository.refreshToken,
+        "id": localRepository.infoCurrentUser.id,
       };
 
       final http.Response responseGetUser = await HttpProvider.postRequest("${ApiPath.userServerUrl}/find-by-phone", body: body, header: header);
@@ -114,19 +122,18 @@ class UserRepository{
   Future<CustomResponse> getListAddFriendRequest() async {
     try {
       final Map<String, String> header = {
-        "accessToken": localRepository.getAccessToken(),
-        "refreshToken": localRepository.getRefreshToken(),
-        "id": localRepository.getCurrentUser()["_id"],
+        "accessToken": localRepository.accessToken,
+        "refreshToken": localRepository.refreshToken,
+        "id": localRepository.infoCurrentUser.id,
       };
 
       final http.Response response = await HttpProvider.getRequest("${ApiPath.userServerUrl}/friend-request", header: header);
 
-
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
-        final List<FriendRequest> listAddFriendRequest = <FriendRequest>[];
+        final List<FriendRequest> listAddFriendRequestTemp = <FriendRequest>[];
         for (final element in listRequest) {
-          listAddFriendRequest.add(
+          listAddFriendRequestTemp.add(
             FriendRequest(
               friendRequestId: element["_id"],
               fromId: element["from"]["_id"],
@@ -136,9 +143,12 @@ class UserRepository{
             ),
           );
         }
+
+        listAddFriendRequest = listAddFriendRequestTemp;
+
         return CustomResponse(
           responseBody: {
-            "result": listAddFriendRequest,
+            "result": listAddFriendRequestTemp,
           },
         );
       } else if (response.statusCode == 500) {
@@ -173,22 +183,26 @@ class UserRepository{
   Future<CustomResponse> getListFriend() async {
     try {
       final Map<String, String> header = {
-        "accessToken": localRepository.getAccessToken(),
-        "refreshToken": localRepository.getRefreshToken(),
-        "id": localRepository.getCurrentUser()["_id"],
+        "accessToken": localRepository.accessToken,
+        "refreshToken": localRepository.refreshToken,
+        "id": localRepository.infoCurrentUser.id,
       };
 
       final http.Response response = await HttpProvider.getRequest("${ApiPath.userServerUrl}/friends", header: header);
 
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
-        final List<User> listFriend = <User>[];
+        final List<User> listFriendTemp = <User>[];
+
         for (final element in listRequest) {
-          listFriend.add(User.fromMap(element),);
+          listFriendTemp.add(User.fromMap(element),);
         }
+
+        listFriend = listFriendTemp;
+
         return CustomResponse(
           responseBody: {
-            "result": listFriend,
+            "result": listFriendTemp,
           },
         );
       } else if (response.statusCode == 500) {

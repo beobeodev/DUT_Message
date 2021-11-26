@@ -1,8 +1,7 @@
 enum CurrentScreen {
-  message,
+  home,
   friend,
   profile,
-  addFriend,
 }
 
 enum AddFriendStatus  {

@@ -28,6 +28,7 @@ class SocketController extends GetxController {
         print('HAVE CONNECTED to socket');
         onAddFriend();
         onNotifyAcceptAddFriendRequest();
+        onReceiveConversationMessage();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -94,6 +95,31 @@ class SocketController extends GetxController {
       });
     } catch (e) {
       print("Error in notifyAcceptAddFriendRequest() from SocketUtil $e");
+    }
+  }
+
+  void emitSendConversationMessage(String conversationId, String fromId, String toId, String content) {
+    try {
+      socket.emit(SocketEvent.sendConversationMessage, {
+        "converId": conversationId,
+        "fromUserId": fromId,
+        "toUserId": toId,
+        "content": content,
+      });
+      print(content);
+    } catch (e) {
+      print("Error in emitSendConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveConversationMessage() {
+    try {
+      print("onReceiveConversationMessage() was called");
+      socket.on(SocketEvent.receiveConversationMessage, (data) {
+        print(data);
+      });
+    } catch (e) {
+      print("Error in onReceiveConversationMessage() from SocketUtil $e");
     }
   }
 }

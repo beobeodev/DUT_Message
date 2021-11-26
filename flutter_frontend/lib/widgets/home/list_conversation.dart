@@ -39,7 +39,9 @@ class ListConversation extends StatelessWidget {
                 ),
                 itemBuilder: (context, index) {
                   return GestureDetector(
-                    onTap: homeController.onTapMessage,
+                    onTap: () {
+                      homeController.onTapConversation(index);
+                    },
                     child: Container(
                         decoration: BoxDecoration(
                           color: Palette.americanSilver,

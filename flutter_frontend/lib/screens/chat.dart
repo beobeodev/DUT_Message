@@ -24,6 +24,7 @@ class ChatScreen extends StatelessWidget {
               width: double.infinity,
               child: ListView(
                 padding: EdgeInsets.only(left: 10, right: 16),
+                // itemCount: chatController.currentConversation.listMessage.length,
                 children: const [
                   ChatItem(
                     isSender: false,
@@ -76,10 +77,11 @@ class ChatScreen extends StatelessWidget {
                       style: TextStyle(
                         fontSize: 13,
                       ),
+                      controller: chatController.inputEditingController,
                     ),
                   ),
                   IconButton(
-                    onPressed: () {},
+                    onPressed: chatController.onTapSendButton,
                     icon: Icon(
                       FontAwesomeIcons.solidPaperPlane,
                       color: Palette.orangeRed,
