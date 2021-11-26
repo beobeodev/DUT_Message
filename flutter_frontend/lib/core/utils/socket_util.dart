@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
+import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:get/get.dart';
@@ -9,6 +13,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 class SocketController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
   FriendController friendController;
+  HomeController homeController;
 
   IO.Socket socket;
 
@@ -28,6 +33,7 @@ class SocketController extends GetxController {
         print('HAVE CONNECTED to socket');
         onAddFriend();
         onNotifyAcceptAddFriendRequest();
+        onReceiveConversationMessage();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -38,6 +44,7 @@ class SocketController extends GetxController {
   void onReady() {
     super.onReady();
     friendController = Get.put(FriendController());
+    homeController = Get.put(HomeController());
   }
   
   void emitAddFriend(String toId) {
@@ -94,6 +101,33 @@ class SocketController extends GetxController {
       });
     } catch (e) {
       print("Error in notifyAcceptAddFriendRequest() from SocketUtil $e");
+    }
+  }
+
+  void emitSendConversationMessage(String conversationId, String fromId, String toId, String content) {
+    try {
+      socket.emit(SocketEvent.sendConversationMessage, {
+        "converId": conversationId,
+        "fromUserId": fromId,
+        "toUserId": toId,
+        "content": content,
+      });
+      // print(content);
+    } catch (e) {
+      print("Error in emitSendConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveConversationMessage() {
+    try {
+      print("onReceiveConversationMessage() was called");
+      socket.on(SocketEvent.receiveConversationMessage, (data) {
+        final Map<String, dynamic> dataMessage = jsonDecode(data);
+        homeController.listConversation.firstWhere((element) => element.id == dataMessage["converId"])
+            .listMessage.add(Message.fromMap(dataMessage["message"]));
+      });
+    } catch (e) {
+      print("Error in onReceiveConversationMessage() from SocketUtil $e");
     }
   }
 }

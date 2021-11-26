@@ -26,21 +26,37 @@ class FriendController extends GetxController {
   final RxList<FriendRequest> listAddFriendRequest = <FriendRequest>[].obs;
   // this variable to store list friend of current user
   final RxList<User> listFriend = <User>[].obs;
+  final RxList<User> listFriendFilter = <User>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    listFriend.value = userRepository.listFriend;
+    listAddFriendRequest.value = userRepository.listAddFriendRequest;
+  }
 
   @override
   void onReady() {
     super.onReady();
-    getListAddFriendRequest();
-    getListFriend();
+    // getListAddFriendRequest();
+    // getListFriend();
+    listenChangeOfListFriend();
   }
 
-  Future<void> getListAddFriendRequest() async {
-    final List<FriendRequest> result = (await userRepository.getListAddFriendRequest()).responseBody["result"];
-    listAddFriendRequest.value = result;
-  }
+  // Future<void> getListAddFriendRequest() async {
+  //   final List<FriendRequest> result = (await userRepository.getListAddFriendRequest()).responseBody["result"];
+  //   listAddFriendRequest.value = result;
+  // }
+  //
+  // Future<void> getListFriend() async {
+  //   listFriend.value = (await userRepository.getListFriend()).responseBody["result"];
+  //   listFriendFilter.value = listFriend;
+  // }
 
-  Future<void> getListFriend() async {
-    listFriend.value = (await userRepository.getListFriend()).responseBody["result"];
+  void listenChangeOfListFriend() {
+    listFriend.listen((p0) {
+      listFriendFilter.value = p0;
+    });
   }
 
   // this function to handle event onTap "DANH SÁCH"
@@ -55,6 +71,7 @@ class FriendController extends GetxController {
     isOpenListTab.value = false;
   }
 
+  // this function to handle event when page change
   void onPageChange(int index) {
     isOpenListTab.value = !isOpenListTab.value;
     indexPage.value = index;
@@ -78,7 +95,7 @@ class FriendController extends GetxController {
       return ;
     } else {
       final CustomResponse response = await userRepository.getUserByPhoneNumber(phoneNumberEditingController.text);
-      // check if user not exist with phone number need get
+      // check if user not exist with phone number which need get info user
       if (response.error && response.statusCode == 404) {
         errorPhoneNumber.value = "Số điện thoại này chưa được đăng ký";
       } else if (response.statusCode == 200) {
@@ -88,16 +105,24 @@ class FriendController extends GetxController {
 
         AddFriendStatus addFriendStatus;
 
+        // if STATUS is friend
+        // => popup show button "HUỶ KẾT BẠN", "NHẮN TIN"
         if (responseCheckAddFriendRequest["message"] == "is friend") {
           addFriendStatus = AddFriendStatus.isFriend;
         } else if (responseCheckAddFriendRequest["message"] == "have send add friend request") {
+        // if STATUS is HAVE SEND REQUEST
+        // => popup show button "HUỶ GỬI"
           addFriendStatus = AddFriendStatus.haveSendAddFriendRequest;
         } else if (responseCheckAddFriendRequest["message"] == "have receive add friend request") {
+        // if STATUS is HAVE SEND REQUEST
+        // => popup show button "TỪ CHỐI", "CHẤP NHẬN"
           addFriendStatus = AddFriendStatus.haveReceiveAddFriendRequest;
         } else {
+        // if STATUS is NO SEND REQUEST
+        // => popup show button "KẾT BẠN"
           addFriendStatus = AddFriendStatus.noAddFriendRequest;
         }
-
+        // open info of user finding
         Navigator.of(Get.context).push(
           HeroPopupRoute(
             builder: (context) => Center(
@@ -122,7 +147,15 @@ class FriendController extends GetxController {
     Get.back();
   }
 
+  // this function to handle event
+  // onTap ICON 'TICK' to ACCEPT add friend request
   void onTapAcceptAddFriendRequest(String fromId, String toId) {
     socketController.emitAcceptAddFriendRequest(fromId, toId);
+  }
+
+  // this function to handle event on change
+  // of text field find friend, with input is friend's name
+  void onChangeTextFieldFindFriend(String value) {
+    listFriendFilter.value = listFriend.where((e) => e.name.toLowerCase().contains(value.toLowerCase())).toList();
   }
 }

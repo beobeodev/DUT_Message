@@ -17,7 +17,8 @@ class DrawerScreenController extends GetxController {
   final RxDouble yOffset = 0.0.obs;
   final RxDouble scaleFactor  = 1.0.obs;
 
-  final Rx<CurrentScreen> currentPage = CurrentScreen.message.obs;
+  // default screen is home screen
+  final Rx<CurrentScreen> currentPage = CurrentScreen.home.obs;
 
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
@@ -54,13 +55,11 @@ class DrawerScreenController extends GetxController {
   //This function to handle onTap event of menu item
   void onTapMenuItem(IconData icon) {
     if (icon == FontAwesomeIcons.commentAlt) {
-      currentPage.value = CurrentScreen.message;
+      currentPage.value = CurrentScreen.home;
     } else if (icon == FontAwesomeIcons.userFriends) {
       currentPage.value = CurrentScreen.friend;
     } else if (icon == FontAwesomeIcons.idBadge) {
       currentPage.value = CurrentScreen.profile;
-    } else {
-      currentPage.value = CurrentScreen.addFriend;
     }
     closeDrawer();
   }
@@ -68,6 +67,7 @@ class DrawerScreenController extends GetxController {
   //This function to handle event onTap of logout button
   Future<void> onTapLogoutButton() async {
     await localRepository.deleteToken();
+    await localRepository.deleteCurrentUser();
     Get.offAllNamed(GetRouter.login);
   }
 }

@@ -23,7 +23,7 @@ class User {
     id: json["_id"].toString(),
     name: json["name"].toString(),
     username: json["username"].toString(),
-    avatar: json["avatar"].toString(),
+    avatar: json["avatar"].toString() == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : json["avatar"].toString(),
     phone: json["phone"].toString(),
     friends: json["friends"] == null ? <String>[] : List<String>.from((json["friends"] as Iterable<dynamic>).map((dynamic x) => x.toString())),
   );

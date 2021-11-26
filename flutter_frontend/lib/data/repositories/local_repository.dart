@@ -1,7 +1,13 @@
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:hive/hive.dart';
 
 class LocalRepository {
   static final LocalRepository _singleton = LocalRepository._init();
+
+  String accessToken;
+  String refreshToken;
+  User infoCurrentUser;
+
   Box authBox;
 
   LocalRepository._init() {
@@ -16,8 +22,15 @@ class LocalRepository {
   //This function to init box to store token when login
   Future<void> initJWTBoxHive() async {
     await Hive.openBox('authBox');
-    await Hive.openBox('currentUserBox');
+    // await Hive.openBox('currentUserBox');
     authBox = Hive.box('authBox');
+  }
+
+  // this function to init data get from local
+  void initData() {
+    accessToken = getAccessToken();
+    refreshToken = getRefreshToken();
+    infoCurrentUser = User.fromMap(Map<String, dynamic>.from(getCurrentUser()));
   }
 
   //
@@ -53,5 +66,9 @@ class LocalRepository {
 
   Map<dynamic, dynamic> getCurrentUser() {
     return authBox.get('current_user');
+  }
+
+  Future<void> deleteCurrentUser() async {
+    await authBox.delete('current_user');
   }
 }

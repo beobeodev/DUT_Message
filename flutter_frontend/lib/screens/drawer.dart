@@ -35,12 +35,12 @@ class DrawerScreen extends StatelessWidget {
                 yOffset: drawerController.yOffset.value,
                 scaleFactor: drawerController.scaleFactor.value,
                 closeDrawer: drawerController.closeDrawer,
-                pageItem: drawerController.currentPage.value == CurrentScreen.message
-                    ? HomeScreen()
-                    : (drawerController.currentPage.value == CurrentScreen.friend
-                    ?  FriendScreen()
-                    : ProfileScreen()
-                    ),
+                pageItem: drawerController.currentPage.value == CurrentScreen.home
+                ? HomeScreen()
+                : (drawerController.currentPage.value == CurrentScreen.friend
+                ?  FriendScreen()
+                : ProfileScreen()
+                ),
               ),
             ],
           );
