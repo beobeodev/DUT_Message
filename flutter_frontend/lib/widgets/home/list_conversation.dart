@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -39,9 +40,10 @@ class ListConversation extends StatelessWidget {
                   top: 0.1,
                 ),
                 itemBuilder: (context, index) {
-                  final User friend = homeController.listConversation[index].listUserIn.firstWhere((element) => homeController.localRepository.infoCurrentUser.id != element.id);
+                  final User friend = homeController.listConversation[index].listUserIn.firstWhere((element) => homeController.currentUser.id != element.id);
                   final String friendName = friend.name;
                   final String friendAvatar = friend.avatar;
+                  final Message lastMessage = homeController.listConversation[index].listMessage.last;
                   return GestureDetector(
                     onTap: () {
                       homeController.onTapConversation(index);
@@ -85,12 +87,12 @@ class ListConversation extends StatelessWidget {
                                   height: 2,
                                 ),
                                 Text(
-                                  "Mi push code lên chưa?",
+                                  lastMessage.author.id == homeController.currentUser.id ? "Bạn: ${lastMessage.content}" : lastMessage.content,
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w700,
+                                    color: lastMessage.author.id == homeController.currentUser.id ? Colors.white : Colors.black,
+                                    fontWeight: lastMessage.author.id == homeController.currentUser.id ? FontWeight.w400 : FontWeight.w700,
                                     fontFamily: FontFamily.fontNunito,
                                     fontSize: ScreenUtil().setSp(15),
                                   ),

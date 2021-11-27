@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -20,6 +21,8 @@ class DrawerScreenController extends GetxController {
   // default screen is home screen
   final Rx<CurrentScreen> currentPage = CurrentScreen.home.obs;
 
+  User currentUser;
+
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
     <String, dynamic>{
@@ -35,6 +38,12 @@ class DrawerScreenController extends GetxController {
       "icon": FontAwesomeIcons.idBadge,
     },
   ];
+
+  @override
+  void onInit() {
+    super.onInit();
+    currentUser = localRepository.infoCurrentUser;
+  }
 
   //This function to implement close drawer
   void closeDrawer() {

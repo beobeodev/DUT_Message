@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/chat/chat_controller.dart';
+import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/widgets/chat/appbar.dart';
 import 'package:flutter_frontend/widgets/chat/chat_item.dart';
@@ -9,10 +11,12 @@ import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   final ChatController chatController = Get.put(ChatController());
+  final HomeController homeController = Get.put(HomeController());
+
+  final DrawerScreenController drawerController = Get.put(DrawerScreenController());
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Column(
         children: [
@@ -22,28 +26,34 @@ class ChatScreen extends StatelessWidget {
           Expanded(
             child: SizedBox(
               width: double.infinity,
-              child: ListView(
-                padding: EdgeInsets.only(left: 10, right: 16),
-                // itemCount: chatController.currentConversation.listMessage.length,
-                children: const [
-                  ChatItem(
-                    isSender: false,
-                    time: '18:00',
-                    message: 'Bạn push code lên chưa?',
-                  ),
-                  ChatItem(
-                    isSender: true,
-                    time: '18:00',
-                    message: 'Đợi xí',
-                  ),
-                ],
+              child: Obx(
+                () => ListView.builder(
+                  controller: chatController.scrollController,
+                  padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
+                  // itemCount: chatController.currentConversation.listMessage.length,
+                  itemCount: homeController.listConversation[chatController.indexConversation].listMessage.length,
+                  itemBuilder: (context, index) {
+                    final bool isSender = homeController.listConversation[chatController.indexConversation].listMessage[index].author.id ==
+                        drawerController.currentUser.id;
+                    return ChatItem(
+                      isSender: isSender,
+                      time: "${homeController.listConversation[chatController.indexConversation]
+                          .listMessage[index].timeSend.hour
+                          .toString()} : ${homeController.listConversation[chatController.indexConversation].listMessage[index].timeSend.minute
+                          .toString()}",
+                      message: homeController.listConversation[chatController.indexConversation]
+                          .listMessage[index].content,
+                    );
+                  },
+                ),
               ),
             ),
           ),
           ColoredBox(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 25.0, top: 6, left: 15, right: 15),
+              padding: const EdgeInsets.only(
+                  bottom: 25.0, top: 6, left: 15, right: 15),
               child: Row(
                 children: [
                   GestureDetector(
@@ -72,7 +82,8 @@ class ChatScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25),
                         ),
                         isDense: true,
-                        contentPadding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                        contentPadding: EdgeInsets.only(
+                            left: 12, top: 12, bottom: 12),
                       ),
                       style: TextStyle(
                         fontSize: 13,

@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
+import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
@@ -12,6 +13,7 @@ import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
+
   FriendController friendController;
   HomeController homeController;
 
@@ -112,19 +114,31 @@ class SocketController extends GetxController {
         "toUserId": toId,
         "content": content,
       });
+      final int index = homeController.listConversation.indexWhere((element) => element.id == conversationId);
+      final Conversation conversationTemp = homeController.listConversation[index];
+      conversationTemp.listMessage.add(Message(
+        author: localRepository.infoCurrentUser,
+        content: content,
+        timeSend: DateTime.now().toUtc(),
+      ));
+      homeController.listConversation[index] = conversationTemp;
       // print(content);
     } catch (e) {
       print("Error in emitSendConversationMessage() from SocketUtil $e");
     }
   }
 
-  void onReceiveConversationMessage() {
+  void onReceiveConversationMessage()  {
     try {
       print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
-        final Map<String, dynamic> dataMessage = jsonDecode(data);
-        homeController.listConversation.firstWhere((element) => element.id == dataMessage["converId"])
-            .listMessage.add(Message.fromMap(dataMessage["message"]));
+        // yield jsonDecode(data);
+        // print(data);
+        final int index = homeController.listConversation.indexWhere((element) => element.id == data["converId"]);
+        final Conversation conversationTemp = homeController.listConversation[index];
+        conversationTemp.listMessage.add(Message.fromMap(data["message"]));
+        homeController.listConversation[index] = conversationTemp;
+        // update();
       });
     } catch (e) {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");

@@ -33,7 +33,7 @@ class ConversationRepository {
       if (response.statusCode == 200) {
         final List<Conversation> listConversationTemp = <Conversation>[];
         for (final element in jsonDecode(response.body)) {
-          // print(element["userIns"]);
+          // print(element);
           listConversationTemp.add(
             Conversation.fromMap(element),
           );
