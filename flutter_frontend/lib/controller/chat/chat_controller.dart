@@ -3,8 +3,6 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
-import 'package:flutter_frontend/data/models/conversation.dart';
-import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:get/get.dart';
@@ -33,10 +31,17 @@ class ChatController extends GetxController {
   @override
   void onReady() {
     super.onReady();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      if (scrollController.hasClients) {
+        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      }
+    });
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
     homeController.listConversation.listen((p0) {
       Timer(Duration(milliseconds: 200), () => {
-        scrollController.jumpTo(scrollController.position.maxScrollExtent),
+        if (scrollController.hasClients) {
+          scrollController.jumpTo(scrollController.position.maxScrollExtent)
+        }
       },);
     },);
   }
@@ -51,12 +56,15 @@ class ChatController extends GetxController {
     //   print(item.toMap());
     // }
     // print(DateTime.now().toUtc());
-    socketController.emitSendConversationMessage(
-      homeController.listConversation[indexConversation].id,
-      localRepository.infoCurrentUser.id,
-      friendUser.id,
-      inputEditingController.text,
-    );
+    if (inputEditingController.text != "") {
+      socketController.emitSendConversationMessage(
+        homeController.listConversation[indexConversation].id,
+        localRepository.infoCurrentUser.id,
+        friendUser.id,
+        inputEditingController.text,
+      );
+      inputEditingController.clear();
+    }
     // currentConversation.update((val) {
     //   val.listMessage.add(Message(
     //     author: localRepository.infoCurrentUser,
@@ -65,7 +73,6 @@ class ChatController extends GetxController {
     //   ),);
     // });
     // update();
-    inputEditingController.clear();
   }
 
 }

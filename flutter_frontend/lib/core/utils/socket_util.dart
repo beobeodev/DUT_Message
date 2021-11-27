@@ -119,8 +119,8 @@ class SocketController extends GetxController {
       conversationTemp.listMessage.add(Message(
         author: localRepository.infoCurrentUser,
         content: content,
-        timeSend: DateTime.now().toUtc(),
-      ));
+        timeSend: DateTime.now(),
+      ),);
       homeController.listConversation[index] = conversationTemp;
       // print(content);
     } catch (e) {
