@@ -32,6 +32,7 @@ class FriendController extends GetxController {
   void onInit() {
     super.onInit();
     listFriend.value = userRepository.listFriend;
+    listFriendFilter.value = listFriend;
     listAddFriendRequest.value = userRepository.listAddFriendRequest;
   }
 

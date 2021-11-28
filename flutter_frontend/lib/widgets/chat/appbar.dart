@@ -34,15 +34,19 @@ class AppBarChat extends StatelessWidget {
                 ),
                 iconSize: ScreenUtil().setSp(23),
               ),
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(60),
-                ),
-                child: SizedBox(
-                  width: ScreenUtil().setWidth(45),
-                  height: ScreenUtil().setWidth(45),
-                ),
+              // DecoratedBox(
+              //   decoration: BoxDecoration(
+              //     color: Colors.red,
+              //     borderRadius: BorderRadius.circular(60),
+              //   ),
+              //   child: SizedBox(
+              //     width: ScreenUtil().setWidth(45),
+              //     height: ScreenUtil().setWidth(45),
+              //   ),
+              // ),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(chatController.friendUser.avatar),
               ),
               SizedBox(
                 width: ScreenUtil().setWidth(10),
@@ -52,7 +56,7 @@ class AppBarChat extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "Quốc Đạt",
+                    chatController.friendUser.name,
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,
                       color: Palette.zodiacBlue,
@@ -60,39 +64,39 @@ class AppBarChat extends StatelessWidget {
                       fontSize: ScreenUtil().setSp(18),
                     ),
                   ),
-                  Text(
-                    "Hoạt động 5 phút trước",
-                    style: TextStyle(
-                      fontFamily: FontFamily.fontNunito,
-                      color: Palette.americanSilver,
-                      fontWeight: FontWeight.w400,
-                      fontSize: ScreenUtil().setSp(14),
-                    ),
-                  ),
+                  // Text(
+                  //   "Hoạt động 5 phút trước",
+                  //   style: TextStyle(
+                  //     fontFamily: FontFamily.fontNunito,
+                  //     color: Palette.americanSilver,
+                  //     fontWeight: FontWeight.w400,
+                  //     fontSize: ScreenUtil().setSp(14),
+                  //   ),
+                  // ),
                 ],
               ),
               const Expanded(
                 child: SizedBox(),
               ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  FontAwesomeIcons.video,
-                  color: Palette.orangeRed,
-                ),
-                iconSize: ScreenUtil().setSp(24),
-              ),
-              SizedBox(
-                width: ScreenUtil().setWidth(8),
-              ),
-              IconButton(
-                onPressed: () {},
-                icon: Icon(
-                  FontAwesomeIcons.phoneAlt,
-                  color: Palette.orangeRed,
-                ),
-                iconSize: ScreenUtil().setSp(21),
-              ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(
+              //     FontAwesomeIcons.video,
+              //     color: Palette.orangeRed,
+              //   ),
+              //   iconSize: ScreenUtil().setSp(24),
+              // ),
+              // SizedBox(
+              //   width: ScreenUtil().setWidth(8),
+              // ),
+              // IconButton(
+              //   onPressed: () {},
+              //   icon: Icon(
+              //     FontAwesomeIcons.phoneAlt,
+              //     color: Palette.orangeRed,
+              //   ),
+              //   iconSize: ScreenUtil().setSp(21),
+              // ),
             ],
           ),
         ),

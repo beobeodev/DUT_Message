@@ -106,13 +106,14 @@ class SocketController extends GetxController {
     }
   }
 
-  void emitSendConversationMessage(String conversationId, String fromId, String toId, String content) {
+  void emitSendConversationMessage({String conversationId, String fromId, String toId, String content, bool isImg = false}) {
     try {
       socket.emit(SocketEvent.sendConversationMessage, {
         "converId": conversationId,
         "fromUserId": fromId,
         "toUserId": toId,
         "content": content,
+        "isImg": isImg,
       });
       final int index = homeController.listConversation.indexWhere((element) => element.id == conversationId);
       final Conversation conversationTemp = homeController.listConversation[index];
@@ -120,6 +121,7 @@ class SocketController extends GetxController {
         author: localRepository.infoCurrentUser,
         content: content,
         timeSend: DateTime.now(),
+        isImage: isImg,
       ),);
       homeController.listConversation[index] = conversationTemp;
       // print(content);

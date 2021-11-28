@@ -43,5 +43,15 @@
 	</array>
 	<key>UIViewControllerBasedStatusBarAppearance</key>
 	<false/>
+	<key>UIBackgroundModes</key>
+    <array>
+       <string>fetch</string>
+       <string>remote-notification</string>
+    </array>
+    <key>UISupportsDocumentBrowser</key>
+    <true/>
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>Use photo library to pick image and upload to firebase and send to chat</string>
+
 </dict>
 </plist>

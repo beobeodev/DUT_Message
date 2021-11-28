@@ -1,5 +1,6 @@
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
+import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
@@ -8,6 +9,7 @@ class SplashController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
   final ConversationRepository conversationRepository = ConversationRepository();
   final UserRepository userRepository = UserRepository();
+  final FirebaseRepository firebaseRepository = FirebaseRepository();
 
   @override
   void onInit() {

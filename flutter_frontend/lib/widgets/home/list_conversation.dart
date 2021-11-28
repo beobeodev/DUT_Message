@@ -43,7 +43,9 @@ class ListConversation extends StatelessWidget {
                   final User friend = homeController.listConversation[index].listUserIn.firstWhere((element) => homeController.currentUser.id != element.id);
                   final String friendName = friend.name;
                   final String friendAvatar = friend.avatar;
-                  final Message lastMessage = homeController.listConversation[index].listMessage.last;
+                  final int indexLast = homeController.listConversation[index].listMessage.length - 1;
+                  final Message lastMessage = homeController.listConversation[index].listMessage[indexLast];
+                  final bool isImage = homeController.listConversation[index].listMessage[indexLast].isImage;
                   return GestureDetector(
                     onTap: () {
                       homeController.onTapConversation(index);
@@ -87,7 +89,7 @@ class ListConversation extends StatelessWidget {
                                   height: 2,
                                 ),
                                 Text(
-                                  lastMessage.author.id == homeController.currentUser.id ? "Bạn: ${lastMessage.content}" : lastMessage.content,
+                                  lastMessage.author.id == homeController.currentUser.id ? (isImage ? "Bạn: đã gửi một file" : "Bạn: ${lastMessage.content}") : (isImage ? "Đã gửi một file" : lastMessage.content),
                                   overflow: TextOverflow.ellipsis,
                                   maxLines: 1,
                                   style: TextStyle(

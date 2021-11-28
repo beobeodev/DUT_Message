@@ -24,28 +24,27 @@ class ChatScreen extends StatelessWidget {
             chatController: chatController,
           ),
           Expanded(
-            child: SizedBox(
-              width: double.infinity,
-              child: Obx(
-                () => ListView.builder(
-                  controller: chatController.scrollController,
-                  padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
-                  // itemCount: chatController.currentConversation.listMessage.length,
-                  itemCount: homeController.listConversation[chatController.indexConversation].listMessage.length,
-                  itemBuilder: (context, index) {
-                    final bool isSender = homeController.listConversation[chatController.indexConversation].listMessage[index].author.id ==
-                        drawerController.currentUser.id;
-                    return ChatItem(
-                      isSender: isSender,
-                      time: "${homeController.listConversation[chatController.indexConversation]
-                          .listMessage[index].timeSend.hour
-                          .toString()} : ${homeController.listConversation[chatController.indexConversation].listMessage[index].timeSend.minute
-                          .toString()}",
-                      message: homeController.listConversation[chatController.indexConversation]
-                          .listMessage[index].content,
-                    );
-                  },
-                ),
+            child: Obx(
+              () => ListView.builder(
+                controller: chatController.scrollController,
+                padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
+                // itemCount: chatController.currentConversation.listMessage.length,
+                itemCount: homeController.listConversation[chatController.indexConversation].listMessage.length,
+                itemBuilder: (context, index) {
+                  final bool isSender = homeController.listConversation[chatController.indexConversation].listMessage[index].author.id ==
+                      drawerController.currentUser.id;
+                  return ChatItem(
+                    isSender: isSender,
+                    time: "${homeController.listConversation[chatController.indexConversation]
+                        .listMessage[index].timeSend.hour
+                        .toString()} : ${homeController.listConversation[chatController.indexConversation].listMessage[index].timeSend.minute
+                        .toString()}",
+                    message: homeController.listConversation[chatController.indexConversation]
+                        .listMessage[index].content,
+                    isImage: homeController.listConversation[chatController.indexConversation]
+                        .listMessage[index].isImage,
+                  );
+                },
               ),
             ),
           ),
@@ -53,11 +52,12 @@ class ChatScreen extends StatelessWidget {
             color: Colors.white,
             child: Padding(
               padding: const EdgeInsets.only(
-                  bottom: 25.0, top: 6, left: 15, right: 15),
+                  bottom: 16.0, top: 6, left: 15, right: 15,
+              ),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: chatController.showSelectModalBottom,
                     child: Icon(
                       FontAwesomeIcons.plusCircle,
                       color: Palette.orangeRed,
@@ -70,7 +70,7 @@ class ChatScreen extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Type your message...',
+                        hintText: 'Nhập tin nhắn...',
                         filled: true,
                         fillColor: Colors.blueGrey[50],
                         enabledBorder: OutlineInputBorder(
@@ -83,7 +83,8 @@ class ChatScreen extends StatelessWidget {
                         ),
                         isDense: true,
                         contentPadding: EdgeInsets.only(
-                            left: 12, top: 12, bottom: 12),
+                            left: 16, top: 13, bottom: 12,
+                        ),
                       ),
                       style: TextStyle(
                         fontSize: 13,

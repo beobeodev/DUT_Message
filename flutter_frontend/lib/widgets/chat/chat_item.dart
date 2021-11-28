@@ -4,12 +4,13 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({this.isSender, this.time, this.message});
+  const ChatItem({this.isSender, this.time, this.message, this.isImage = false});
 
   //check sender is current user or others
   final bool isSender;
   final String time;
   final String message;
+  final bool isImage;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class ChatItem extends StatelessWidget {
           time,
           style: TextStyle(
             color: Palette.americanSilver,
-            fontSize: ScreenUtil().setSp(14),
+            fontSize: ScreenUtil().setSp(12),
             fontFamily: FontFamily.fontNunito,
             fontWeight: FontWeight.w400,
           ),
@@ -36,7 +37,13 @@ class ChatItem extends StatelessWidget {
           ),
         ),
         Flexible(
-          child: Container(
+          child: isImage ? Padding(
+            padding:  EdgeInsets.only(left: 10, right: 10, top:  10),
+            child: Image.network(
+              message,
+              width: ScreenUtil().screenWidth/2 + 50,
+            ),
+          ) : Container(
             margin: EdgeInsets.only(left: 10, right: 10, top:  10),
             padding: EdgeInsets.symmetric(
               vertical: 10,
@@ -67,11 +74,12 @@ class ChatItem extends StatelessWidget {
             ),
           ),
         ),
-        if (isSender) SizedBox() else Text(
+        if (isSender) SizedBox()
+        else Text(
           time,
           style: TextStyle(
             color: Palette.americanSilver,
-            fontSize: ScreenUtil().setSp(14),
+            fontSize: ScreenUtil().setSp(12),
             fontFamily: FontFamily.fontNunito,
             fontWeight: FontWeight.w400,
           ),
