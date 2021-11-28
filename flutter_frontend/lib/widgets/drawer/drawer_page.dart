@@ -23,21 +23,15 @@ class DrawerPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                ),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(drawerController.currentUser.avatar),
               ),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                "Nguyễn Minh Đức",
+                drawerController.currentUser.name,
                 style: TextStyle(
                   fontFamily: FontFamily.fontNunito,
                   color: Palette.zodiacBlue,
