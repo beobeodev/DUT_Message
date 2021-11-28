@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/widgets/friend/friend_page/info_friend_card.dart';
+import 'package:flutter_frontend/widgets/friend/friend_page/friend_card.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -73,9 +73,12 @@ class ListFriendPage extends StatelessWidget {
                 padding: EdgeInsets.only(top: 0.1),
                 itemCount: friendController.listFriendFilter.length,
                 itemBuilder: (context, index) {
-                  return InfoFriendCard(
+                  return FriendCard(
                     name: friendController.listFriendFilter[index].name,
                     avatar: friendController.listFriendFilter[index].avatar,
+                    onTapCard: () {
+                      friendController.onTapFriendCard(index);
+                    },
                   );
                 },
               ),

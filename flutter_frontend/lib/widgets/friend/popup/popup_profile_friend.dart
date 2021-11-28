@@ -49,7 +49,11 @@ class PopUpProfileFriend extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent()
+              if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent(
+                onPressButtonChat: () {
+                  friendController.onPressButtonChat(id);
+                },
+              )
               else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
               else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent()
               else if (addFriendStatus == AddFriendStatus.noAddFriendRequest) Padding(

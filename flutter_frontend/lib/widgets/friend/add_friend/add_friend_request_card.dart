@@ -33,7 +33,7 @@ class RequestAddFriendCard extends StatelessWidget {
         children: [
           CircleAvatar(
             backgroundImage: NetworkImage(
-              avatar == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : avatar,
+              avatar,
             ),
             radius: 18,
           ),
