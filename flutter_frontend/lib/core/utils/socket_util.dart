@@ -24,15 +24,18 @@ class SocketController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    print("init SocketController");
     try {
       final String id = localRepository.getCurrentUser()["_id"];
       socket = IO.io("http://localhost:3000",
         IO.OptionBuilder()
         .setTransports(['websocket']) // for Flutter or Dart VM
-        .enableAutoConnect()  // enable auto-connection
+        // .enableAutoConnect()
+        // .enableReconnection()// enable auto-connection
         .setQuery({'userId': id})
         .build(),
       );
+      socket.connect();
       socket.onConnect((_) {
         print('HAVE CONNECTED to socket');
         onAddFriend();
@@ -63,6 +66,16 @@ class SocketController extends GetxController {
     } catch (e) {
       print("Error in emitAddFriend() from SocketUtil $e");
     }
+  }
+
+  @override
+  void onClose() {
+    print("DISPOSE SOCKET!");
+    socket.onDisconnect((data) => print(data));
+    socket.ondisconnect();
+    socket.close();
+    socket.dispose();
+    super.onClose();
   }
 
   void onAddFriend() {
@@ -135,8 +148,6 @@ class SocketController extends GetxController {
     try {
       print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
-        // yield jsonDecode(data);
-        // print(data);
         final int index = homeController.listConversation.indexWhere((element) => element.id == data["converId"]);
         final Conversation conversationTemp = homeController.listConversation[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));

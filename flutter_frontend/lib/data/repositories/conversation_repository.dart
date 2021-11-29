@@ -30,6 +30,8 @@ class ConversationRepository {
 
       final http.Response response = await HttpProvider.getRequest(ApiPath.conversationServerUrl, header: header);
 
+      // print("in getListConversation() from CONVERSATION REPOSITORY: ${response.body}");
+
       if (response.statusCode == 200) {
         final List<Conversation> listConversationTemp = <Conversation>[];
         for (final element in jsonDecode(response.body)) {
@@ -47,6 +49,7 @@ class ConversationRepository {
           },
         );
       } else if (response.statusCode == 500) {
+        listConversation = <Conversation>[];
         return CustomResponse(
           statusCode: 500,
           error: true,

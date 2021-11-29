@@ -16,8 +16,8 @@ class UserRepository{
     return _singleton;
   }
 
-  List<FriendRequest> listAddFriendRequest;
-  List<User> listFriend;
+  List<FriendRequest> listAddFriendRequest = [];
+  List<User> listFriend = [];
 
   UserRepository._init();
 
@@ -152,6 +152,8 @@ class UserRepository{
           },
         );
       } else if (response.statusCode == 500) {
+        listAddFriendRequest = <FriendRequest>[];
+
         return CustomResponse(
           statusCode: 404,
           error: true,
@@ -207,6 +209,8 @@ class UserRepository{
           },
         );
       } else if (response.statusCode == 500) {
+        listFriend = <User>[];
+
         return CustomResponse(
           statusCode: 404,
           error: true,

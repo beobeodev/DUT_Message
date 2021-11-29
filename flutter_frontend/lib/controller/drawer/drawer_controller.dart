@@ -75,8 +75,7 @@ class DrawerScreenController extends GetxController {
 
   //This function to handle event onTap of logout button
   Future<void> onTapLogoutButton() async {
-    await localRepository.deleteToken();
-    await localRepository.deleteCurrentUser();
+    await localRepository.removeAllData();
     Get.offAllNamed(GetRouter.login);
   }
 }
