@@ -44,36 +44,28 @@ class AppBarChat extends StatelessWidget {
               //     height: ScreenUtil().setWidth(45),
               //   ),
               // ),
-              CircleAvatar(
-                radius: 30,
-                backgroundImage: NetworkImage(chatController.friendUser.avatar),
-              ),
-              SizedBox(
-                width: ScreenUtil().setWidth(10),
-              ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    chatController.friendUser.name,
-                    style: TextStyle(
-                      fontFamily: FontFamily.fontNunito,
-                      color: Palette.zodiacBlue,
-                      fontWeight: FontWeight.w700,
-                      fontSize: ScreenUtil().setSp(18),
+              GestureDetector(
+                onTap: chatController.openMenuChatScreen,
+                child: Row(
+                  children: [
+                    CircleAvatar(
+                      radius: 30,
+                      backgroundImage: NetworkImage(chatController.friendUser.avatar),
                     ),
-                  ),
-                  // Text(
-                  //   "Hoạt động 5 phút trước",
-                  //   style: TextStyle(
-                  //     fontFamily: FontFamily.fontNunito,
-                  //     color: Palette.americanSilver,
-                  //     fontWeight: FontWeight.w400,
-                  //     fontSize: ScreenUtil().setSp(14),
-                  //   ),
-                  // ),
-                ],
+                    SizedBox(
+                      width: ScreenUtil().setWidth(10),
+                    ),
+                    Text(
+                      chatController.friendUser.name,
+                      style: TextStyle(
+                        fontFamily: FontFamily.fontNunito,
+                        color: Palette.zodiacBlue,
+                        fontWeight: FontWeight.w700,
+                        fontSize: ScreenUtil().setSp(18),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               const Expanded(
                 child: SizedBox(),

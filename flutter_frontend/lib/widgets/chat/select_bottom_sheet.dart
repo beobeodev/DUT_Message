@@ -14,13 +14,13 @@ class SelectBottomSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return SnappingSheet(
       snappingPositions: const [
-        //Set height of BottomSheet is 0.37 height of screen
+        //Set height of BottomSheet is 0.3 height of screen
         SnappingPosition.factor(
           positionFactor: 0.3,
           snappingCurve: Curves.easeIn,
           snappingDuration: Duration(milliseconds: 100),
         ),
-        //Set height expanded is 0.37 height of screen
+        //Set height expanded is 0.3 height of screen
         SnappingPosition.factor(
           positionFactor: 0.3,
           snappingCurve: Curves.easeIn,

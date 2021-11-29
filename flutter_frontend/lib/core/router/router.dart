@@ -3,6 +3,7 @@ import 'package:flutter_frontend/screens/chat.dart';
 import 'package:flutter_frontend/screens/drawer.dart';
 import 'package:flutter_frontend/screens/home.dart';
 import 'package:flutter_frontend/screens/login.dart';
+import 'package:flutter_frontend/screens/menu_chat.dart';
 import 'package:flutter_frontend/screens/onboard.dart';
 import 'package:flutter_frontend/screens/sign_up.dart';
 import 'package:flutter_frontend/screens/splash.dart';
@@ -15,6 +16,7 @@ class GetRouter {
   static const onboard = "/onboard";
   static const home = "/home";
   static const chat = "/chat";
+  static const menuChat = "/menuChat";
   static const drawer = "/drawer";
 
   static List<GetPage> pages = [
@@ -24,6 +26,7 @@ class GetRouter {
     GetPage(name: onboard, page: () => OnboardScreen()),
     GetPage(name: home, page: () => HomeScreen()),
     GetPage(name: chat, page: () => ChatScreen()),
+    GetPage(name: menuChat, page: () => MenuChatScreen()),
     GetPage(name: drawer, page: () => DrawerScreen(), binding: DrawerBinding()),
   ];
 }

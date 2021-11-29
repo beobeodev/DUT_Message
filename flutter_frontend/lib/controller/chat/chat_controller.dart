@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/user.dart';
@@ -20,6 +21,7 @@ class ChatController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
   final FirebaseRepository firebaseRepository = FirebaseRepository();
 
+  // final MenuChatController menuChatController = Get.put(MenuChatController());
   final HomeController homeController = Get.put(HomeController());
   final SocketController socketController = Get.put(SocketController());
 
@@ -147,7 +149,13 @@ class ChatController extends GetxController {
         return SelectBottomSheet(
           onPressItem: showFilePicker,
         );
-      }
+      },
     );
+  }
+
+  // this function to open menu chat screen when on tap
+  // app bar of chat screen
+  void openMenuChatScreen() {
+    Get.toNamed(GetRouter.menuChat, arguments: friendUser);
   }
 }
