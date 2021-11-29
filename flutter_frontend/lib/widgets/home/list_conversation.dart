@@ -40,7 +40,7 @@ class ListConversation extends StatelessWidget {
                   top: 0.1,
                 ),
                 itemBuilder: (context, index) {
-                  if (homeController.listConversation[index].listMessage.length != 0) {
+                  if (homeController.listConversation[index].listMessage.isNotEmpty) {
                     final User friend = homeController.listConversation[index].listUserIn.firstWhere((element) => homeController.currentUser.id != element.id);
                     final String friendName = friend.name;
                     final String friendAvatar = friend.avatar;

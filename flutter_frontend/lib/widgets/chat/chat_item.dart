@@ -4,13 +4,16 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({this.isSender, this.time, this.message, this.isImage = false});
+  const ChatItem({this.isSender, this.time, this.message, this.isImage = false, this.avatar});
 
   //check sender is current user or others
   final bool isSender;
   final String time;
   final String message;
+  // check if message is image, video or file then show it
   final bool isImage;
+  // get avatar of sender
+  final String avatar;
 
   @override
   Widget build(BuildContext context) {
@@ -26,14 +29,10 @@ class ChatItem extends StatelessWidget {
             fontFamily: FontFamily.fontNunito,
             fontWeight: FontWeight.w400,
           ),
-        ) else DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: SizedBox(
-            width: ScreenUtil().setWidth(30),
-            height: ScreenUtil().setWidth(30),
+        ) else CircleAvatar(
+          radius: 13,
+          backgroundImage: NetworkImage(
+            avatar,
           ),
         ),
         Flexible(

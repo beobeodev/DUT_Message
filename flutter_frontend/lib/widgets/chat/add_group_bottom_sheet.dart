@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/chat/menu_chat_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,7 +7,9 @@ import 'package:get/get.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
 
 class AddGroupBottomSheet extends StatelessWidget {
-  const AddGroupBottomSheet({Key key}) : super(key: key);
+  final MenuChatController menuChatController;
+
+  const AddGroupBottomSheet({Key key, this.menuChatController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -124,6 +127,7 @@ class AddGroupBottomSheet extends StatelessWidget {
                   height: 20,
                 ),
                 TextField(
+                  onChanged: menuChatController.onChangeTextFieldFind,
                   decoration: InputDecoration(
                     hintText: 'Tìm bạn thêm vào nhóm',
                     filled: true,
@@ -162,46 +166,60 @@ class AddGroupBottomSheet extends StatelessWidget {
                 const SizedBox(
                   height: 20,
                 ),
-                Container(
-                  margin: EdgeInsets.only(bottom: 5.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Palette.lighterBlack,
-                    ),
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  width: double.infinity,
-                  height: ScreenUtil().setHeight(40),
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20,
-                  ),
-                  child: Row(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: NetworkImage(
-                          "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png",
-                        ),
-                        radius: 15,
-                      ),
-                      const SizedBox(
-                        width: 20,
-                      ),
-                      Expanded(
-                        child: Text(
-                          "Minh Duc",
-                          style: TextStyle(
-                            color: Palette.zodiacBlue,
-                            fontWeight: FontWeight.w700,
-                            fontSize: ScreenUtil().setSp(16),
-                            fontFamily: FontFamily.fontNunito,
-                            overflow: TextOverflow.ellipsis,
+                Expanded(
+                  child: Obx(
+                    () => ListView.builder(
+                      itemCount: menuChatController.listFriend.where((element) => element["user"].name.toLowerCase().contains(menuChatController.findEditingController.text)).length,
+                      itemBuilder: (context, index) {
+                        return GestureDetector(
+                          onTap: () {
+                            menuChatController.onTapSelectFriend(menuChatController.listFriend[index]["user"]);
+                          },
+                          child: Container(
+                            margin: EdgeInsets.only(bottom: 5.0),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color: Palette.lighterBlack,
+                              ),
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            width: double.infinity,
+                            height: ScreenUtil().setHeight(40),
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 20,
+                            ),
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: NetworkImage(
+                                    menuChatController.listFriend[index]["user"].avatar,
+                                  ),
+                                  radius: 15,
+                                ),
+                                const SizedBox(
+                                  width: 20,
+                                ),
+                                Expanded(
+                                  child: Text(
+                                    menuChatController.listFriend[index]["user"].name,
+                                    style: TextStyle(
+                                      color: Palette.zodiacBlue,
+                                      fontWeight: FontWeight.w700,
+                                      fontSize: ScreenUtil().setSp(16),
+                                      fontFamily: FontFamily.fontNunito,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
-                        ),
-                      ),
-                    ],
+                        );
+                      },
+                    ),
                   ),
-                ),
+                )
               ],
             ),
           ),

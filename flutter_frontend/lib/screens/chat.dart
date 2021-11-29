@@ -43,6 +43,7 @@ class ChatScreen extends StatelessWidget {
                         .listMessage[index].content,
                     isImage: homeController.listConversation[chatController.indexConversation]
                         .listMessage[index].isImage,
+                    avatar: chatController.friendUser.avatar,
                   );
                 },
               ),
