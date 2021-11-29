@@ -233,4 +233,8 @@ class UserRepository{
       },
     );
   }
+
+  void addFriendToList(User friend) {
+    listFriend.add(friend);
+  }
 }

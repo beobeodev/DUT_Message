@@ -8,11 +8,13 @@ import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
+import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
 class SocketController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
+  final UserRepository userRepository = UserRepository();
 
   FriendController friendController;
   HomeController homeController;
@@ -57,7 +59,7 @@ class SocketController extends GetxController {
         "fromId": fromId,
         "toId": toId,
       });
-      print(toId);
+      // print(toId);
     } catch (e) {
       print("Error in emitAddFriend() from SocketUtil $e");
     }
@@ -73,9 +75,8 @@ class SocketController extends GetxController {
           fromId: data["from"]["_id"],
           toId: currentId,
           name: data["from"]["name"],
-          avatar: data["from"]["avatar"],
+          avatar: data["from"]["avatar"] == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : data["from"]["avatar"],
         );
-        print(friendRequest);
         friendController.listAddFriendRequest.add(friendRequest);
       });
     } catch (e) {
