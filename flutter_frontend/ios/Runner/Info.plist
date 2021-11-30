@@ -52,6 +52,10 @@
     <true/>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>Use photo library to pick image and upload to firebase and send to chat</string>
-
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+      <string>https</string>
+      <string>http</string>
+    </array>
 </dict>
 </plist>

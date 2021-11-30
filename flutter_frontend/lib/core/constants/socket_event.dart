@@ -6,4 +6,7 @@ class SocketEvent {
 
   static String sendConversationMessage = 'send-conver-message';
   static String receiveConversationMessage = 'receive-conver-message';
+
+  static String sendCreateRoom = 'send-create-room';
+  static String receiveCreateRoom = 'receive-create-room';
 }

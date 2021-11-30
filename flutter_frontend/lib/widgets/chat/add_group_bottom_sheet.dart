@@ -67,7 +67,7 @@ class AddGroupBottomSheet extends StatelessWidget {
                 ),
               ),
               TextButton(
-                onPressed: () {},
+                onPressed: menuChatController.onTapCreateButton,
                 child: Text(
                   "Tạo",
                   style: TextStyle(
@@ -127,7 +127,8 @@ class AddGroupBottomSheet extends StatelessWidget {
                   height: 20,
                 ),
                 TextField(
-                  onChanged: menuChatController.onChangeTextFieldFind,
+                  // onChanged: menuChatController.onChangeTextFieldFind,
+                  controller: menuChatController.findEditingController,
                   decoration: InputDecoration(
                     hintText: 'Tìm bạn thêm vào nhóm',
                     filled: true,
@@ -169,17 +170,19 @@ class AddGroupBottomSheet extends StatelessWidget {
                 Expanded(
                   child: Obx(
                     () => ListView.builder(
-                      itemCount: menuChatController.listFriend.where((element) => element["user"].name.toLowerCase().contains(menuChatController.findEditingController.text)).length,
+                      itemCount: menuChatController.listFriend.where((element) => element["user"].name.toLowerCase().contains(menuChatController.findEditingController.text)).toList().length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
+                            // print(menuChatController.findEditingController.text);
                             menuChatController.onTapSelectFriend(menuChatController.listFriend[index]["user"]);
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 5.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: Palette.lighterBlack,
+                                color: menuChatController.listFriend[index]["beSelected"] ? Colors.blue : Palette.lighterBlack,
+                                width: menuChatController.listFriend[index]["beSelected"] ? 2 : 1,
                               ),
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),

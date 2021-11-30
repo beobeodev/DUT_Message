@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/widgets/chat/add_group_bottom_sheet.dart';
@@ -7,13 +8,14 @@ import 'package:get/get.dart';
 class MenuChatController extends GetxController {
   final UserRepository userRepository = UserRepository();
 
-
   final User friendUser = Get.arguments;
+
+  final SocketController socketController = Get.put(SocketController());
 
   final TextEditingController findEditingController = TextEditingController();
 
   final RxList<Map<String, dynamic>> listFriend = <Map<String, dynamic>>[].obs;
-  final List<User> listSelectedFriend = <User>[];
+  List<String> listIDSelectedFriend;
   // final RxList<Map<String, dynamic>> listFilterFriend = <Map<String, dynamic>>[].obs;
   // final RxList<bool> listCheckSelectedFriend = <bool>[].obs;
   // final RxList<User> listSelectedFriend = <User>[].obs;
@@ -27,6 +29,7 @@ class MenuChatController extends GetxController {
         "beSelected": false,
       };
     }).toList();
+    listIDSelectedFriend = <String>[friendUser.id];
     // listFilterFriend.value = List.from(listFriend).toList();
     // listCheckSelectedFriend.value = List.filled(listFriend.length, false);
   }
@@ -56,9 +59,13 @@ class MenuChatController extends GetxController {
       "beSelected": !listFriend[index]["beSelected"],
     };
     if (listFriend[index]["beSelected"]) {
-      listSelectedFriend.add(selectedFriend);
+      listIDSelectedFriend.add(selectedFriend.id);
     } else {
-      listSelectedFriend.removeWhere((element) => element.id == selectedFriend.id);
+      listIDSelectedFriend.removeWhere((element) => element == selectedFriend.id);
     }
+  }
+
+  void onTapCreateButton() {
+    socketController.emitSendCreateRoom(listIDSelectedFriend);
   }
 }

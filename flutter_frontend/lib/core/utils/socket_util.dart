@@ -41,6 +41,7 @@ class SocketController extends GetxController {
         onAddFriend();
         onNotifyAcceptAddFriendRequest();
         onReceiveConversationMessage();
+        onReceiveCreateRoom();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -78,6 +79,8 @@ class SocketController extends GetxController {
     super.onClose();
   }
 
+  // this function to handle event on add friend
+  // (receive add friend request)
   void onAddFriend() {
     try {
       final String currentId = localRepository.getCurrentUser()["_id"];
@@ -144,7 +147,7 @@ class SocketController extends GetxController {
     }
   }
 
-  void onReceiveConversationMessage()  {
+  void onReceiveConversationMessage() {
     try {
       print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
@@ -156,6 +159,28 @@ class SocketController extends GetxController {
       });
     } catch (e) {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void emitSendCreateRoom(List<String> listId) {
+    try {
+      socket.emit(SocketEvent.sendCreateRoom, {
+        "authorID": localRepository.infoCurrentUser.id,
+        "authorName": localRepository.infoCurrentUser.name,
+        "ids": listId,
+      });
+    } catch (e) {
+      print("Error in emitSendCreateRoom() from SocketController: $e");
+    }
+  }
+
+  void onReceiveCreateRoom() {
+    try {
+      socket.on(SocketEvent.receiveCreateRoom, (data) {
+        print(data);
+      });
+    } catch (e) {
+      print("Error in onReceiveCreateRoom() from SocketController: $e");
     }
   }
 }
