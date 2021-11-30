@@ -42,6 +42,7 @@ class SocketController extends GetxController {
         onNotifyAcceptAddFriendRequest();
         onReceiveConversationMessage();
         onReceiveCreateRoom();
+        onReceiveJoinRoom();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -53,6 +54,16 @@ class SocketController extends GetxController {
     super.onReady();
     friendController = Get.put(FriendController());
     homeController = Get.put(HomeController());
+  }
+
+  @override
+  void onClose() {
+    print("DISPOSE SOCKET!");
+    socket.onDisconnect((data) => print(data));
+    socket.ondisconnect();
+    socket.close();
+    socket.dispose();
+    super.onClose();
   }
   
   void emitAddFriend(String toId) {
@@ -67,16 +78,6 @@ class SocketController extends GetxController {
     } catch (e) {
       print("Error in emitAddFriend() from SocketUtil $e");
     }
-  }
-
-  @override
-  void onClose() {
-    print("DISPOSE SOCKET!");
-    socket.onDisconnect((data) => print(data));
-    socket.ondisconnect();
-    socket.close();
-    socket.dispose();
-    super.onClose();
   }
 
   // this function to handle event on add friend
@@ -165,7 +166,7 @@ class SocketController extends GetxController {
   void emitSendCreateRoom(List<String> listId) {
     try {
       socket.emit(SocketEvent.sendCreateRoom, {
-        "authorID": localRepository.infoCurrentUser.id,
+        "authorId": localRepository.infoCurrentUser.id,
         "authorName": localRepository.infoCurrentUser.name,
         "ids": listId,
       });
@@ -177,10 +178,23 @@ class SocketController extends GetxController {
   void onReceiveCreateRoom() {
     try {
       socket.on(SocketEvent.receiveCreateRoom, (data) {
-        print(data);
+        socket.emit(SocketEvent.sendJoinRoom, {
+          "fromId": localRepository.infoCurrentUser.id,
+          "roomId": data["_id"],
+        });
       });
     } catch (e) {
       print("Error in onReceiveCreateRoom() from SocketController: $e");
+    }
+  }
+
+  void onReceiveJoinRoom() {
+    try {
+      socket.on(SocketEvent.receiveJoinRoom, (data) {
+        print(data);
+      });
+    } catch (e) {
+      print("Error in onReceiveJoinRoom() from SocketController: $e");
     }
   }
 }

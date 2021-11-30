@@ -9,4 +9,7 @@ class SocketEvent {
 
   static String sendCreateRoom = 'send-create-room';
   static String receiveCreateRoom = 'receive-create-room';
+
+  static String sendJoinRoom = 'send-join-room';
+  static String receiveJoinRoom = 'receive-join-room';
 }

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/widgets/chat/add_group_bottom_sheet.dart';
 import 'package:get/get.dart';
 
 class MenuChatController extends GetxController {
   final UserRepository userRepository = UserRepository();
+  final ConversationRepository conversationRepository = ConversationRepository();
 
   final User friendUser = Get.arguments;
 
@@ -65,7 +68,10 @@ class MenuChatController extends GetxController {
     }
   }
 
-  void onTapCreateButton() {
-    socketController.emitSendCreateRoom(listIDSelectedFriend);
+  Future<void> onTapCreateButton() async {
+    await conversationRepository.getListConversationAndRoom();
+
+    // socketController.emitSendCreateRoom(listIDSelectedFriend);
+    // Get.offNamedUntil(GetRouter.home, ModalRoute.withName(GetRouter.drawer));
   }
 }

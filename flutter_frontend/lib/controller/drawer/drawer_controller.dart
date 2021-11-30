@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/router/router.dart';
@@ -6,6 +8,7 @@ import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerScreenController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
@@ -77,5 +80,26 @@ class DrawerScreenController extends GetxController {
   Future<void> onTapLogoutButton() async {
     await localRepository.removeAllData();
     Get.offAllNamed(GetRouter.login);
+  }
+
+  Future<void> onPressFacebookButton() async {
+    String fbProtocolUrl;
+    if (Platform.isIOS) {
+      fbProtocolUrl = 'fb://profile/145408438926727';
+    } else {
+      fbProtocolUrl = 'fb://page/145408438926727';
+    }
+
+    const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
+
+    try {
+      final bool launched = await launch(fbProtocolUrl, forceSafariVC: false, forceWebView: false);
+
+      if (!launched) {
+        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+      }
+    } catch (e) {
+      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+    }
   }
 }
