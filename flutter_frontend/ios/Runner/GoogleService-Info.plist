@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>740021940494-pcq2gg74cttsad8g7o6i9qt0d6g20mjt.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.740021940494-pcq2gg74cttsad8g7o6i9qt0d6g20mjt</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB_iFi6F9j1V485dTRV562q9NbT0wnlJV8</string>
+	<key>GCM_SENDER_ID</key>
+	<string>740021940494</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.dut.dutmessage</string>
+	<key>PROJECT_ID</key>
+	<string>dut-message</string>
+	<key>STORAGE_BUCKET</key>
+	<string>dut-message.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:740021940494:ios:ee58542b33e25bd8c8275f</string>
+</dict>
+</plist>

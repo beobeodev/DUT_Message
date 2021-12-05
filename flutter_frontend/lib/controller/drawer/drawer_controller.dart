@@ -1,10 +1,14 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class DrawerScreenController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
@@ -19,6 +23,8 @@ class DrawerScreenController extends GetxController {
 
   // default screen is home screen
   final Rx<CurrentScreen> currentPage = CurrentScreen.home.obs;
+
+  User currentUser;
 
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
@@ -35,6 +41,12 @@ class DrawerScreenController extends GetxController {
       "icon": FontAwesomeIcons.idBadge,
     },
   ];
+
+  @override
+  void onInit() {
+    super.onInit();
+    currentUser = localRepository.infoCurrentUser;
+  }
 
   //This function to implement close drawer
   void closeDrawer() {
@@ -66,8 +78,28 @@ class DrawerScreenController extends GetxController {
 
   //This function to handle event onTap of logout button
   Future<void> onTapLogoutButton() async {
-    await localRepository.deleteToken();
-    await localRepository.deleteCurrentUser();
+    await localRepository.removeAllData();
     Get.offAllNamed(GetRouter.login);
+  }
+
+  Future<void> onPressFacebookButton() async {
+    String fbProtocolUrl;
+    if (Platform.isIOS) {
+      fbProtocolUrl = 'fb://profile/145408438926727';
+    } else {
+      fbProtocolUrl = 'fb://page/145408438926727';
+    }
+
+    const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
+
+    try {
+      final bool launched = await launch(fbProtocolUrl, forceSafariVC: false, forceWebView: false);
+
+      if (!launched) {
+        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+      }
+    } catch (e) {
+      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+    }
   }
 }

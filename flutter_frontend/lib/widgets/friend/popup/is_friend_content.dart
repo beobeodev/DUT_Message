@@ -4,7 +4,9 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IsFriendContent extends StatelessWidget {
-  const IsFriendContent({Key key}) : super(key: key);
+  final void Function() onPressButtonChat;
+
+  const IsFriendContent({Key key, this.onPressButtonChat}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -53,8 +55,7 @@ class IsFriendContent extends StatelessWidget {
                   backgroundColor: Color(0xFF3570EC),
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
-                onPressed: () {
-                },
+                onPressed: onPressButtonChat,
                 child: Text(
                   'Nhắn tin',
                   style: TextStyle(

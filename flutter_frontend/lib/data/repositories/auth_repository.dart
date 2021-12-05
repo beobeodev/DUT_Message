@@ -3,11 +3,15 @@ import 'package:flutter_frontend/core/constants/api_path.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/providers/http_provider.dart';
+import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
+import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:http/http.dart' as http;
 
 class AuthRepository {
   final LocalRepository localRepository = LocalRepository();
+  final ConversationRepository conversationRepository = ConversationRepository();
+  final UserRepository userRepository = UserRepository();
 
   static final AuthRepository _singleton = AuthRepository._init();
 
@@ -82,11 +86,20 @@ class AuthRepository {
         final Map<String, dynamic> responseBody = jsonDecode(response.body);
 
         final User currentUser = User.fromMap(responseBody["user"]);
+        // print(localRepository.getRefreshToken());
+        // open and init LOCAL REPOSITORY
+        await localRepository.initBoxHive();
         // save data of user and token to local database
-        localRepository.setCurrentUser(currentUser.toMap());
+        // await localRepository.setCurrentUser(currentUser.toMap());
         // save access token and refresh token to local database
-        localRepository.setToken(responseBody["accessToken"], responseBody["refreshToken"]);
+        // await localRepository.setToken(responseBody["accessToken"], responseBody["refreshToken"]);
+        await localRepository.setAllData(responseBody["accessToken"], responseBody["refreshToken"], currentUser.toMap());
+        // print(responseBody["refreshToken"]);
         // print(currentUser.toMap());
+        localRepository.initData();
+        await conversationRepository.getListConversationAndRoom();
+        await userRepository.initData();
+
         return CustomResponse(
           // default status code is 200
           responseBody: responseBody,

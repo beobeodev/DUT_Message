@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/chat/chat_controller.dart';
+import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/widgets/chat/appbar.dart';
 import 'package:flutter_frontend/widgets/chat/chat_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,45 +12,68 @@ import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   final ChatController chatController = Get.put(ChatController());
+  final HomeController homeController = Get.put(HomeController());
+
+  final DrawerScreenController drawerController = Get.put(DrawerScreenController());
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Column(
         children: [
           AppBarChat(
             chatController: chatController,
+            homeController: homeController,
           ),
           Expanded(
-            child: SizedBox(
-              width: double.infinity,
-              child: ListView(
-                padding: EdgeInsets.only(left: 10, right: 16),
+            child: Obx(
+              () => ListView.builder(
+                controller: chatController.scrollController,
+                padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
                 // itemCount: chatController.currentConversation.listMessage.length,
-                children: const [
-                  ChatItem(
-                    isSender: false,
-                    time: '18:00',
-                    message: 'Bạn push code lên chưa?',
-                  ),
-                  ChatItem(
-                    isSender: true,
-                    time: '18:00',
-                    message: 'Đợi xí',
-                  ),
-                ],
+                itemCount: homeController.listConversationAndRoom[chatController.indexConversation].listMessage.length,
+                itemBuilder: (context, index) {
+                  final Message currentMessage = homeController.listConversationAndRoom[chatController.indexConversation].listMessage[index];
+                  final bool isSender = currentMessage.author.id == drawerController.currentUser.id;
+                  if (chatController.isRoom && index == 0) {
+                    return Align(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          homeController.listConversationAndRoom[chatController.indexConversation].listMessage[0].content,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(13),
+                            color: Palette.zodiacBlue,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ChatItem(
+                      isSender: isSender,
+                      time: "${currentMessage.timeSend.hour.toString()} "
+                          ": ${currentMessage.timeSend.minute.toString()}",
+                      content: currentMessage.content,
+                      isImage: currentMessage.isImage,
+                      avatar: currentMessage.author.avatar,
+                      authorName: currentMessage.author.name,
+                      isRoom: chatController.isRoom,
+                    );
+                  }
+                },
               ),
             ),
           ),
           ColoredBox(
             color: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.only(bottom: 25.0, top: 6, left: 15, right: 15),
+              padding: const EdgeInsets.only(
+                  bottom: 16.0, top: 6, left: 15, right: 15,
+              ),
               child: Row(
                 children: [
                   GestureDetector(
-                    onTap: () {},
+                    onTap: chatController.showSelectModalBottom,
                     child: Icon(
                       FontAwesomeIcons.plusCircle,
                       color: Palette.orangeRed,
@@ -60,7 +86,7 @@ class ChatScreen extends StatelessWidget {
                   Expanded(
                     child: TextField(
                       decoration: InputDecoration(
-                        hintText: 'Type your message...',
+                        hintText: 'Nhập tin nhắn...',
                         filled: true,
                         fillColor: Colors.blueGrey[50],
                         enabledBorder: OutlineInputBorder(
@@ -72,7 +98,9 @@ class ChatScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(25),
                         ),
                         isDense: true,
-                        contentPadding: EdgeInsets.only(left: 12, top: 12, bottom: 12),
+                        contentPadding: EdgeInsets.only(
+                            left: 16, top: 13, bottom: 12,
+                        ),
                       ),
                       style: TextStyle(
                         fontSize: 13,

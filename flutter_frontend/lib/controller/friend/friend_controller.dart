@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
@@ -13,6 +15,7 @@ class FriendController extends GetxController {
   final UserRepository userRepository = UserRepository();
 
   final SocketController socketController = Get.put(SocketController());
+  final HomeController homeController = Get.put(HomeController());
 
   final TextEditingController phoneNumberEditingController = TextEditingController();
 
@@ -32,6 +35,7 @@ class FriendController extends GetxController {
   void onInit() {
     super.onInit();
     listFriend.value = userRepository.listFriend;
+    listFriendFilter.value = listFriend;
     listAddFriendRequest.value = userRepository.listAddFriendRequest;
   }
 
@@ -157,5 +161,31 @@ class FriendController extends GetxController {
   // of text field find friend, with input is friend's name
   void onChangeTextFieldFindFriend(String value) {
     listFriendFilter.value = listFriend.where((e) => e.name.toLowerCase().contains(value.toLowerCase())).toList();
+  }
+
+  // this function to handle event on tap friend card
+  // in list friend page
+  void onTapFriendCard(int index) {
+    // open popup about info of friend
+    Navigator.of(Get.context).push(
+      HeroPopupRoute(
+        builder: (context) => Center(
+          child: PopUpProfileFriend(
+            imageURL: listFriendFilter[index].avatar,
+            name: listFriendFilter[index].name,
+            id: listFriendFilter[index].id, // id of user being find
+            friendController: this,
+            addFriendStatus: AddFriendStatus.isFriend,
+          ),
+        ),
+      ),
+    );
+  }
+
+  // this function to handle event on press BUTTON "NHẮN TIN"
+  // in popup profile friend
+  void onPressButtonChat(String friendId) {
+    final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId));
+    Get.toNamed(GetRouter.chat, arguments: indexConversation);
   }
 }

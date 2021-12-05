@@ -7,10 +7,11 @@ class Message {
   User author;
   String content;
   String status;
+  bool isImage;
   DateTime timeSend;
   List<String> deleteBy;
 
-  Message({this.id, this.author, this.content, this.status, this.timeSend, this.deleteBy});
+  Message({this.id, this.author, this.content, this.status, this.isImage = false ,this.timeSend, this.deleteBy});
 
   factory Message.fromJson(String str) => Message.fromMap(jsonDecode(str) as Map<String, dynamic>);
 
@@ -19,6 +20,7 @@ class Message {
     author: User.fromMap(json["author"]),
     content: json["content"].toString(),
     status: json["status"].toString(),
+    isImage: json["isImg"] as bool,
     timeSend: DateTime.parse(json["createdAt"].toString()).toLocal(),
     deleteBy: json["deleteBy"] == null ? <String>[] : List<String>.from((json["deleteBy"] as List<dynamic>).map((dynamic x) => x.toString())).toList(),
   );

@@ -4,12 +4,22 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({this.isSender, this.time, this.message});
+  const ChatItem({this.isSender, this.time, this.content, this.isImage = false, this.avatar, this.authorName, this.isRoom});
 
-  //check sender is current user or others
+  //c heck sender is current user or others
   final bool isSender;
+  // get time send message
   final String time;
-  final String message;
+  // get content of MESSAGE
+  final String content;
+  // check if message is image, video or file then show it
+  final bool isImage;
+  // get avatar of sender
+  final String avatar;
+  // get author name
+  final String authorName;
+  // check if conversation is group chat, show name of message's author
+  final bool isRoom;
 
   @override
   Widget build(BuildContext context) {
@@ -20,58 +30,76 @@ class ChatItem extends StatelessWidget {
         if (isSender) Text(
           time,
           style: TextStyle(
-            color: Palette.americanSilver,
-            fontSize: ScreenUtil().setSp(14),
+            color: Colors.black26,
+            fontSize: ScreenUtil().setSp(12),
             fontFamily: FontFamily.fontNunito,
             fontWeight: FontWeight.w400,
           ),
-        ) else DecoratedBox(
-          decoration: BoxDecoration(
-            color: Colors.red,
-            borderRadius: BorderRadius.circular(30),
-          ),
-          child: SizedBox(
-            width: ScreenUtil().setWidth(30),
-            height: ScreenUtil().setWidth(30),
+        ) else CircleAvatar(
+          radius: 13,
+          backgroundImage: NetworkImage(
+            avatar,
           ),
         ),
         Flexible(
-          child: Container(
-            margin: EdgeInsets.only(left: 10, right: 10, top:  10),
-            padding: EdgeInsets.symmetric(
-              vertical: 10,
-              horizontal: 15,
+          child: isImage ? Padding(
+            padding:  EdgeInsets.only(left: 10, right: 10, top:  10),
+            child: Image.network(
+              content,
+              width: ScreenUtil().screenWidth/2 + 50,
             ),
-            decoration: BoxDecoration(
-              color: isSender ? Palette.blue : Colors.white,
-              borderRadius: isSender
-                  ? BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-                bottomLeft: Radius.circular(30),
-              )
-                  : BorderRadius.only(
-                topLeft: Radius.circular(30),
-                topRight: Radius.circular(30),
-                bottomRight: Radius.circular(30),
+          ) : Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              if (isRoom && !isSender) Padding(
+                padding: const EdgeInsets.only(left: 10.0, top: 15),
+                child: Text(
+                  authorName,
+                  style: TextStyle(
+                    fontFamily: FontFamily.fontNunito,
+                    fontSize: 13,
+                    color: Palette.zodiacBlue,
+                  ),
+                ),
               ),
-            ),
-            child: Text(
-              message,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: ScreenUtil().setSp(17),
-                fontFamily: FontFamily.fontNunito,
-                color: isSender ? Colors.white : Palette.zodiacBlue,
+              Container(
+                margin: EdgeInsets.only(left: 10, right: 10, top: (isRoom && !isSender) ? 2 : 10),
+                padding: EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 15,
+                ),
+                decoration: BoxDecoration(
+                  color: isSender ? Palette.blue : Colors.white,
+                  borderRadius: isSender
+                      ? BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomLeft: Radius.circular(30),
+                  )
+                      : BorderRadius.only(
+                    topLeft: Radius.circular(30),
+                    topRight: Radius.circular(30),
+                    bottomRight: Radius.circular(30),
+                  ),
+                ),
+                child: Text(
+                  content,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: ScreenUtil().setSp(17),
+                    fontFamily: FontFamily.fontNunito,
+                    color: isSender ? Colors.white : Palette.zodiacBlue,
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ),
-        if (isSender) SizedBox() else Text(
+        if (!isSender) Text(
           time,
           style: TextStyle(
-            color: Palette.americanSilver,
-            fontSize: ScreenUtil().setSp(14),
+            color: Colors.black26,
+            fontSize: ScreenUtil().setSp(12),
             fontFamily: FontFamily.fontNunito,
             fontWeight: FontWeight.w400,
           ),

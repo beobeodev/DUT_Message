@@ -12,7 +12,8 @@ class LocalRepository {
 
   LocalRepository._init() {
     //init hive with jwt box to store token
-    initJWTBoxHive();
+    print("init LocalRepository");
+    initBoxHive();
   }
 
   factory LocalRepository() {
@@ -20,7 +21,7 @@ class LocalRepository {
   }
 
   //This function to init box to store token when login
-  Future<void> initJWTBoxHive() async {
+  Future<void> initBoxHive() async {
     await Hive.openBox('authBox');
     // await Hive.openBox('currentUserBox');
     authBox = Hive.box('authBox');
@@ -31,12 +32,20 @@ class LocalRepository {
     accessToken = getAccessToken();
     refreshToken = getRefreshToken();
     infoCurrentUser = User.fromMap(Map<String, dynamic>.from(getCurrentUser()));
+    // print("In initData() from LOCAL REPOSITORY: ${infoCurrentUser.id}");
+  }
+
+  Future<void> setAllData(String accessToken, String refreshToken, Map<String, dynamic> dataUser) async {
+    await authBox.put('access_token', accessToken);
+    await authBox.put('refresh_token', refreshToken);
+    await authBox.put('current_user', dataUser);
   }
 
   //
   Future<void> setToken(String accessToken, String refreshToken) async {
     await authBox.put('access_token', accessToken);
     await authBox.put('refresh_token', refreshToken);
+    // print(refreshToken);
   }
 
   Future<void> deleteToken() async {
@@ -70,5 +79,12 @@ class LocalRepository {
 
   Future<void> deleteCurrentUser() async {
     await authBox.delete('current_user');
+  }
+
+  Future<void> removeAllData() async {
+    await deleteToken();
+    await deleteCurrentUser();
+    // await authBox.clear();
+    // await authBox.deleteFromDisk();
   }
 }

@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 class HomeScreen extends StatelessWidget {
   final HomeController homeController = Get.put(HomeController());
 
-
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
@@ -26,7 +25,7 @@ class HomeScreen extends StatelessWidget {
               color: Palette.crayolaBlue,
             ),
           ),
-          ListConversation(
+          ListConversationWidget(
             homeController: homeController,
           ),
         ],

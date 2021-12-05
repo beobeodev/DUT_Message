@@ -16,8 +16,8 @@ class UserRepository{
     return _singleton;
   }
 
-  List<FriendRequest> listAddFriendRequest;
-  List<User> listFriend;
+  List<FriendRequest> listAddFriendRequest = [];
+  List<User> listFriend = [];
 
   UserRepository._init();
 
@@ -152,6 +152,8 @@ class UserRepository{
           },
         );
       } else if (response.statusCode == 500) {
+        listAddFriendRequest = <FriendRequest>[];
+
         return CustomResponse(
           statusCode: 404,
           error: true,
@@ -195,6 +197,7 @@ class UserRepository{
         final List<User> listFriendTemp = <User>[];
 
         for (final element in listRequest) {
+          // print(element);
           listFriendTemp.add(User.fromMap(element),);
         }
 
@@ -206,6 +209,8 @@ class UserRepository{
           },
         );
       } else if (response.statusCode == 500) {
+        listFriend = <User>[];
+
         return CustomResponse(
           statusCode: 404,
           error: true,
@@ -231,5 +236,9 @@ class UserRepository{
         "message": "invalid request",
       },
     );
+  }
+
+  void addFriendToList(User friend) {
+    listFriend.add(friend);
   }
 }

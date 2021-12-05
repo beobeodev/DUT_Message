@@ -15,7 +15,7 @@ class DrawerPage extends StatelessWidget {
     final Size size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, bottom: 60),
+      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, bottom: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -23,21 +23,15 @@ class DrawerPage extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              DecoratedBox(
-                decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(40),
-                ),
-                child: SizedBox(
-                  width: 60,
-                  height: 60,
-                ),
+              CircleAvatar(
+                radius: 30,
+                backgroundImage: NetworkImage(drawerController.currentUser.avatar),
               ),
               const SizedBox(
                 width: 15,
               ),
               Text(
-                "Nguyễn Minh Đức",
+                drawerController.currentUser.name,
                 style: TextStyle(
                   fontFamily: FontFamily.fontNunito,
                   color: Palette.zodiacBlue,
@@ -70,68 +64,94 @@ class DrawerPage extends StatelessWidget {
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(15),
-              ),
-              child: SizedBox(
-                height: 60,
-                width: ScreenUtil().setWidth(size.width - 140),
-                child: Row(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            FontAwesomeIcons.cog,
-                            color: Palette.zodiacBlue,
-                          ),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            "Cài đặt",
-                            style: TextStyle(
-                              fontFamily: FontFamily.fontNunito,
-                              color: Palette.zodiacBlue,
-                              fontSize: ScreenUtil().setSp(18),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                        ],
+                    TextButton(
+                      style: TextButton.styleFrom(
+                        shape: CircleBorder(),
+                        padding: EdgeInsets.all(10),
+                        backgroundColor: Palette.blue,
+                        splashFactory: NoSplash.splashFactory,
                       ),
-                    ),
-                    Expanded(
-                      child: GestureDetector(
-                        onTap: drawerController.onTapLogoutButton,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Đăng xuất",
-                              style: TextStyle(
-                                fontFamily: FontFamily.fontNunito,
-                                color: Palette.zodiacBlue,
-                                fontSize: ScreenUtil().setSp(18),
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                            const SizedBox(
-                              width: 15,
-                            ),
-                            Icon(
-                              FontAwesomeIcons.signOutAlt,
-                              color: Palette.zodiacBlue,
-                            ),
-                          ],
-                        ),
+                      onPressed: drawerController.onPressFacebookButton,
+                      child: Icon(
+                        FontAwesomeIcons.facebookF,
+                        color: Colors.white,
+                        size: 20,
                       ),
                     ),
                   ],
                 ),
-              ),
+                const SizedBox(
+                  height: 15,
+                ),
+                DecoratedBox(
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                  ),
+                  child: SizedBox(
+                    height: 50,
+                    width: ScreenUtil().setWidth(size.width - 140),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                FontAwesomeIcons.cog,
+                                color: Palette.zodiacBlue,
+                              ),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Text(
+                                "Cài đặt",
+                                style: TextStyle(
+                                  fontFamily: FontFamily.fontNunito,
+                                  color: Palette.zodiacBlue,
+                                  fontSize: ScreenUtil().setSp(18),
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: drawerController.onTapLogoutButton,
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  "Đăng xuất",
+                                  style: TextStyle(
+                                    fontFamily: FontFamily.fontNunito,
+                                    color: Palette.zodiacBlue,
+                                    fontSize: ScreenUtil().setSp(18),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(
+                                  width: 15,
+                                ),
+                                Icon(
+                                  FontAwesomeIcons.signOutAlt,
+                                  color: Palette.zodiacBlue,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           )
         ],
