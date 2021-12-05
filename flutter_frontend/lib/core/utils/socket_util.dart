@@ -1,13 +1,13 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/controller/friend/friend_controller.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
+import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
@@ -43,7 +43,7 @@ class SocketController extends GetxController {
         onNotifyAcceptAddFriendRequest();
         onReceiveConversationMessage();
         onReceiveCreateRoom();
-        onReceiveJoinRoom();
+        // onReceiveJoinRoom();
         onReceiveRoomMessage();
       });
     } catch (e) {
@@ -135,15 +135,15 @@ class SocketController extends GetxController {
         "content": content,
         "isImg": isImg,
       });
-      final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == conversationId);
-      final Conversation conversationTemp = homeController.listConversationAndRoom[index];
-      conversationTemp.listMessage.add(Message(
-        author: localRepository.infoCurrentUser,
-        content: content,
-        timeSend: DateTime.now(),
-        isImage: isImg,
-      ),);
-      homeController.listConversationAndRoom[index] = conversationTemp;
+      // final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == conversationId);
+      // final Conversation conversationTemp = homeController.listConversationAndRoom[index];
+      // conversationTemp.listMessage.add(Message(
+      //   author: localRepository.infoCurrentUser,
+      //   content: content,
+      //   timeSend: DateTime.now(),
+      //   isImage: isImg,
+      // ),);
+      // homeController.listConversationAndRoom[index] = conversationTemp;
       // print(content);
     } catch (e) {
       print("Error in emitSendConversationMessage() from SocketUtil $e");
@@ -152,13 +152,14 @@ class SocketController extends GetxController {
 
   void onReceiveConversationMessage() {
     try {
-      print("onReceiveConversationMessage() was called");
+      // print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["converId"]);
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
-        homeController.listConversationAndRoom[index] = conversationTemp;
-        // update();
+        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        listTemp.removeWhere((element) => element.id == data["converId"]);
+        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
       });
     } catch (e) {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");
@@ -186,21 +187,30 @@ class SocketController extends GetxController {
           "fromId": localRepository.infoCurrentUser.id,
           "roomId": data["_id"],
         });
+        final Conversation roomChat = Conversation.fromMapRoom(data);
+        homeController.listConversationAndRoom.value = [roomChat, ...homeController.listConversationAndRoom];
+        final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == roomChat.id);
+        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [index, true]);
       });
     } catch (e) {
       print("Error in onReceiveCreateRoom() from SocketController: $e");
     }
   }
 
-  void onReceiveJoinRoom() {
-    try {
-      socket.on(SocketEvent.receiveJoinRoom, (data) {
-        print(data);
-      });
-    } catch (e) {
-      print("Error in onReceiveJoinRoom() from SocketController: $e");
-    }
-  }
+  // void onReceiveJoinRoom() {
+  //   try {
+  //     socket.on(SocketEvent.receiveJoinRoom, (data) {
+  //       print(data);
+  //       final Conversation roomChat = Conversation.fromMapRoom(data);
+  //       homeController.listConversationAndRoom.add(roomChat);
+  //       print(homeController.listConversationAndRoom.length);
+  //       final ConversationRepository conversationRepository = ConversationRepository();
+  //       print(conversationRepository.listConversationAndRoom.length);
+  //     });
+  //   } catch (e) {
+  //     print("Error in onReceiveJoinRoom() from SocketController: $e");
+  //   }
+  // }
 
   void emitSendRoomMessage({@required String roomId, @required  String content, bool isImg = false}) {
     try {
@@ -210,15 +220,15 @@ class SocketController extends GetxController {
         "fromUserId": localRepository.infoCurrentUser.id,
         "isImg": isImg,
       });
-      final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == roomId);
-      final Conversation conversationTemp = homeController.listConversationAndRoom[index];
-      conversationTemp.listMessage.add(Message(
-        author: localRepository.infoCurrentUser,
-        content: content,
-        timeSend: DateTime.now(),
-        isImage: isImg,
-      ),);
-      homeController.listConversationAndRoom[index] = conversationTemp;
+      // final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == roomId);
+      // final Conversation conversationTemp = homeController.listConversationAndRoom[index];
+      // conversationTemp.listMessage.add(Message(
+      //   author: localRepository.infoCurrentUser,
+      //   content: content,
+      //   timeSend: DateTime.now(),
+      //   isImage: isImg,
+      // ),);
+      // homeController.listConversationAndRoom[index] = conversationTemp;
     } catch (e) {
       print("ERROR in emitSendRoomMessage() from SocketController: $e");
     }
@@ -230,7 +240,9 @@ class SocketController extends GetxController {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["roomId"]);
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
-        homeController.listConversationAndRoom[index] = conversationTemp;
+        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        listTemp.removeWhere((element) => element.id == data["roomId"]);
+        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
       });
     } catch (e) {
       print("ERROR in onReceiveRoomMessage() from SocketController: $e");

@@ -23,24 +23,25 @@ class ChatScreen extends StatelessWidget {
         children: [
           AppBarChat(
             chatController: chatController,
-            homeController: homeController,
           ),
           Expanded(
             child: Obx(
               () => ListView.builder(
                 controller: chatController.scrollController,
                 padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
-                // itemCount: chatController.currentConversation.listMessage.length,
-                itemCount: homeController.listConversationAndRoom[chatController.indexConversation].listMessage.length,
+                itemCount: chatController.currentConversation.value.listMessage.length,
                 itemBuilder: (context, index) {
-                  final Message currentMessage = homeController.listConversationAndRoom[chatController.indexConversation].listMessage[index];
+                  final Message currentMessage = chatController.currentConversation.value.listMessage[index];
                   final bool isSender = currentMessage.author.id == drawerController.currentUser.id;
                   if (chatController.isRoom && index == 0) {
                     return Align(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
                         child: Text(
-                          homeController.listConversationAndRoom[chatController.indexConversation].listMessage[0].content,
+                          homeController.currentUser.id
+                          == currentMessage.author.id
+                          ? "Bạn đã tạo nhóm này"
+                          : currentMessage.content,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(13),
                             color: Palette.zodiacBlue,
