@@ -9,6 +9,7 @@ import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
@@ -25,9 +26,8 @@ class ChatController extends GetxController {
   final HomeController homeController = Get.put(HomeController());
   final SocketController socketController = Get.put(SocketController());
 
-  // get index of current conversation in LIST CONVERSATION
-  // from HOME CONTROLLER
-  final int indexConversation = Get.arguments[0];
+  // get current conversation from argument
+  final Rx<Conversation> currentConversation = (Get.arguments[0] as Conversation).obs;
   // check if current conversation is room chat (GROUP CHAT)
   final bool isRoom = Get.arguments[1];
 
@@ -35,15 +35,20 @@ class ChatController extends GetxController {
   final TextEditingController inputEditingController = TextEditingController();
 
   User friendUser;
-  // Conversation currentConversation;
 
   @override
   void onInit() {
     super.onInit();
+    // currentConversation = homeController.listConversationAndRoom.firstWhere((p0) => p0.id == Get.arguments[0]).obs;
     // if not room chat, then get info of FRIEND to SHOW AVATAR AND GET ID
     if (!isRoom) {
-      friendUser =  homeController.listConversationAndRoom[indexConversation].listUserIn.firstWhere((element) => element.id != localRepository.infoCurrentUser.id,);
+      friendUser = currentConversation.value.listUserIn.firstWhere((element) => element.id != localRepository.infoCurrentUser.id,);
     }
+    homeController.listConversationAndRoom.listen((p0) {
+      currentConversation.update((val) {
+        val = p0.firstWhere((element) => element.id == currentConversation.value.id);
+      });
+    });
   }
 
   @override
@@ -77,12 +82,12 @@ class ChatController extends GetxController {
     if (inputEditingController.text != "") {
       if (isRoom) {
         socketController.emitSendRoomMessage(
-            roomId: homeController.listConversationAndRoom[indexConversation].id,
+            roomId: currentConversation.value.id,
             content: inputEditingController.text,
         );
       } else {
         socketController.emitSendConversationMessage(
-          conversationId: homeController.listConversationAndRoom[indexConversation].id,
+          conversationId: currentConversation.value.id,
           fromId: localRepository.infoCurrentUser.id,
           toId: friendUser.id,
           content: inputEditingController.text,
@@ -145,7 +150,7 @@ class ChatController extends GetxController {
 
         } else {
           socketController.emitSendConversationMessage(
-            conversationId: homeController.listConversationAndRoom[indexConversation].id,
+            conversationId: currentConversation.value.id,
             fromId: localRepository.infoCurrentUser.id,
             toId: friendUser.id,
             content: url,

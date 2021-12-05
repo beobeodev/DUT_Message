@@ -7,10 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppBarChat extends StatelessWidget {
-  const AppBarChat({this.chatController, this.homeController});
+  const AppBarChat({this.chatController});
 
   final ChatController chatController;
-  final HomeController homeController;
 
   @override
   Widget build(BuildContext context) {
@@ -54,9 +53,7 @@ class AppBarChat extends StatelessWidget {
                       radius: 30,
                       backgroundImage: chatController.isRoom
                         ? NetworkImage(
-                        homeController.
-                         listConversationAndRoom[chatController.indexConversation]
-                            .avatarRoom,)
+                        chatController.currentConversation.value.avatarRoom,)
                       : NetworkImage(chatController.friendUser.avatar),
                     ),
                     SizedBox(
@@ -64,9 +61,7 @@ class AppBarChat extends StatelessWidget {
                     ),
                     Text(
                       chatController.isRoom
-                        ? homeController
-                          .listConversationAndRoom[chatController
-                          .indexConversation].name
+                        ? chatController.currentConversation.value.name
                         : chatController.friendUser.name,
                       style: TextStyle(
                         fontFamily: FontFamily.fontNunito,

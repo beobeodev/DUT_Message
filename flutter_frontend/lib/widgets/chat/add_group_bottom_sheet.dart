@@ -170,19 +170,19 @@ class AddGroupBottomSheet extends StatelessWidget {
                 Expanded(
                   child: Obx(
                     () => ListView.builder(
-                      itemCount: menuChatController.listFriend.length,
+                      itemCount: menuChatController.listSearchFriend.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {
                             // print(menuChatController.findEditingController.text);
-                            menuChatController.onTapSelectFriend(menuChatController.listFriend[index]["user"]);
+                            menuChatController.onTapSelectFriend(menuChatController.listSearchFriend[index]["user"]);
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 5.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: menuChatController.listFriend[index]["beSelected"] ? Colors.blue : Palette.lighterBlack,
-                                width: menuChatController.listFriend[index]["beSelected"] ? 2 : 1,
+                                color: menuChatController.listSearchFriend[index]["beSelected"] ? Colors.blue : Palette.lighterBlack,
+                                width: menuChatController.listSearchFriend[index]["beSelected"] ? 2 : 1,
                               ),
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -196,7 +196,7 @@ class AddGroupBottomSheet extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   backgroundImage: NetworkImage(
-                                    menuChatController.listFriend[index]["user"].avatar,
+                                    menuChatController.listSearchFriend[index]["user"].avatar,
                                   ),
                                   radius: 15,
                                 ),
@@ -205,7 +205,7 @@ class AddGroupBottomSheet extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    menuChatController.listFriend[index]["user"].name,
+                                    menuChatController.listSearchFriend[index]["user"].name,
                                     style: TextStyle(
                                       color: Palette.zodiacBlue,
                                       fontWeight: FontWeight.w700,

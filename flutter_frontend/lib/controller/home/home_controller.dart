@@ -27,6 +27,6 @@ class HomeController extends GetxController {
   //Handle event on tap message
   void onTapConversation(int index) {
     //Navigate to chat screen with detail message
-    Get.toNamed<dynamic>(GetRouter.chat, arguments: [index, listConversationAndRoom[index].isRoom]);
+    Get.toNamed(GetRouter.chat, arguments: [listConversationAndRoom[index], listConversationAndRoom[index].isRoom]);
   }
 }
