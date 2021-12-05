@@ -16,6 +16,8 @@ class MenuChatController extends GetxController {
   final SocketController socketController = Get.put(SocketController());
 
   final TextEditingController findEditingController = TextEditingController();
+  final TextEditingController nameEditingController = TextEditingController();
+
 
   final RxList<Map<String, dynamic>> listFriend = <Map<String, dynamic>>[].obs;
   List<String> listIDSelectedFriend;
@@ -38,7 +40,16 @@ class MenuChatController extends GetxController {
   }
 
   void onChangeTextFieldFind(String value) {
-    // listFilterFriend.value = userRepository.listFriend.where((element) => element.name.toLowerCase().contains(value.toLowerCase())).toList();
+    listFriend.value = List<User>.from(userRepository.listFriend).toList()
+      .where(
+        (element) => element.id != friendUser.id
+          && element.name.toLowerCase().contains(value.toLowerCase()),
+    ).map((e) {
+      return {
+        "user": e,
+        "beSelected": false,
+      };
+    }).toList();
   }
 
   Future<void> openBottomSheet() async {
@@ -69,9 +80,9 @@ class MenuChatController extends GetxController {
   }
 
   Future<void> onTapCreateButton() async {
-    await conversationRepository.getListConversationAndRoom();
+    // await conversationRepository.getListConversationAndRoom();
 
-    // socketController.emitSendCreateRoom(listIDSelectedFriend);
+    socketController.emitSendCreateRoom(listIDSelectedFriend, nameEditingController.text);
     // Get.offNamedUntil(GetRouter.home, ModalRoute.withName(GetRouter.drawer));
   }
 }

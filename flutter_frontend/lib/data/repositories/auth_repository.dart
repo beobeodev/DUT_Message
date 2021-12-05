@@ -97,7 +97,7 @@ class AuthRepository {
         // print(responseBody["refreshToken"]);
         // print(currentUser.toMap());
         localRepository.initData();
-        await conversationRepository.getListConversation();
+        await conversationRepository.getListConversationAndRoom();
         await userRepository.initData();
 
         return CustomResponse(

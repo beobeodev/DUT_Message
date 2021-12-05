@@ -185,7 +185,7 @@ class FriendController extends GetxController {
   // this function to handle event on press BUTTON "NHẮN TIN"
   // in popup profile friend
   void onPressButtonChat(String friendId) {
-    final int indexConversation = homeController.listConversation.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId));
+    final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId));
     Get.toNamed(GetRouter.chat, arguments: indexConversation);
   }
 }

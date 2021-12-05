@@ -25,7 +25,7 @@ class HomeScreen extends StatelessWidget {
               color: Palette.crayolaBlue,
             ),
           ),
-          ListConversation(
+          ListConversationWidget(
             homeController: homeController,
           ),
         ],

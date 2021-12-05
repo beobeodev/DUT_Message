@@ -92,7 +92,7 @@ class AddGroupBottomSheet extends StatelessWidget {
               children: [
                 TextField(
                   decoration: InputDecoration(
-                    hintText: 'Nhập tên nhóm',
+                    hintText: 'Nhập tên nhóm (tuỳ chọn)',
                     filled: true,
                     fillColor: Colors.blueGrey[50],
                     enabledBorder: OutlineInputBorder(
@@ -121,13 +121,13 @@ class AddGroupBottomSheet extends StatelessWidget {
                     fontSize: 13,
                     color: Palette.zodiacBlue,
                   ),
-                  // controller: chatController.inputEditingController,
+                  controller: menuChatController.nameEditingController,
                 ),
                 const SizedBox(
                   height: 20,
                 ),
                 TextField(
-                  // onChanged: menuChatController.onChangeTextFieldFind,
+                  onChanged: menuChatController.onChangeTextFieldFind,
                   controller: menuChatController.findEditingController,
                   decoration: InputDecoration(
                     hintText: 'Tìm bạn thêm vào nhóm',
@@ -170,7 +170,7 @@ class AddGroupBottomSheet extends StatelessWidget {
                 Expanded(
                   child: Obx(
                     () => ListView.builder(
-                      itemCount: menuChatController.listFriend.where((element) => element["user"].name.toLowerCase().contains(menuChatController.findEditingController.text)).toList().length,
+                      itemCount: menuChatController.listFriend.length,
                       itemBuilder: (context, index) {
                         return GestureDetector(
                           onTap: () {

@@ -12,7 +12,7 @@ class HomeController extends GetxController {
 
   final DrawerScreenController drawerScreenController = Get.put(DrawerScreenController());
 
-  final RxList<Conversation> listConversation = <Conversation>[].obs;
+  final RxList<Conversation> listConversationAndRoom = <Conversation>[].obs;
 
   User currentUser;
 
@@ -20,13 +20,13 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     // get list conversation from repository;
-    listConversation.value = conversationRepository.listConversation;
+    listConversationAndRoom.value = conversationRepository.listConversationAndRoom;
     currentUser = localRepository.infoCurrentUser;
   }
 
   //Handle event on tap message
   void onTapConversation(int index) {
     //Navigate to chat screen with detail message
-    Get.toNamed<dynamic>(GetRouter.chat, arguments: index);
+    Get.toNamed<dynamic>(GetRouter.chat, arguments: [index, listConversationAndRoom[index].isRoom]);
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_frontend/controller/chat/chat_controller.dart';
 import 'package:flutter_frontend/controller/drawer/drawer_controller.dart';
 import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/widgets/chat/appbar.dart';
 import 'package:flutter_frontend/widgets/chat/chat_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -22,6 +23,7 @@ class ChatScreen extends StatelessWidget {
         children: [
           AppBarChat(
             chatController: chatController,
+            homeController: homeController,
           ),
           Expanded(
             child: Obx(
@@ -29,22 +31,35 @@ class ChatScreen extends StatelessWidget {
                 controller: chatController.scrollController,
                 padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
                 // itemCount: chatController.currentConversation.listMessage.length,
-                itemCount: homeController.listConversation[chatController.indexConversation].listMessage.length,
+                itemCount: homeController.listConversationAndRoom[chatController.indexConversation].listMessage.length,
                 itemBuilder: (context, index) {
-                  final bool isSender = homeController.listConversation[chatController.indexConversation].listMessage[index].author.id ==
-                      drawerController.currentUser.id;
-                  return ChatItem(
-                    isSender: isSender,
-                    time: "${homeController.listConversation[chatController.indexConversation]
-                        .listMessage[index].timeSend.hour
-                        .toString()} : ${homeController.listConversation[chatController.indexConversation].listMessage[index].timeSend.minute
-                        .toString()}",
-                    message: homeController.listConversation[chatController.indexConversation]
-                        .listMessage[index].content,
-                    isImage: homeController.listConversation[chatController.indexConversation]
-                        .listMessage[index].isImage,
-                    avatar: chatController.friendUser.avatar,
-                  );
+                  final Message currentMessage = homeController.listConversationAndRoom[chatController.indexConversation].listMessage[index];
+                  final bool isSender = currentMessage.author.id == drawerController.currentUser.id;
+                  if (chatController.isRoom && index == 0) {
+                    return Align(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 15),
+                        child: Text(
+                          homeController.listConversationAndRoom[chatController.indexConversation].listMessage[0].content,
+                          style: TextStyle(
+                            fontSize: ScreenUtil().setSp(13),
+                            color: Palette.zodiacBlue,
+                          ),
+                        ),
+                      ),
+                    );
+                  } else {
+                    return ChatItem(
+                      isSender: isSender,
+                      time: "${currentMessage.timeSend.hour.toString()} "
+                          ": ${currentMessage.timeSend.minute.toString()}",
+                      content: currentMessage.content,
+                      isImage: currentMessage.isImage,
+                      avatar: currentMessage.author.avatar,
+                      authorName: currentMessage.author.name,
+                      isRoom: chatController.isRoom,
+                    );
+                  }
                 },
               ),
             ),

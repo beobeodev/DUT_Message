@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/chat/chat_controller.dart';
+import 'package:flutter_frontend/controller/home/home_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppBarChat extends StatelessWidget {
-  const AppBarChat({this.chatController});
+  const AppBarChat({this.chatController, this.homeController});
 
   final ChatController chatController;
+  final HomeController homeController;
 
   @override
   Widget build(BuildContext context) {
@@ -50,13 +52,22 @@ class AppBarChat extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 30,
-                      backgroundImage: NetworkImage(chatController.friendUser.avatar),
+                      backgroundImage: chatController.isRoom
+                        ? NetworkImage(
+                        homeController.
+                         listConversationAndRoom[chatController.indexConversation]
+                            .avatarRoom,)
+                      : NetworkImage(chatController.friendUser.avatar),
                     ),
                     SizedBox(
                       width: ScreenUtil().setWidth(10),
                     ),
                     Text(
-                      chatController.friendUser.name,
+                      chatController.isRoom
+                        ? homeController
+                          .listConversationAndRoom[chatController
+                          .indexConversation].name
+                        : chatController.friendUser.name,
                       style: TextStyle(
                         fontFamily: FontFamily.fontNunito,
                         color: Palette.zodiacBlue,

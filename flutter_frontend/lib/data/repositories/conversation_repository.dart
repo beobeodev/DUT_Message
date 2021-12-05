@@ -148,10 +148,10 @@ class ConversationRepository {
         final Message messageAfter = b.listMessage.last;
         return messagePrevious.timeSend.compareTo(messageAfter.timeSend);
       });
-      listConversationAndRoomTemp = [...listMessageEmpty, ...listConversationAndRoomTemp];
-      // for (final element in listConversationAndRoom) {
-      //   print(element.id);
-      // }
+      listConversationAndRoomTemp = [...listMessageEmpty, ...listConversationAndRoomTemp.reversed];
+      for (final element in listConversationAndRoomTemp) {
+        print(element.id);
+      }
       listConversationAndRoom = listConversationAndRoomTemp;
     } catch (e) {
       print("Error in getListConversationAndRoom() from ConversationRepository: $e");

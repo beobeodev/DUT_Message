@@ -25,18 +25,24 @@ class ChatController extends GetxController {
   final HomeController homeController = Get.put(HomeController());
   final SocketController socketController = Get.put(SocketController());
 
-  final int indexConversation = Get.arguments;
+  // get index of current conversation in LIST CONVERSATION
+  // from HOME CONTROLLER
+  final int indexConversation = Get.arguments[0];
+  // check if current conversation is room chat (GROUP CHAT)
+  final bool isRoom = Get.arguments[1];
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController inputEditingController = TextEditingController();
 
   User friendUser;
+  // Conversation currentConversation;
 
   @override
   void onInit() {
     super.onInit();
-    if (Get.arguments != null) {
-      friendUser =  homeController.listConversation[indexConversation].listUserIn.firstWhere((element) => element.id != localRepository.infoCurrentUser.id,);
+    // if not room chat, then get info of FRIEND to SHOW AVATAR AND GET ID
+    if (!isRoom) {
+      friendUser =  homeController.listConversationAndRoom[indexConversation].listUserIn.firstWhere((element) => element.id != localRepository.infoCurrentUser.id,);
     }
   }
 
@@ -49,7 +55,7 @@ class ChatController extends GetxController {
       }
     });
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    homeController.listConversation.listen((p0) {
+    homeController.listConversationAndRoom.listen((p0) {
       Timer(Duration(milliseconds: 200), () => {
         if (scrollController.hasClients) {
           scrollController.jumpTo(scrollController.position.maxScrollExtent)
@@ -69,12 +75,19 @@ class ChatController extends GetxController {
     // }
     // print(DateTime.now().toUtc());
     if (inputEditingController.text != "") {
-      socketController.emitSendConversationMessage(
-        conversationId: homeController.listConversation[indexConversation].id,
-        fromId: localRepository.infoCurrentUser.id,
-        toId: friendUser.id,
-        content: inputEditingController.text,
-      );
+      if (isRoom) {
+        socketController.emitSendRoomMessage(
+            roomId: homeController.listConversationAndRoom[indexConversation].id,
+            content: inputEditingController.text,
+        );
+      } else {
+        socketController.emitSendConversationMessage(
+          conversationId: homeController.listConversationAndRoom[indexConversation].id,
+          fromId: localRepository.infoCurrentUser.id,
+          toId: friendUser.id,
+          content: inputEditingController.text,
+        );
+      }
       inputEditingController.clear();
     }
     // currentConversation.update((val) {
@@ -128,13 +141,17 @@ class ChatController extends GetxController {
         );
       } else {
         final String url = await firebaseRepository.uploadToFireStorage(fileType, file);
-        socketController.emitSendConversationMessage(
-          conversationId: homeController.listConversation[indexConversation].id,
-          fromId: localRepository.infoCurrentUser.id,
-          toId: friendUser.id,
-          content: url,
-          isImg: true,
-        );
+        if (isRoom) {
+
+        } else {
+          socketController.emitSendConversationMessage(
+            conversationId: homeController.listConversationAndRoom[indexConversation].id,
+            fromId: localRepository.infoCurrentUser.id,
+            toId: friendUser.id,
+            content: url,
+            isImg: true,
+          );
+        }
       }
     }
   }

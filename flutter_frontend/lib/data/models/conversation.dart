@@ -1,14 +1,16 @@
+import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 
 class Conversation {
   String id;
   String name;
+  String avatarRoom;
   List<User> listUserIn;
   List<Message> listMessage;
   bool isRoom;
 
-  Conversation({this.id, this.name, this.listUserIn, this.listMessage, this.isRoom = false});
+  Conversation({this.id, this.name, this.avatarRoom, this.listUserIn, this.listMessage, this.isRoom = false});
 
   factory Conversation.fromMap(Map<String, dynamic> json) => Conversation(
     id: json["_id"],
@@ -19,8 +21,10 @@ class Conversation {
   factory Conversation.fromMapRoom(Map<String, dynamic> json) => Conversation(
     id: json["_id"],
     name: json["name"],
+    avatarRoom: (json["avatar"] == null || json["avatar"] == "") ? ImagePath.avatarChatGroup : json["avatar"],
     listUserIn: List<User>.from((json["members"] as List<dynamic>).map((e) => User.fromMapRoom(e))).toList(),
     listMessage: List<Message>.from((json["list_message"] as List<dynamic>).map((e) => Message.fromMap(e))).toList(),
+    isRoom: true,
   );
 
   Map<String, dynamic> toMap() => <String, dynamic>{
