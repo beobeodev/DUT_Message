@@ -178,6 +178,10 @@ class ChatController extends GetxController {
   // this function to open menu chat screen when on tap
   // app bar of chat screen
   void openMenuChatScreen() {
-    Get.toNamed(GetRouter.menuChat, arguments: friendUser);
+    if (isRoom) {
+      Get.toNamed(GetRouter.menuChat, arguments: currentConversation.value);
+    } else {
+      Get.toNamed(GetRouter.menuChat, arguments: friendUser);
+    }
   }
 }

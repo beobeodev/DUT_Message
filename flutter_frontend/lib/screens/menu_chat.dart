@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/controller/chat/menu_chat_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -37,14 +38,14 @@ class MenuChatScreen extends StatelessWidget {
             Align(
               child: CircleAvatar(
                 radius: 40,
-                backgroundImage: NetworkImage(menuChatController.friendUser.avatar),
+                backgroundImage: NetworkImage(menuChatController.infoConversation is User ? menuChatController.infoConversation.avatar : menuChatController.infoConversation.avatarRoom),
               ),
             ),
             SizedBox(
               height: ScreenUtil().setHeight(10),
             ),
             Text(
-              menuChatController.friendUser.name,
+              menuChatController.infoConversation.name,
               style: TextStyle(
                 fontFamily: FontFamily.fontNunito,
                 color: Palette.zodiacBlue,
@@ -55,7 +56,7 @@ class MenuChatScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            TextButton(
+            if (menuChatController.infoConversation is User) TextButton(
               style: TextButton.styleFrom(
                 backgroundColor: Colors.white,
                 padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
@@ -74,7 +75,7 @@ class MenuChatScreen extends StatelessWidget {
                     width: 30,
                   ),
                   Text(
-                    "Tạo nhóm chat với ${menuChatController.friendUser.name}",
+                    "Tạo nhóm chat với ${menuChatController.infoConversation.name}",
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,
                       color: Palette.blue,

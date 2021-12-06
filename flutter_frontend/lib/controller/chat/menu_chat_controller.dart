@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
+import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
@@ -17,7 +17,7 @@ class MenuChatController extends GetxController {
   final UserRepository userRepository = UserRepository();
   final ConversationRepository conversationRepository = ConversationRepository();
 
-  final User friendUser = Get.arguments;
+  final dynamic infoConversation = Get.arguments;
 
   final SocketController socketController = Get.put(SocketController());
 
@@ -25,7 +25,7 @@ class MenuChatController extends GetxController {
   final TextEditingController nameEditingController = TextEditingController();
 
 
-  final RxList<Map<String, dynamic>> listFriend = <Map<String, dynamic>>[].obs;
+  List<Map<String, dynamic>> listFriend = <Map<String, dynamic>>[];
   final RxList<Map<String, dynamic>> listSearchFriend = <Map<String, dynamic>>[].obs;
   List<String> listIDSelectedFriend;
   // final RxList<Map<String, dynamic>> listFilterFriend = <Map<String, dynamic>>[].obs;
@@ -35,14 +35,29 @@ class MenuChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    listFriend.value = List.from(userRepository.listFriend).toList().where((element) => element.id != friendUser.id).map((e) {
-      return {
-        "user": e,
-        "beSelected": false,
-      };
-    }).toList();
+    if (infoConversation is User) {
+      // get list friend with condition have not id of friend
+      // who is chatting
+      listFriend = List.from(userRepository.listFriend).toList().where((element) => element.id != infoConversation.id).map((e) {
+        return {
+          "user": e,
+          "beSelected": false,
+        };
+      }).toList();
+      listIDSelectedFriend = <String>[infoConversation.id];
+    } else if (infoConversation is Conversation) {
+      // get list id of users in current conversation
+      final List<String> listIDUserInConversation = (infoConversation as Conversation).listUserIn.map((e) => e.id).toList();
+      // show list friend with condition have not
+      // id of friends in listIDUserInConversation
+      listFriend = List.from(userRepository.listFriend).where((element) => !listIDUserInConversation.contains(element.id)).map((e) {
+        return {
+          "user": e,
+          "beSelected": false,
+        };
+      }).toList();
+    }
     listSearchFriend.value = List.from(listFriend);
-    listIDSelectedFriend = <String>[friendUser.id];
   }
 
   void onChangeTextFieldFind(String value) {
@@ -131,5 +146,15 @@ class MenuChatController extends GetxController {
       // Get.toNamed(GetRouter.chat, arguments: [index, true]);
     }
     // Get.offNamedUntil(GetRouter.home, ModalRoute.withName(GetRouter.drawer));
+  }
+
+  void onTapCancelButton() {
+    findEditingController.clear();
+    listFriend = listFriend.map((e) => {
+      "user": e["user"],
+      "beSelected": false,
+    },).toList();
+    listSearchFriend.value = listFriend;
+    Get.back();
   }
 }

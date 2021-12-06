@@ -44,9 +44,7 @@ class AddGroupBottomSheet extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               TextButton(
-                onPressed: () {
-                  Get.back();
-                },
+                onPressed: menuChatController.onTapCancelButton,
                 child: Text(
                   "Huỷ",
                   style: TextStyle(

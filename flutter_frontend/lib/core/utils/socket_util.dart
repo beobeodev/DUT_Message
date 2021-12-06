@@ -7,7 +7,6 @@ import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
-import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
