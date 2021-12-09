@@ -13,6 +13,8 @@ import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
+import 'package:flutter_frontend/widgets/chat/focus_menu/focus_menu_detail.dart';
+import 'package:flutter_frontend/widgets/chat/focus_menu/focus_menu_item.dart';
 import 'package:flutter_frontend/widgets/chat/select_bottom_sheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -147,7 +149,11 @@ class ChatController extends GetxController {
       } else {
         final String url = await firebaseRepository.uploadToFireStorage(fileType, file);
         if (isRoom) {
-
+          socketController.emitSendRoomMessage(
+            roomId: currentConversation.value.id,
+            content: url,
+            isImg: true,
+          );
         } else {
           socketController.emitSendConversationMessage(
             conversationId: currentConversation.value.id,
@@ -183,5 +189,78 @@ class ChatController extends GetxController {
     } else {
       Get.toNamed(GetRouter.menuChat, arguments: friendUser);
     }
+  }
+
+
+  Future<void> onOpenFocusMenu(GlobalKey testKey) async {
+    Offset childOffset = Offset(0, 0);
+    Size childSize;
+    RenderBox renderBox = testKey.currentContext.findRenderObject() as RenderBox;
+    Size size = renderBox.size;
+    Offset offset = renderBox.localToGlobal(Offset.zero);
+    childOffset = Offset(offset.dx, offset.dy);
+    childSize = size;
+
+    const double menuWidth = 200;
+    const double menuHeight = 100;
+
+    final leftMargin = (childOffset.dx + menuWidth ) < ScreenUtil().screenWidth ? childOffset.dx + 10 : (ScreenUtil().screenWidth - menuWidth - 20);
+    final topMargin = (childOffset.dy + menuHeight + childSize.height + 50) < ScreenUtil().screenHeight ? childOffset.dy + childSize.height + 8 : childOffset.dy - menuHeight;
+
+    await Navigator.of(Get.context).push(
+      PageRouteBuilder(
+        transitionDuration: Duration(milliseconds: 100),
+        barrierDismissible: true,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FadeTransition(
+            opacity: animation,
+            child: FocusMenuDetail(
+              leftMargin: leftMargin,
+              topMargin: topMargin,
+              listFocusMenuItem: <FocusMenuItem>[
+                FocusMenuItem(
+                  title: Text(
+                    "Gỡ tin nhắn",
+                    style: TextStyle(
+                      color: Palette.zodiacBlue,
+                      fontFamily: FontFamily.fontNunito,
+                      fontSize: ScreenUtil().setSp(13),
+                    ),
+                  ),
+                  icon: Icon(
+                    FontAwesomeIcons.trash,
+                    color: Colors.red,
+                    size: 18,
+                  ),
+                  onTapItem: () {
+                    Get.back();
+                  },
+                ),
+                FocusMenuItem(
+                  title: Text(
+                    "Gỡ tin nhắn",
+                    style: TextStyle(
+                      color: Palette.zodiacBlue,
+                      fontFamily: FontFamily.fontNunito,
+                      fontSize: ScreenUtil().setSp(13),
+                    ),
+                  ),
+                  icon: Icon(
+                    FontAwesomeIcons.trash,
+                    color: Colors.red,
+                    size: 18,
+                  ),
+                  onTapItem: () {
+                    Get.back();
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+        fullscreenDialog: true,
+        opaque: false,
+      ),
+    );
   }
 }

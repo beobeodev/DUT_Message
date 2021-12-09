@@ -70,6 +70,8 @@ class ListConversationWidget extends StatelessWidget {
                     if (lastMessage.author.id == homeController.currentUser.id) {
                       if (isImage) {
                         lastText = "Bạn đã gửi một tệp đính kèm";
+                      } else if (indexLast == 0) {
+                        lastText = "Bạn đã tạo nhóm này";
                       } else {
                         lastText = "Bạn: ${lastMessage.content}";
                       }

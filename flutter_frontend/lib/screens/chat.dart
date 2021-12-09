@@ -16,6 +16,7 @@ class ChatScreen extends StatelessWidget {
 
   final DrawerScreenController drawerController = Get.put(DrawerScreenController());
 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +29,7 @@ class ChatScreen extends StatelessWidget {
             child: Obx(
               () => ListView.builder(
                 controller: chatController.scrollController,
-                padding: EdgeInsets.only(left: 10, right: 16, bottom: 10),
+                padding: EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 itemCount: chatController.currentConversation.value.listMessage.length,
                 itemBuilder: (context, index) {
                   final Message currentMessage = chatController.currentConversation.value.listMessage[index];

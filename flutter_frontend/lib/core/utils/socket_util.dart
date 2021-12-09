@@ -188,8 +188,7 @@ class SocketController extends GetxController {
         });
         final Conversation roomChat = Conversation.fromMapRoom(data);
         homeController.listConversationAndRoom.value = [roomChat, ...homeController.listConversationAndRoom];
-        final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == roomChat.id);
-        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [index, true]);
+        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [homeController.listConversationAndRoom.firstWhere((element) => element.id == roomChat.id), true]);
       });
     } catch (e) {
       print("Error in onReceiveCreateRoom() from SocketController: $e");
