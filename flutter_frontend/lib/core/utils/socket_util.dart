@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/controller/friend/friend_controller.dart';
-import 'package:flutter_frontend/controller/home/home_controller.dart';
+import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
+import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/models/conversation.dart';
