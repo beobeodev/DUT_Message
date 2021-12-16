@@ -19,5 +19,5 @@ class ImagePath {
   static const avatarRoom = "assets/images/decorate_images/avatar_room.png";
 
   // path for network image
-  static const avatarChatGroup = "https://url.dscdut.com/RgIN";
+  static const avatarChatGroup = "https://url.dscdut.com/MQfh";
 }

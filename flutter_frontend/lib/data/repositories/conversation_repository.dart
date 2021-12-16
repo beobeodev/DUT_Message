@@ -141,17 +141,14 @@ class ConversationRepository {
     try {
       await getListConversation();
       await getListRoom();
-      final List<Conversation> listMessageEmpty = List.from(listConversation.where((element) => element.listMessage.isEmpty).toList());
-      List<Conversation> listConversationAndRoomTemp = <Conversation>[...listConversation.where((element) => element.listMessage.isNotEmpty).toList(), ...listRoom];
-      listConversationAndRoomTemp.sort((a, b) {
+      final List<Conversation> listMessageEmpty = List.from(listConversation.where((element) => element.listMessage.isEmpty));
+      List<Conversation> listConversationAndRoomTemp = <Conversation>[...listConversation.where((element) => element.listMessage.isNotEmpty), ...listRoom];
+      listConversationAndRoomTemp.sort((b, a) {
         final Message messagePrevious = a.listMessage.last;
         final Message messageAfter = b.listMessage.last;
         return messagePrevious.timeSend.compareTo(messageAfter.timeSend);
       });
-      listConversationAndRoomTemp = [...listMessageEmpty, ...listConversationAndRoomTemp.reversed];
-      for (final element in listConversationAndRoomTemp) {
-        print(element.id);
-      }
+      listConversationAndRoomTemp = [...listMessageEmpty, ...listConversationAndRoomTemp];
       listConversationAndRoom = listConversationAndRoomTemp;
     } catch (e) {
       print("Error in getListConversationAndRoom() from ConversationRepository: $e");

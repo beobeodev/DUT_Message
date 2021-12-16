@@ -1,13 +1,12 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/controller/friend/friend_controller.dart';
-import 'package:flutter_frontend/controller/home/home_controller.dart';
+import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
+import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/message.dart';
 import 'package:flutter_frontend/data/models/user.dart';
-import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
@@ -189,8 +188,7 @@ class SocketController extends GetxController {
         });
         final Conversation roomChat = Conversation.fromMapRoom(data);
         homeController.listConversationAndRoom.value = [roomChat, ...homeController.listConversationAndRoom];
-        final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == roomChat.id);
-        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [index, true]);
+        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [homeController.listConversationAndRoom.firstWhere((element) => element.id == roomChat.id), true]);
       });
     } catch (e) {
       print("Error in onReceiveCreateRoom() from SocketController: $e");
