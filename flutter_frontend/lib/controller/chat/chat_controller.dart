@@ -15,7 +15,7 @@ import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/widgets/chat/focus_menu/focus_menu_detail.dart';
 import 'package:flutter_frontend/widgets/chat/focus_menu/focus_menu_item.dart';
-import 'package:flutter_frontend/widgets/chat/select_bottom_sheet.dart';
+import 'package:flutter_frontend/widgets/chat/bottom_sheet/select_bottom_sheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';

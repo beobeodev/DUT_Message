@@ -8,7 +8,7 @@ import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/conversation_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
-import 'package:flutter_frontend/widgets/chat/add_group_bottom_sheet.dart';
+import 'package:flutter_frontend/widgets/chat/bottom_sheet/add_group_bottom_sheet.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
