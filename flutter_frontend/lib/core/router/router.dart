@@ -1,12 +1,12 @@
-import 'package:flutter_frontend/bindings/drawer_binding.dart';
-import 'package:flutter_frontend/screens/chat.dart';
-import 'package:flutter_frontend/screens/drawer.dart';
-import 'package:flutter_frontend/screens/home.dart';
-import 'package:flutter_frontend/screens/login.dart';
-import 'package:flutter_frontend/screens/menu_chat.dart';
-import 'package:flutter_frontend/screens/onboard.dart';
-import 'package:flutter_frontend/screens/sign_up.dart';
-import 'package:flutter_frontend/screens/splash.dart';
+import 'package:flutter_frontend/modules/drawer/bindings/drawer_binding.dart';
+import 'package:flutter_frontend/modules/chat/views/chat.dart';
+import 'package:flutter_frontend/modules/drawer/views/drawer.dart';
+import 'package:flutter_frontend/modules/home/views/home.dart';
+import 'package:flutter_frontend/modules/login/views/login.dart';
+import 'package:flutter_frontend/modules/chat/views/menu_chat.dart';
+import 'package:flutter_frontend/modules/onboard/views/onboard.dart';
+import 'package:flutter_frontend/modules/sign_up/views/sign_up.dart';
+import 'package:flutter_frontend/modules/splash/views/splash.dart';
 import 'package:get/get.dart';
 
 class GetRouter {
