@@ -4,6 +4,7 @@ import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/core/widgets/custom_text_form_field.dart';
+import 'package:flutter_frontend/core/widgets/loading_dot.dart';
 import 'package:flutter_frontend/modules/sign_up/controllers/sign_up_controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -49,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Join DUT Message",
+                            "Tham gia DUT Message",
                             style: TextStyle(
                               fontFamily: FontFamily.fontPoppins,
                               color: Palette.lighterBlack,
@@ -58,14 +59,17 @@ class SignUpScreen extends StatelessWidget {
                             ),
                           ),
                         ),
+                        SizedBox(
+                          height: ScreenUtil().setHeight(10),
+                        ),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Create account",
+                            "Tạo tài khoản",
                             style: TextStyle(
-                              fontFamily: FontFamily.fontPoppins,
+                              fontFamily: FontFamily.fontNunito,
                               color: Palette.zodiacBlue,
-                              fontSize: ScreenUtil().setSp(38),
+                              fontSize: ScreenUtil().setSp(34),
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -162,7 +166,11 @@ class SignUpScreen extends StatelessWidget {
                             child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setHeight(55),
-                              child: Center(
+                              child: signUpController.isLoading.value
+                              ? LoadingDot(
+                                size: 30,
+                              ) :
+                              Center(
                                 child: Text(
                                   "Đăng ký",
                                   style: TextStyle(
@@ -183,7 +191,7 @@ class SignUpScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Don’t have an account? ",
+                              "Đã có tài khoản? ",
                               style: TextStyle(
                                 color: Palette.zodiacBlue,
                                 fontFamily: FontFamily.fontPoppins,
@@ -194,7 +202,7 @@ class SignUpScreen extends StatelessWidget {
                             GestureDetector(
                               onTap: signUpController.navigateToLoginScreen,
                               child: Text(
-                                "LOG IN",
+                                "ĐĂNG NHẬP",
                                 style: TextStyle(
                                   color: Palette.celticBlue,
                                   fontFamily: FontFamily.fontPoppins,

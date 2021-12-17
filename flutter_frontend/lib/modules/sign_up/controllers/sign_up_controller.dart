@@ -21,6 +21,7 @@ class SignUpController extends GetxController {
 
   final RxString errorUsername = "".obs;
   final RxString errorPhoneNumber = "".obs;
+  final RxBool isLoading = false.obs;
 
   final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
@@ -77,6 +78,7 @@ class SignUpController extends GetxController {
     if (!signUpFormKey.currentState.validate()) {
       return;
     } else {
+      isLoading.value = true;
       final Map<String, String> body = {
         "name": nameEditingController.text,
         "username": usernameEditingController.text,
@@ -85,10 +87,12 @@ class SignUpController extends GetxController {
       };
       final CustomResponse response = await authRepository.signUp(body);
       if (response.statusCode == 400) {
+        isLoading.value = false;
         errorUsername.value = response.errorMaps["usernameExist"] ? "Tên đăng nhập đã tồn tại" : "";
         errorPhoneNumber.value = response.errorMaps["phoneExist"] ? "Số điện thoại đã tồn tại" : "";
         return;
       } else if (response.statusCode == 201) {
+        isLoading.value = false;
         Timer _timer;
         await showDialog(
             context: Get.context,

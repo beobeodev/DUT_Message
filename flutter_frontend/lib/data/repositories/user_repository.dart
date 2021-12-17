@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_frontend/core/constants/api_path.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/friend_request.dart';
 import 'package:flutter_frontend/data/models/user.dart';
@@ -39,7 +39,7 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response responseGetUser = await HttpProvider.postRequest("${ApiPath.userServerUrl}/find-by-phone", body: body, header: header);
+      final http.Response responseGetUser = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/find-by-phone", body: body, header: header);
 
       if (responseGetUser.statusCode == 200) {
         return CustomResponse(
@@ -84,7 +84,7 @@ class UserRepository{
         "id": localRepository.getCurrentUser()["_id"],
       };
 
-      final http.Response responseGetUser = await HttpProvider.postRequest("${ApiPath.userServerUrl}/checkFriendRequest", body: body, header: header);
+      final http.Response responseGetUser = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/checkFriendRequest", body: body, header: header);
 
       if (responseGetUser.statusCode == 200) {
         return CustomResponse(
@@ -127,7 +127,7 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${ApiPath.userServerUrl}/friend-request", header: header);
+      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/user/friend-request", header: header);
 
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
@@ -190,7 +190,7 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${ApiPath.userServerUrl}/friends", header: header);
+      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/user/friends", header: header);
 
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
