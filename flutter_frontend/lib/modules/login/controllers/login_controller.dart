@@ -14,6 +14,8 @@ class LoginController extends GetxController {
   final AuthRepository authRepository = AuthRepository();
   
   final RxString errorText = "".obs;
+  final RxBool isLoading = false.obs;
+
 
   String validateUsername(String value) {
     if (value == "") {
@@ -38,11 +40,14 @@ class LoginController extends GetxController {
     if (!loginFormKey.currentState.validate()) {
       return;
     } else {
+      isLoading.value = true;
       final CustomResponse response = await authRepository.login(usernameEditingController.text, passwordEditingController.text);
       if (response.statusCode == 200) {
+        isLoading.value = false;
         Get.offAllNamed(GetRouter.drawer);
       } else if (response.statusCode == 500) {
         if (response.errorMaps['errorPassword'] != null) {
+          isLoading.value = false;
           errorText.value = "Sai tên đăng nhập hoặc mật khẩu";
         }
       }

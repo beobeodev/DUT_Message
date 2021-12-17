@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_frontend/core/constants/api_path.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/providers/http_provider.dart';
@@ -27,7 +27,7 @@ class AuthRepository {
     };
 
     // final http.Response response = await AuthProvider.checkUsernameExist(body);
-    final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/checkUsernameExist", body: body);
+    final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/checkUsernameExist", body: body);
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -39,7 +39,7 @@ class AuthRepository {
 
   Future<CustomResponse> signUp(Map<String, String> body) async {
     try {
-      final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/signup", body: body);
+      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/signup", body: body);
 
       final dynamic signUpResponse = jsonDecode(response.body);
 
@@ -78,7 +78,7 @@ class AuthRepository {
         "password": password
       };
 
-      final http.Response response = await HttpProvider.postRequest("${ApiPath.authServerUrl}/login", body: body);
+      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/login", body: body);
 
       // if login SUCCESS
       if (response.statusCode == 200) {
@@ -93,7 +93,7 @@ class AuthRepository {
         // await localRepository.setCurrentUser(currentUser.toMap());
         // save access token and refresh token to local database
         // await localRepository.setToken(responseBody["accessToken"], responseBody["refreshToken"]);
-        await localRepository.setAllData(responseBody["accessToken"], responseBody["refreshToken"], currentUser.toMap());
+        await localRepository.setAllNewData(responseBody["accessToken"], responseBody["refreshToken"], currentUser.toMap());
         // print(responseBody["refreshToken"]);
         // print(currentUser.toMap());
         localRepository.initData();

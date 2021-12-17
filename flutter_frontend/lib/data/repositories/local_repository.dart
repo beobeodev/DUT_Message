@@ -35,7 +35,7 @@ class LocalRepository {
     // print("In initData() from LOCAL REPOSITORY: ${infoCurrentUser.id}");
   }
 
-  Future<void> setAllData(String accessToken, String refreshToken, Map<String, dynamic> dataUser) async {
+  Future<void> setAllNewData(String accessToken, String refreshToken, Map<String, dynamic> dataUser) async {
     await authBox.put('access_token', accessToken);
     await authBox.put('refresh_token', refreshToken);
     await authBox.put('current_user', dataUser);

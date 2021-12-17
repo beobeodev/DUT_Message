@@ -1,12 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/widgets/custom_text_form_field.dart';
+import 'package:flutter_frontend/core/widgets/loading_dot.dart';
 import 'package:flutter_frontend/modules/login/controllers/login_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/login/widgets/build_narrow_social.dart';
-import 'package:flutter_frontend/modules/login/widgets/build_wide_social.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -16,7 +15,7 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
+
     return GestureDetector(
       onTap: loginController.onUnFocus,
       child: Scaffold(
@@ -26,7 +25,8 @@ class LoginScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Palette.aliceBlue,
               ),
-              child: Obx(() {
+              child: Obx(
+              () {
                 return Form(
                   key: loginController.loginFormKey,
                   child: Column(
@@ -66,8 +66,7 @@ class LoginScreen extends StatelessWidget {
                               height: ScreenUtil().setHeight(25),
                             ),
                             CustomTextFormField(
-                              textEditingController: loginController
-                                  .usernameEditingController,
+                              textEditingController: loginController.usernameEditingController,
                               width: double.infinity,
                               validateFunc: loginController.validateUsername,
                               hintText: "Username or phone number",
@@ -78,8 +77,7 @@ class LoginScreen extends StatelessWidget {
                               borderColor: Palette.celticBlue,
                             ),
                             CustomTextFormField(
-                              textEditingController: loginController
-                                  .passwordEditingController,
+                              textEditingController: loginController.passwordEditingController,
                               width: double.infinity,
                               validateFunc: loginController.validatePassword,
                               hintText: "Password",
@@ -108,7 +106,8 @@ class LoginScreen extends StatelessWidget {
                                 child: SizedBox(
                                   width: double.infinity,
                                   height: ScreenUtil().setHeight(55),
-                                  child: Center(
+                                  child: loginController.isLoading.value
+                                    ? LoadingDot(size: 30,) : Center(
                                     child: Text(
                                       "Log in",
                                       style: TextStyle(
@@ -125,39 +124,40 @@ class LoginScreen extends StatelessWidget {
                             SizedBox(
                               height: ScreenUtil().setHeight(20.0),
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1.2,
-                                  ),
-                                ),
-                                Text(
-                                  "OR",
-                                  style: TextStyle(
-                                    color: Palette.lighterBlack,
-                                    fontFamily: FontFamily.fontPoppins,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: ScreenUtil().setSp(18),
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Divider(
-                                    thickness: 1.2,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            SizedBox(
-                              height: ScreenUtil().setHeight(20.0),
-                            ),
-                            if (size.height <= 960)
-                              BuildNarrowSocial(),
-                            if (size.height > 960)
-                              BuildWideSocial(),
-                            SizedBox(
-                              height: ScreenUtil().setHeight(25),
-                            ),
+                            // Row(
+                            //   children: [
+                            //     Expanded(
+                            //       child: Divider(
+                            //         thickness: 1.2,
+                            //       ),
+                            //     ),
+                            //     Text(
+                            //       "OR",
+                            //       style: TextStyle(
+                            //         color: Palette.lighterBlack,
+                            //         fontFamily: FontFamily.fontPoppins,
+                            //         fontWeight: FontWeight.w700,
+                            //         fontSize: ScreenUtil().setSp(18),
+                            //       ),
+                            //     ),
+                            //     Expanded(
+                            //       child: Divider(
+                            //         thickness: 1.2,
+                            //       ),
+                            //     ),
+                            //   ],
+                            // ),
+                            // SizedBox(
+                            //   height: ScreenUtil().setHeight(20.0),
+                            // ),
+                            // if (size.height <= 960)
+                            //   BuildNarrowSocial(),
+                            // if (size.height > 960)
+                            //   BuildWideSocial(),
+                            // SizedBox(
+                            //   height: ScreenUtil().setHeight(25),
+                            // ),
+                            // Expanded(child: SizedBox(),),
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

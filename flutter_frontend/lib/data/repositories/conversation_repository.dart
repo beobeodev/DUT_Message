@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter_frontend/core/constants/api_path.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/data/models/conversation.dart';
 import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/message.dart';
@@ -31,7 +31,7 @@ class ConversationRepository {
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest(ApiPath.conversationServerUrl, header: header);
+      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/conversation", header: header);
 
       // print("in getListConversation() from CONVERSATION REPOSITORY: ${response.body}");
 
@@ -88,7 +88,7 @@ class ConversationRepository {
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest(ApiPath.roomServerUrl, header: header);
+      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/room", header: header);
 
       // print("in getListConversation() from CONVERSATION REPOSITORY: ${response.body}");
 
@@ -102,7 +102,6 @@ class ConversationRepository {
         }
 
         listRoom = listConversationRoomTemp;
-
         return CustomResponse(
           responseBody: {
             "result": listConversationRoomTemp,
