@@ -62,9 +62,9 @@ class _LoadingDotState extends State<LoadingDot> with TickerProviderStateMixin {
     for (final f in _delayFeature) {
       f.cancel();
     }
-    for (final f in listAnimationController) {
-      f.dispose();
-    }
+    // for (final f in listAnimationController) {
+    //   f.dispose();
+    // }
     super.dispose();
   }
 

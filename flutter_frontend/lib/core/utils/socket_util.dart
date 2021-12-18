@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
 import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
@@ -27,7 +28,7 @@ class SocketController extends GetxController {
     print("init SocketController");
     try {
       final String id = localRepository.getCurrentUser()["_id"];
-      socket = IO.io("http://localhost:3000",
+      socket = IO.io(dotenv.env['SOCKET_URL'],
         IO.OptionBuilder()
         .setTransports(['websocket']) // for Flutter or Dart VM
         // .enableAutoConnect()
@@ -66,7 +67,8 @@ class SocketController extends GetxController {
     socket.dispose();
     super.onClose();
   }
-  
+
+  // this function to send add friend request
   void emitAddFriend(String toId) {
     try {
       final String fromId = localRepository.getCurrentUser()["_id"];
@@ -81,7 +83,7 @@ class SocketController extends GetxController {
     }
   }
 
-  // this function to handle event on add friend
+  // this function to handle event on add friend request
   // (receive add friend request)
   void onAddFriend() {
     try {
@@ -102,11 +104,12 @@ class SocketController extends GetxController {
     }
   }
 
-  void emitAcceptAddFriendRequest(String fromId, String toId) {
+  // this function to send accept add friend request
+  void emitAcceptAddFriendRequest(String fromId) {
     try {
       socket.emit(SocketEvent.acceptAddFriendRequest, {
         "fromId": fromId,
-        "toId": toId,
+        "toId": localRepository.infoCurrentUser.id,
       });
       friendController.listAddFriendRequest.removeWhere((element) => element.fromId == fromId);
     } catch (e) {
@@ -114,6 +117,8 @@ class SocketController extends GetxController {
     }
   }
 
+  // this function to listen accept add friend request
+  // ex: have someone accept your add friend request
   void onNotifyAcceptAddFriendRequest() {
     try {
       socket.on(SocketEvent.notifyAcceptAddFriendRequest, (data) {
@@ -236,10 +241,13 @@ class SocketController extends GetxController {
     try {
       socket.on(SocketEvent.receiveRoomMessage, (data) {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["roomId"]);
+        // get current conversation and add message to it
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
+        // get list which haven't current conversation
         final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
         listTemp.removeWhere((element) => element.id == data["roomId"]);
+        // push current conversation to position 0 of list conversation
         homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
       });
     } catch (e) {

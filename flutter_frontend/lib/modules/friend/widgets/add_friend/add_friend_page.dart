@@ -122,7 +122,6 @@ class AddFriendPage extends StatelessWidget {
                   onTapAccept: () {
                     friendController.onTapAcceptAddFriendRequest(
                       friendController.listAddFriendRequest[index].fromId,
-                      friendController.listAddFriendRequest[index].toId,
                     );
                   },
                 );

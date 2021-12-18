@@ -15,6 +15,9 @@ class FriendScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print("FRIEND SCREEN WAS BUILD");
+
+    friendController.isOpenListTab.value = true;
     final Size size = MediaQuery.of(context).size;
 
     return Scaffold(

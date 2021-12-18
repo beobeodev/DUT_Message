@@ -16,7 +16,17 @@ class ListFriendPage extends StatelessWidget {
     return SizedBox(
       width: double.infinity,
       height: double.infinity,
-      child: Column(
+      child: friendController.listFriend.isEmpty ? Center(
+        child: Text(
+          "Không có bạn bè nào!",
+          style: TextStyle(
+            color: Palette.zodiacBlue,
+            fontWeight: FontWeight.w700,
+            fontSize: ScreenUtil().setSp(18),
+            fontFamily: FontFamily.fontNunito,
+          ),
+        ),
+      ) : Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextFormField(
@@ -68,7 +78,7 @@ class ListFriendPage extends StatelessWidget {
             height: ScreenUtil().setHeight(6),
           ),
           Obx(
-              () => Expanded(
+            () => Expanded(
               child: ListView.builder(
                 padding: EdgeInsets.only(top: 0.1),
                 itemCount: friendController.listFriendFilter.length,

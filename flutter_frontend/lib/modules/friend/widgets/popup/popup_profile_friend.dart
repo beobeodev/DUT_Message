@@ -7,10 +7,12 @@ import 'package:flutter_frontend/modules/friend/widgets/popup/have_receive_conte
 import 'package:flutter_frontend/modules/friend/widgets/popup/have_send_content.dart';
 import 'package:flutter_frontend/modules/friend/widgets/popup/is_friend_content.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class PopUpProfileFriend extends StatelessWidget {
   final String imageURL;
   final String name;
+  // id's friend
   final String id;
   final FriendController friendController;
   final AddFriendStatus addFriendStatus;
@@ -55,7 +57,12 @@ class PopUpProfileFriend extends StatelessWidget {
                 },
               )
               else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
-              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent()
+              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent(
+                onTapAccept: () {
+                  friendController.onTapAcceptAddFriendRequest(id);
+                  Get.back();
+                },
+                )
               else if (addFriendStatus == AddFriendStatus.noAddFriendRequest) Padding(
                 padding: const EdgeInsets.only(top: 35.0),
                 child: TextButton(
