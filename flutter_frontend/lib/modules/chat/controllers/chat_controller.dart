@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_frontend/modules/chat/widgets/bottom_sheet/select_bottom_sheet.dart';
 import 'package:flutter_frontend/modules/chat/widgets/focus_menu/focus_menu_detail.dart';
 import 'package:flutter_frontend/modules/chat/widgets/focus_menu/focus_menu_item.dart';
@@ -19,6 +22,8 @@ import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 class ChatController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
@@ -191,8 +196,21 @@ class ChatController extends GetxController {
     }
   }
 
+  // this function to handle event 'GỚ TIN NHẮN'
+  void removeMessage(String messageId) {
+    if (isRoom) {
 
-  Future<void> onOpenFocusMenu(GlobalKey testKey) async {
+    } else {
+      socketController.sendRemoveConverMessage(
+        messageId,
+        friendUser.id,
+        currentConversation.value.id,
+      );
+    }
+  }
+
+  //
+  Future<void> onOpenFocusMenu(GlobalKey testKey, {bool isFile = false, bool isSender = true, String urlDownload, @required String messageId}) async {
     Offset childOffset = Offset(0, 0);
     Size childSize;
     final RenderBox renderBox = testKey.currentContext.findRenderObject() as RenderBox;
@@ -220,7 +238,7 @@ class ChatController extends GetxController {
               listFocusMenuItem: <FocusMenuItem>[
                 FocusMenuItem(
                   title: Text(
-                    "Gỡ tin nhắn",
+                    isSender ? "Gỡ tin nhắn" : "Xoá tin nhắn",
                     style: TextStyle(
                       color: Palette.zodiacBlue,
                       fontFamily: FontFamily.fontNunito,
@@ -233,12 +251,13 @@ class ChatController extends GetxController {
                     size: 18,
                   ),
                   onTapItem: () {
+                    removeMessage(messageId);
                     Get.back();
                   },
                 ),
-                FocusMenuItem(
+                if (isFile && !isSender) FocusMenuItem(
                   title: Text(
-                    "Gỡ tin nhắn",
+                    "Tải về",
                     style: TextStyle(
                       color: Palette.zodiacBlue,
                       fontFamily: FontFamily.fontNunito,
@@ -246,12 +265,12 @@ class ChatController extends GetxController {
                     ),
                   ),
                   icon: Icon(
-                    FontAwesomeIcons.trash,
-                    color: Colors.red,
+                    FontAwesomeIcons.download,
+                    color: Palette.metallicViolet,
                     size: 18,
                   ),
-                  onTapItem: () {
-                    Get.back();
+                  onTapItem: () async {
+                    await implementDownload(urlDownload);
                   },
                 ),
               ],
@@ -262,5 +281,50 @@ class ChatController extends GetxController {
         opaque: false,
       ),
     );
+  }
+
+  Future<bool> _requestPermissions() async {
+    Permission permission = Permission.storage;
+
+    if (!(await permission.isGranted)) {
+      await Permission.storage.request();
+      permission = Permission.storage;
+    }
+
+    final bool check = await permission.isGranted;
+
+    return check;
+  }
+
+  Future<void> implementDownload(String url) async {
+    final Directory _path = await getApplicationDocumentsDirectory();
+    final String _localPath = '${_path.path}${Platform.pathSeparator}Download';
+    final savedDir = Directory(_localPath);
+    final bool hasExisted = await savedDir.exists();
+    if (!hasExisted) {
+      savedDir.create();
+    }
+
+    print(_localPath);
+    final status = await Permission.storage.request();
+
+    if(status.isGranted) {
+      final String taskId = await FlutterDownloader.enqueue(
+        url: url,
+        savedDir: _localPath,
+        showNotification: true, // show download progress in status bar (for Android)
+        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+      );
+      FlutterDownloader.registerCallback(downloadCallback);
+    } else {
+      print('Permission denied!');
+    }
+    print("DOWNLOAD FILE SUCCESSFUL!!");
+  }
+
+  void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+    // print(send);
   }
 }

@@ -60,6 +60,8 @@ class ChatScreen extends StatelessWidget {
                       avatar: currentMessage.author.avatar,
                       authorName: currentMessage.author.name,
                       isRoom: chatController.isRoom,
+                      isDeleted: currentMessage.isDeleted,
+                      messageId: currentMessage.id,
                     );
                   }
                 },

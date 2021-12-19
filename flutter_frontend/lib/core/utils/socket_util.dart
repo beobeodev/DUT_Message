@@ -45,6 +45,7 @@ class SocketController extends GetxController {
         onReceiveCreateRoom();
         // onReceiveJoinRoom();
         onReceiveRoomMessage();
+        onReceiveRemoveConversationMessage();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -130,6 +131,9 @@ class SocketController extends GetxController {
     }
   }
 
+
+  // ---- SOCKET FOR CHAT ONE TO ONE ----- //
+
   void emitSendConversationMessage({String conversationId, String fromId, String toId, String content, bool isImg = false}) {
     try {
       socket.emit(SocketEvent.sendConversationMessage, {
@@ -156,7 +160,7 @@ class SocketController extends GetxController {
 
   void onReceiveConversationMessage() {
     try {
-      // print("onReceiveConversationMessage() was called");
+      print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["converId"]);
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
@@ -169,6 +173,39 @@ class SocketController extends GetxController {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");
     }
   }
+
+  // this function to emit event delete room message
+  void sendRemoveConverMessage(String messageId, String toId, String converId) {
+    try {
+      socket.emit(SocketEvent.sendRemoveConversationMessage, {
+        "messageId": messageId,
+        "fromId": localRepository.infoCurrentUser.id,
+        "toId": toId,
+        "converId": converId,
+      });
+    } catch (e) {
+      print("Error in sendRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveRemoveConversationMessage() {
+    try {
+      socket.on(SocketEvent.receiveRemoveConversationMessage, (data) {
+        // get current conversation and remove message
+        final Conversation conversationTemp = homeController.listConversationAndRoom.firstWhere((element) => element.id == data["converId"]);
+        final Message messageTemp = conversationTemp.listMessage.firstWhere((element) => element.id == data["messageId"]);
+        messageTemp.isDeleted = true;
+        // get list which haven't current conversation
+        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        listTemp.removeWhere((element) => element.id == data["converId"]);
+        // push current conversation to position 0 of list conversation
+        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+      });
+    } catch (e) {
+      print("Error in onReceiveRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
+  // ---- END SOCKET CHAT ONE TO ONE ---- //
 
   // ----- SOCKET FOR CHAT ROOM ----- //
   void emitSendCreateRoom(List<String> listId, String nameRoom) {
@@ -254,6 +291,7 @@ class SocketController extends GetxController {
       print("ERROR in onReceiveRoomMessage() from SocketController: $e");
     }
   }
+
 
   // ---- END SOCKET FOR CHAT ROOM ---- //
 }
