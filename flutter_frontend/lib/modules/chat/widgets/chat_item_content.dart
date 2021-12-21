@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
@@ -8,10 +9,17 @@ class ChatItemContent extends StatelessWidget {
   final bool isImage;
   final bool isRoom;
   final bool isSender;
+  final bool isDeleted;
   final String content;
   final String authorName;
 
-  const ChatItemContent({Key key, @required this.isImage, @required this.isRoom, @required this.isSender, @required this.content, @required this.authorName}) : super(key: key);
+  const ChatItemContent({Key key,
+    @required this.isImage,
+    @required this.isRoom,
+    @required this.isSender,
+    @required this.content,
+    @required this.authorName,
+    @required this.isDeleted,}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +27,24 @@ class ChatItemContent extends StatelessWidget {
       if (content.contains("/o/images%")) {
         return Padding(
           padding:  EdgeInsets.only(left: 10, top:  10),
-          child: Image.network(
-            content,
-            width: ScreenUtil().screenWidth/2 + 50,
+          child: CachedNetworkImage(
+            imageUrl: content,
+            placeholder: (context, url) {
+              return SizedBox(
+                width: ScreenUtil().screenWidth/2 + 40,
+                height: 60,
+                child: Center(
+                  child: CircularProgressIndicator(),
+                ),
+              );
+            },
+            errorWidget: (context, url, error) => Icon(Icons.error),
+            width: ScreenUtil().screenWidth/2 + 40,
           ),
+          // Image.network(
+          //   content,
+          //   width: ScreenUtil().screenWidth/2 + 50,
+          // ),
         );
       } else if (content.contains("/o/files%")) {
         return Column(
@@ -102,13 +124,13 @@ class ChatItemContent extends StatelessWidget {
           ),
         ),
         Container(
-          margin: EdgeInsets.only(left: 10, right: 10, top: (isRoom && !isSender) ? 2 : 10),
+          margin: EdgeInsets.only(left: 10, top: (isRoom && !isSender) ? 2 : 10),
           padding: EdgeInsets.symmetric(
             vertical: 10,
             horizontal: 15,
           ),
           decoration: BoxDecoration(
-            color: isSender ? Palette.blue : Colors.white,
+            color: isDeleted ? Palette.americanSilver : (isSender ? Palette.blue : Colors.white),
             borderRadius: isSender
                 ? BorderRadius.only(
               topLeft: Radius.circular(30),
@@ -121,12 +143,12 @@ class ChatItemContent extends StatelessWidget {
             ),
           ),
           child: Text(
-            content,
+            isDeleted ? "Đã gỡ tin nhắn" : content,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: ScreenUtil().setSp(17),
               fontFamily: FontFamily.fontNunito,
-              color: isSender ? Colors.white : Palette.zodiacBlue,
+              color: isDeleted ? Colors.white : (isSender ? Colors.white : Palette.zodiacBlue),
             ),
           ),
         ),

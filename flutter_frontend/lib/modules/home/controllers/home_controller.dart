@@ -12,7 +12,7 @@ class HomeController extends GetxController {
 
   final DrawerScreenController drawerScreenController = Get.put(DrawerScreenController());
 
-  final RxList<Conversation> listConversationAndRoom = <Conversation>[].obs;
+  RxList<Conversation> listConversationAndRoom = <Conversation>[].obs;
 
   User currentUser;
 

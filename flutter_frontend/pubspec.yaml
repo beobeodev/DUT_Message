@@ -19,6 +19,7 @@ version: 1.0.0+1
 
 environment:
   sdk: ">=2.2.2 <3.0.0"
+#  sdk: ">=2.12.2 <3.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -48,6 +49,9 @@ dependencies:
   url_launcher: ^6.0.16
   flutter_downloader: ^1.7.1
   flutter_dotenv: ^5.0.2
+  cached_network_image: ^3.2.0
+  path_provider: ^2.0.8
+  permission_handler: ^8.3.0
 
 
 dev_dependencies:

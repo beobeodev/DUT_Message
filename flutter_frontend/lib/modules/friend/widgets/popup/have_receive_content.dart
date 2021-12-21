@@ -4,7 +4,9 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HaveReceiveContent extends StatelessWidget {
-  const HaveReceiveContent({Key key}) : super(key: key);
+  final void Function() onTapAccept;
+
+  const HaveReceiveContent({Key key, this.onTapAccept}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +39,7 @@ class HaveReceiveContent extends StatelessWidget {
                 onPressed: () {
                 },
                 child: Text(
-                  'Từ ',
+                  'Từ chối',
                   style: TextStyle(
                     fontFamily: FontFamily.fontNunito,
                     fontSize: ScreenUtil().setSp(16),
@@ -53,8 +55,7 @@ class HaveReceiveContent extends StatelessWidget {
                   backgroundColor: Color(0xFF3570EC),
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
-                onPressed: () {
-                },
+                onPressed: onTapAccept,
                 child: Text(
                   'Chấp nhận',
                   style: TextStyle(

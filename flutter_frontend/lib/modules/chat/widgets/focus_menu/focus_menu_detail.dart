@@ -27,7 +27,7 @@ class FocusMenuDetail extends StatelessWidget {
             top: topMargin,
             child: Container(
               width: menuWidth,
-              height: menuHeight,
+              height: listFocusMenuItem.length * 50.0,
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),

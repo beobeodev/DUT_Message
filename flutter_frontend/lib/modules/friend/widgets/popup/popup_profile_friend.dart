@@ -7,15 +7,17 @@ import 'package:flutter_frontend/modules/friend/widgets/popup/have_receive_conte
 import 'package:flutter_frontend/modules/friend/widgets/popup/have_send_content.dart';
 import 'package:flutter_frontend/modules/friend/widgets/popup/is_friend_content.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 class PopUpProfileFriend extends StatelessWidget {
   final String imageURL;
   final String name;
-  final String id;
+  // id's friend
+  final String friendId;
   final FriendController friendController;
   final AddFriendStatus addFriendStatus;
 
-  const PopUpProfileFriend({this.imageURL, this.name, this.id, this.friendController, this.addFriendStatus});
+  const PopUpProfileFriend({this.imageURL, this.name, this.friendId, this.friendController, this.addFriendStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -51,11 +53,19 @@ class PopUpProfileFriend extends StatelessWidget {
               ),
               if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent(
                 onPressButtonChat: () {
-                  friendController.onPressButtonChat(id);
+                  friendController.onPressButtonChat(friendId);
+                },
+                onPressCancelFriend: () {
+                  friendController.onPressCancelFriend(friendId);
                 },
               )
               else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
-              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent()
+              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent(
+                onTapAccept: () {
+                  friendController.onTapAcceptAddFriendRequest(friendId);
+                  Get.back();
+                },
+                )
               else if (addFriendStatus == AddFriendStatus.noAddFriendRequest) Padding(
                 padding: const EdgeInsets.only(top: 35.0),
                 child: TextButton(
@@ -65,7 +75,7 @@ class PopUpProfileFriend extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   ),
                   onPressed: () {
-                    friendController.onPressAddFriend(id);
+                    friendController.onPressAddFriend(friendId);
                   },
                   child: Text(
                     'Kết bạn',

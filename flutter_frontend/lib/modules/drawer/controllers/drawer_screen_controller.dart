@@ -1,6 +1,9 @@
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:ui';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_downloader/flutter_downloader.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/router/router.dart';
 import 'package:flutter_frontend/core/utils/socket_util.dart';
@@ -47,6 +50,37 @@ class DrawerScreenController extends GetxController {
     super.onInit();
     currentUser = localRepository.infoCurrentUser;
   }
+
+
+  final ReceivePort _port = ReceivePort();
+  @override
+  void onReady() {
+      super.onReady();
+      bindBackgroundIsolate();
+  }
+
+  void bindBackgroundIsolate() {
+    final bool isSuccess = IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    if (!isSuccess) {
+      unbindBackgroundIsolate();
+      bindBackgroundIsolate();
+      return;
+    }
+    _port.listen((dynamic data) {
+      String id = data[0];
+      DownloadTaskStatus status = data[1];
+      int progress = data[2];
+      print(id);
+    });
+    print("STATUS REGISTER PORT: $isSuccess");
+
+  }
+
+  void unbindBackgroundIsolate() {
+    IsolateNameServer.removePortNameMapping('downloader_send_port');
+  }
+
+
 
   //This function to implement close drawer
   void closeDrawer() {

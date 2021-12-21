@@ -48,6 +48,11 @@ class User {
     "phone": phone,
     "friends": List<String>.from(friends.map((String x) => x)),
   };
+
+  @override
+  String toString() {
+    return "$name $avatar $phone";
+  }
 }
 
 

@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
 import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
@@ -27,7 +28,7 @@ class SocketController extends GetxController {
     print("init SocketController");
     try {
       final String id = localRepository.getCurrentUser()["_id"];
-      socket = IO.io("http://localhost:3000",
+      socket = IO.io(dotenv.env['SOCKET_URL'],
         IO.OptionBuilder()
         .setTransports(['websocket']) // for Flutter or Dart VM
         // .enableAutoConnect()
@@ -44,6 +45,9 @@ class SocketController extends GetxController {
         onReceiveCreateRoom();
         // onReceiveJoinRoom();
         onReceiveRoomMessage();
+        onReceiveRemoveConversationMessage();
+        onReceiveCancelFriend();
+        onRemoveFriendRequest();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -66,7 +70,8 @@ class SocketController extends GetxController {
     socket.dispose();
     super.onClose();
   }
-  
+
+  // this function to send add friend request
   void emitAddFriend(String toId) {
     try {
       final String fromId = localRepository.getCurrentUser()["_id"];
@@ -81,7 +86,7 @@ class SocketController extends GetxController {
     }
   }
 
-  // this function to handle event on add friend
+  // this function to handle event on add friend request
   // (receive add friend request)
   void onAddFriend() {
     try {
@@ -102,11 +107,12 @@ class SocketController extends GetxController {
     }
   }
 
-  void emitAcceptAddFriendRequest(String fromId, String toId) {
+  // this function to send accept add friend request
+  void emitAcceptAddFriendRequest(String fromId) {
     try {
       socket.emit(SocketEvent.acceptAddFriendRequest, {
         "fromId": fromId,
-        "toId": toId,
+        "toId": localRepository.infoCurrentUser.id,
       });
       friendController.listAddFriendRequest.removeWhere((element) => element.fromId == fromId);
     } catch (e) {
@@ -114,16 +120,68 @@ class SocketController extends GetxController {
     }
   }
 
+  // this function to listen accept add friend request
+  // ex: have someone accept your add friend request
   void onNotifyAcceptAddFriendRequest() {
     try {
       socket.on(SocketEvent.notifyAcceptAddFriendRequest, (data) {
-        final User user = User.fromMap(data);
+        print(data);
+        final User user = User.fromMap(data['infoFriend']);
+        final Conversation conversation = Conversation.fromMap(data["conver"]);
+        homeController.listConversationAndRoom.add(conversation);
         friendController.listFriend.add(user);
       });
     } catch (e) {
       print("Error in notifyAcceptAddFriendRequest() from SocketUtil $e");
     }
   }
+
+  // this function to emit event UNFRIEND
+  void sendCancelFriend(String toId) {
+    try {
+      socket.emit(SocketEvent.sendCancelFriend, {
+        "fromId": localRepository.infoCurrentUser.id,
+        "toId": toId,
+      });
+    } catch (e) {
+      print("Error in sendCancelFriend() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveCancelFriend() {
+    try {
+      socket.on(SocketEvent.receiveCancelFriend, (data) {
+        friendController.listFriend.removeWhere((element) => element.id == data);
+      });
+    } catch (e) {
+      print("Error in onReceiveCancelFriend() from SocketUtil $e");
+    }
+  }
+
+  // this function to handle event refuse add friend request
+  void emitRemoveFriendRequest(String friendRequestId, String fromId) {
+    try {
+      socket.emit(SocketEvent.cancelFriendRequest, {
+        "friend_request_id": friendRequestId,
+        "fromId": fromId,
+        "toId": localRepository.infoCurrentUser.id,
+      });
+    } catch (e) {
+      print("Error in emitRemoveFriendRequest() from SocketController $e");
+    }
+  }
+
+  void onRemoveFriendRequest() {
+    try {
+      socket.on(SocketEvent.removeFriendRequest, (data) {
+        friendController.listAddFriendRequest.removeWhere((element) => element.friendRequestId == data["_id"]);
+      });
+    } catch (e) {
+      print("Error in onRemoveFriendRequest() from SocketController $e");
+    }
+  }
+
+  // ---- SOCKET FOR CHAT ONE TO ONE ----- //
 
   void emitSendConversationMessage({String conversationId, String fromId, String toId, String content, bool isImg = false}) {
     try {
@@ -151,7 +209,7 @@ class SocketController extends GetxController {
 
   void onReceiveConversationMessage() {
     try {
-      // print("onReceiveConversationMessage() was called");
+      print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["converId"]);
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
@@ -164,6 +222,39 @@ class SocketController extends GetxController {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");
     }
   }
+
+  // this function to emit event delete room message
+  void sendRemoveConverMessage(String messageId, String toId, String converId) {
+    try {
+      socket.emit(SocketEvent.sendRemoveConversationMessage, {
+        "messageId": messageId,
+        "fromId": localRepository.infoCurrentUser.id,
+        "toId": toId,
+        "converId": converId,
+      });
+    } catch (e) {
+      print("Error in sendRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveRemoveConversationMessage() {
+    try {
+      socket.on(SocketEvent.receiveRemoveConversationMessage, (data) {
+        // get current conversation and remove message
+        final Conversation conversationTemp = homeController.listConversationAndRoom.firstWhere((element) => element.id == data["converId"]);
+        final Message messageTemp = conversationTemp.listMessage.firstWhere((element) => element.id == data["messageId"]);
+        messageTemp.isDeleted = true;
+        // get list which haven't current conversation
+        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        listTemp.removeWhere((element) => element.id == data["converId"]);
+        // push current conversation to position 0 of list conversation
+        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+      });
+    } catch (e) {
+      print("Error in onReceiveRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
+  // ---- END SOCKET CHAT ONE TO ONE ---- //
 
   // ----- SOCKET FOR CHAT ROOM ----- //
   void emitSendCreateRoom(List<String> listId, String nameRoom) {
@@ -236,16 +327,20 @@ class SocketController extends GetxController {
     try {
       socket.on(SocketEvent.receiveRoomMessage, (data) {
         final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["roomId"]);
+        // get current conversation and add message to it
         final Conversation conversationTemp = homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
+        // get list which haven't current conversation
         final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
         listTemp.removeWhere((element) => element.id == data["roomId"]);
+        // push current conversation to position 0 of list conversation
         homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
       });
     } catch (e) {
       print("ERROR in onReceiveRoomMessage() from SocketController: $e");
     }
   }
+
 
   // ---- END SOCKET FOR CHAT ROOM ---- //
 }

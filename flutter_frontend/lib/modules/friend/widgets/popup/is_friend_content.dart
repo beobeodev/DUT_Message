@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IsFriendContent extends StatelessWidget {
   final void Function() onPressButtonChat;
+  final void Function() onPressCancelFriend;
 
-  const IsFriendContent({Key key, this.onPressButtonChat}) : super(key: key);
+  const IsFriendContent({Key key, this.onPressButtonChat, this.onPressCancelFriend}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -36,8 +37,7 @@ class IsFriendContent extends StatelessWidget {
                   backgroundColor: Palette.sweetRed,
                   padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
-                onPressed: () {
-                },
+                onPressed: onPressCancelFriend,
                 child: Text(
                   'Huỷ kết bạn',
                   style: TextStyle(
