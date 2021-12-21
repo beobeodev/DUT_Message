@@ -31,7 +31,7 @@ class SplashController extends GetxController {
 
   Future<void> initData() async {
     try {
-      localRepository.initData();
+      await localRepository.initData();
       await conversationRepository.getListConversationAndRoom();
       await userRepository.initData();
     } catch (e) {

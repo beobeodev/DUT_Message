@@ -70,7 +70,7 @@ class ListConversationWidget extends StatelessWidget {
                     if (lastMessage.author.id == homeController.currentUser.id) {
                       if (isImage) {
                         lastText = "Bạn đã gửi một tệp đính kèm";
-                      } else if (indexLast == 0) {
+                      } else if (indexLast == 0 && isRoom) {
                         lastText = "Bạn đã tạo nhóm này";
                       } else {
                         lastText = "Bạn: ${lastMessage.content}";
@@ -79,6 +79,8 @@ class ListConversationWidget extends StatelessWidget {
                       if (isRoom) {
                         if (isImage) {
                           lastText = "${lastMessage.author.name}: đã gửi một tệp đính kèm";
+                        } else if (indexLast == 0) {
+                          lastText = "${lastMessage.author.name} đã tạo nhóm này";
                         } else {
                           lastText = "${lastMessage.author.name}: ${lastMessage.content}";
                         }

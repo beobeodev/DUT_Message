@@ -13,11 +13,11 @@ class PopUpProfileFriend extends StatelessWidget {
   final String imageURL;
   final String name;
   // id's friend
-  final String id;
+  final String friendId;
   final FriendController friendController;
   final AddFriendStatus addFriendStatus;
 
-  const PopUpProfileFriend({this.imageURL, this.name, this.id, this.friendController, this.addFriendStatus});
+  const PopUpProfileFriend({this.imageURL, this.name, this.friendId, this.friendController, this.addFriendStatus});
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +53,16 @@ class PopUpProfileFriend extends StatelessWidget {
               ),
               if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent(
                 onPressButtonChat: () {
-                  friendController.onPressButtonChat(id);
+                  friendController.onPressButtonChat(friendId);
+                },
+                onPressCancelFriend: () {
+                  friendController.onPressCancelFriend(friendId);
                 },
               )
               else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
               else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent(
                 onTapAccept: () {
-                  friendController.onTapAcceptAddFriendRequest(id);
+                  friendController.onTapAcceptAddFriendRequest(friendId);
                   Get.back();
                 },
                 )
@@ -72,7 +75,7 @@ class PopUpProfileFriend extends StatelessWidget {
                     padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                   ),
                   onPressed: () {
-                    friendController.onPressAddFriend(id);
+                    friendController.onPressAddFriend(friendId);
                   },
                   child: Text(
                     'Kết bạn',

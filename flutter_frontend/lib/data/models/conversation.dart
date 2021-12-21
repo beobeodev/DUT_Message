@@ -10,12 +10,12 @@ class Conversation {
   List<Message> listMessage;
   bool isRoom;
 
-  Conversation({this.id, this.name, this.avatarRoom, this.listUserIn, this.listMessage, this.isRoom = false});
+  Conversation({this.id, this.name, this.avatarRoom, this.listUserIn, this.listMessage = const <Message>[], this.isRoom = false});
 
   factory Conversation.fromMap(Map<String, dynamic> json) => Conversation(
     id: json["_id"],
     listUserIn: List<User>.from((json["userIns"] as List<dynamic>).map((e) => User.fromMap(e["userIn"]))).toList(),
-    listMessage: List<Message>.from((json["list_message"] as List<dynamic>).map((e) => Message.fromMap(e))).toList(),
+    listMessage: json["list_message"] == null ? <Message>[] : List<Message>.from((json["list_message"] as List<dynamic>).map((e) => Message.fromMap(e))).toList(),
   );
 
   factory Conversation.fromMapRoom(Map<String, dynamic> json) => Conversation(
@@ -33,4 +33,9 @@ class Conversation {
     "userIns": listUserIn,
     "list_message": listMessage,
   };
+
+  @override
+  String toString() {
+    return "$id $listUserIn";
+  }
 }

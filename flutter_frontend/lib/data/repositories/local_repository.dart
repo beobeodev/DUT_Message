@@ -28,7 +28,7 @@ class LocalRepository {
   }
 
   // this function to init data get from local
-  void initData() {
+  Future<void> initData() async {
     accessToken = getAccessToken();
     refreshToken = getRefreshToken();
     infoCurrentUser = User.fromMap(Map<String, dynamic>.from(getCurrentUser()));

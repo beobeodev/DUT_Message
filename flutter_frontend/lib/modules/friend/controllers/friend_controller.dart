@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/widgets/hero_popup_route.dart';
+import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/modules/friend/widgets/popup/popup_profile_friend.dart';
 import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
@@ -12,6 +13,7 @@ import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
 
 class FriendController extends GetxController {
+  final LocalRepository localRepository = LocalRepository();
   final UserRepository userRepository = UserRepository();
 
   final SocketController socketController = Get.put(SocketController());
@@ -87,6 +89,8 @@ class FriendController extends GetxController {
     } else if (phoneNumberEditingController.text.length != 10) {
       errorPhoneNumber.value = "Số điện thoại không hợp lệ";
       return ;
+    } else if (phoneNumberEditingController.text == localRepository.infoCurrentUser.phone) {
+      errorPhoneNumber.value = "Đây là số điện thoại của bạn";
     } else {
       final CustomResponse response = await userRepository.getUserByPhoneNumber(phoneNumberEditingController.text);
       // check if user not exist with phone number which need get info user
@@ -123,13 +127,15 @@ class FriendController extends GetxController {
               child: PopUpProfileFriend(
                 imageURL: responseBody["avatar"],
                 name: responseBody["name"],
-                id: responseBody["_id"], // id of user being find
+                friendId: responseBody["_id"], // id of user being find
                 friendController: this,
                 addFriendStatus: addFriendStatus,
               ),
             ),
           ),
         );
+        // clear text field find user by phone number
+        phoneNumberEditingController.clear();
       }
     }
   }
@@ -145,6 +151,12 @@ class FriendController extends GetxController {
   // onTap ICON 'TICK' to ACCEPT add friend request
   void onTapAcceptAddFriendRequest(String fromId) {
     socketController.emitAcceptAddFriendRequest(fromId);
+  }
+
+  // this function to handle event on tap ICON 'X' to
+  // REFUSE ADD FRIEND REQUEST
+  void onTapRefuseAddFriendRequest(String friendRequestId, String fromId) {
+    socketController.emitRemoveFriendRequest(friendRequestId, fromId);
   }
 
   // this function to handle event on change
@@ -163,7 +175,7 @@ class FriendController extends GetxController {
           child: PopUpProfileFriend(
             imageURL: listFriendFilter[index].avatar,
             name: listFriendFilter[index].name,
-            id: listFriendFilter[index].id, // id of user being find
+            friendId: listFriendFilter[index].id, // id of user being find
             friendController: this,
             addFriendStatus: AddFriendStatus.isFriend,
           ),
@@ -176,10 +188,16 @@ class FriendController extends GetxController {
   // in popup profile friend
   void onPressButtonChat(String friendId) {
     Get.back();
-    final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2);
+    // final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2);
     Get.toNamed(
       GetRouter.chat,
-      arguments: [homeController.listConversationAndRoom[indexConversation], false],
+      arguments: [homeController.listConversationAndRoom.firstWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2), false],
     );
+  }
+
+  // this function to handel event on press BUTTON "HUỶ KẾT BẠN"
+  void onPressCancelFriend(String friendId) {
+    Get.back();
+    socketController.sendCancelFriend(friendId);
   }
 }

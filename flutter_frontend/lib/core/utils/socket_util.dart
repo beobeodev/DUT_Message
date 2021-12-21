@@ -46,6 +46,8 @@ class SocketController extends GetxController {
         // onReceiveJoinRoom();
         onReceiveRoomMessage();
         onReceiveRemoveConversationMessage();
+        onReceiveCancelFriend();
+        onRemoveFriendRequest();
       });
     } catch (e) {
       print("Error in SocketUtil._init() $e");
@@ -123,7 +125,10 @@ class SocketController extends GetxController {
   void onNotifyAcceptAddFriendRequest() {
     try {
       socket.on(SocketEvent.notifyAcceptAddFriendRequest, (data) {
-        final User user = User.fromMap(data);
+        print(data);
+        final User user = User.fromMap(data['infoFriend']);
+        final Conversation conversation = Conversation.fromMap(data["conver"]);
+        homeController.listConversationAndRoom.add(conversation);
         friendController.listFriend.add(user);
       });
     } catch (e) {
@@ -131,6 +136,50 @@ class SocketController extends GetxController {
     }
   }
 
+  // this function to emit event UNFRIEND
+  void sendCancelFriend(String toId) {
+    try {
+      socket.emit(SocketEvent.sendCancelFriend, {
+        "fromId": localRepository.infoCurrentUser.id,
+        "toId": toId,
+      });
+    } catch (e) {
+      print("Error in sendCancelFriend() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveCancelFriend() {
+    try {
+      socket.on(SocketEvent.receiveCancelFriend, (data) {
+        friendController.listFriend.removeWhere((element) => element.id == data);
+      });
+    } catch (e) {
+      print("Error in onReceiveCancelFriend() from SocketUtil $e");
+    }
+  }
+
+  // this function to handle event refuse add friend request
+  void emitRemoveFriendRequest(String friendRequestId, String fromId) {
+    try {
+      socket.emit(SocketEvent.cancelFriendRequest, {
+        "friend_request_id": friendRequestId,
+        "fromId": fromId,
+        "toId": localRepository.infoCurrentUser.id,
+      });
+    } catch (e) {
+      print("Error in emitRemoveFriendRequest() from SocketController $e");
+    }
+  }
+
+  void onRemoveFriendRequest() {
+    try {
+      socket.on(SocketEvent.removeFriendRequest, (data) {
+        friendController.listAddFriendRequest.removeWhere((element) => element.friendRequestId == data["_id"]);
+      });
+    } catch (e) {
+      print("Error in onRemoveFriendRequest() from SocketController $e");
+    }
+  }
 
   // ---- SOCKET FOR CHAT ONE TO ONE ----- //
 

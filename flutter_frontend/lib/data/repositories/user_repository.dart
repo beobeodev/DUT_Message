@@ -134,12 +134,8 @@ class UserRepository{
         final List<FriendRequest> listAddFriendRequestTemp = <FriendRequest>[];
         for (final element in listRequest) {
           listAddFriendRequestTemp.add(
-            FriendRequest(
-              friendRequestId: element["_id"],
-              fromId: element["from"]["_id"],
-              toId: element["to"]["_id"],
-              name: element["from"]["name"],
-              avatar: element["from"]["avatar"],
+            FriendRequest.fromMap(
+              element,
             ),
           );
         }
