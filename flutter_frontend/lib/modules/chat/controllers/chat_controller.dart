@@ -56,6 +56,7 @@ class ChatController extends GetxController {
         val = p0.firstWhere((element) => element.id == currentConversation.value.id);
       });
     });
+    // print(currentConversation.value.listMessage.length);
   }
 
   @override
@@ -199,7 +200,10 @@ class ChatController extends GetxController {
   // this function to handle event 'GỚ TIN NHẮN'
   void removeMessage(String messageId) {
     if (isRoom) {
-
+      socketController.sendRemoveRoomMessage(
+        currentConversation.value.id,
+        messageId,
+      );
     } else {
       socketController.sendRemoveConverMessage(
         messageId,
@@ -236,7 +240,7 @@ class ChatController extends GetxController {
               leftMargin: leftMargin,
               topMargin: topMargin,
               listFocusMenuItem: <FocusMenuItem>[
-                FocusMenuItem(
+                if (isSender) FocusMenuItem(
                   title: Text(
                     isSender ? "Gỡ tin nhắn" : "Xoá tin nhắn",
                     style: TextStyle(
@@ -255,7 +259,7 @@ class ChatController extends GetxController {
                     Get.back();
                   },
                 ),
-                if (isFile && !isSender) FocusMenuItem(
+                if (isFile) FocusMenuItem(
                   title: Text(
                     "Tải về",
                     style: TextStyle(
@@ -297,34 +301,40 @@ class ChatController extends GetxController {
   }
 
   Future<void> implementDownload(String url) async {
-    final Directory _path = await getApplicationDocumentsDirectory();
-    final String _localPath = '${_path.path}${Platform.pathSeparator}Download';
-    final savedDir = Directory(_localPath);
-    final bool hasExisted = await savedDir.exists();
-    if (!hasExisted) {
-      savedDir.create();
-    }
+    try {
+      Directory _path;
+      if (Platform.isIOS) {
+        _path = await getApplicationDocumentsDirectory();
+      } else {
+        _path = await getExternalStorageDirectory();
+      }
+      // final String _localPath = '${_path.absolute.path}${Platform.pathSeparator}Download';
+      // final savedDir = Directory(_localPath);
+      // final bool hasExisted = await savedDir.exists();
+      // if (!hasExisted) {
+      //   savedDir.create();
+      // }
 
-    print(_localPath);
-    final status = await Permission.storage.request();
+      // print(savedDir.path);
+      final status = await Permission.storage.request();
 
-    if(status.isGranted) {
-      final String taskId = await FlutterDownloader.enqueue(
-        url: url,
-        savedDir: _localPath,
-        showNotification: true, // show download progress in status bar (for Android)
-        openFileFromNotification: true, // click on notification to open downloaded file (for Android)
-      );
-      FlutterDownloader.registerCallback(downloadCallback);
-    } else {
-      print('Permission denied!');
+      if(status.isGranted) {
+        final String taskId = await FlutterDownloader.enqueue(
+          url: url,
+          savedDir: _path.path,
+          showNotification: true, // show download progress in status bar (for Android)
+          openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+          saveInPublicStorage: true,
+        );
+      } else {
+        print('Permission denied!');
+      }
+    } catch (e) {
+      print(e);
     }
     print("DOWNLOAD FILE SUCCESSFUL!!");
+    Get.back();
   }
 
-  void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
-    // print(send);
-  }
+
 }

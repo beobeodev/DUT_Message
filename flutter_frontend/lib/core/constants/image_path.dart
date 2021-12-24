@@ -19,5 +19,5 @@ class ImagePath {
   static const avatarRoom = "assets/images/decorate_images/avatar_room.png";
 
   // path for network image
-  static const avatarChatGroup = "https://url.dscdut.com/MQfh";
+  static const avatarChatGroup = "https://firebasestorage.googleapis.com/v0/b/dut-message.appspot.com/o/decorative%20image%2Favatar_room.png?alt=media&token=7bdb0778-2820-4be6-8b8c-79579f4f9ec5";
 }

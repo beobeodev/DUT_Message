@@ -95,10 +95,10 @@ class ConversationRepository {
       if (response.statusCode == 200) {
         final List<Conversation> listConversationRoomTemp = <Conversation>[];
         for (final element in jsonDecode(response.body)) {
-          // print(element);
           listConversationRoomTemp.add(
             Conversation.fromMapRoom(element),
           );
+          print(listConversationRoomTemp[0].listMessage[0].content);
         }
 
         listRoom = listConversationRoomTemp;

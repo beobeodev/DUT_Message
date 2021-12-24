@@ -29,5 +29,6 @@ class SocketEvent {
   static String sendRemoveConversationMessage = 'send-remove-conver-message';
   static String receiveRemoveConversationMessage = 'receive-remove-conver-message';
 
-
+  static String sendRemoveRoomMessage = 'send-remove-room-message';
+  static String receiveRemoveRoomMessage = 'receive-remove-room-message';
 }

@@ -72,6 +72,8 @@ class ListConversationWidget extends StatelessWidget {
                         lastText = "Bạn đã gửi một tệp đính kèm";
                       } else if (indexLast == 0 && isRoom) {
                         lastText = "Bạn đã tạo nhóm này";
+                      } else if (lastMessage.isDeleted) {
+                        lastText = "Bạn đã gỡ một tin nhắn";
                       } else {
                         lastText = "Bạn: ${lastMessage.content}";
                       }
@@ -81,6 +83,8 @@ class ListConversationWidget extends StatelessWidget {
                           lastText = "${lastMessage.author.name}: đã gửi một tệp đính kèm";
                         } else if (indexLast == 0) {
                           lastText = "${lastMessage.author.name} đã tạo nhóm này";
+                        } else if (lastMessage.isDeleted) {
+                          lastText = "${lastMessage.author.name}: đã gỡ một tin nhắn";
                         } else {
                           lastText = "${lastMessage.author.name}: ${lastMessage.content}";
                         }
