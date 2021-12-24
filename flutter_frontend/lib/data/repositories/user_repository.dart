@@ -234,7 +234,45 @@ class UserRepository{
     );
   }
 
-  void addFriendToList(User friend) {
-    listFriend.add(friend);
+  Future<CustomResponse> updateProfile(User newUser) async {
+    try {
+      final Map<String, String> body = {
+        "name": newUser.name,
+        "avatar": newUser.avatar,
+        "email": newUser.email,
+      };
+
+      final Map<String, String> header = {
+        "accessToken": localRepository.accessToken,
+        "refreshToken": localRepository.refreshToken,
+        "id": localRepository.infoCurrentUser.id,
+      };
+
+      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/update-info", body: body, header: header);
+
+      if (response.statusCode == 200) {
+        return CustomResponse(
+          responseBody: jsonDecode(response.body),
+        );
+      } else if (response.statusCode == 500) {
+        return CustomResponse(
+          statusCode: 500,
+          error: true,
+          errorMaps: {
+            "message": "internal server error",
+          },
+        );
+      }
+    } catch (err) {
+      print("Error in updateProfile() from UserRepository: $err");
+      return CustomResponse(
+        statusCode: 500,
+        error: true,
+        errorMaps: {
+          "message": err,
+        },
+      );
+    }
+    return null;
   }
 }

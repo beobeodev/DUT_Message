@@ -23,7 +23,7 @@ class ChatItemContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (isImage) {
+    if (isImage && !isDeleted) {
       if (content.contains("/o/images%")) {
         return Padding(
           padding:  EdgeInsets.only(left: 10, top:  10),

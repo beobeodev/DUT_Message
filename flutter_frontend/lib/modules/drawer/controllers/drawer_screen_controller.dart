@@ -53,6 +53,7 @@ class DrawerScreenController extends GetxController {
 
 
   final ReceivePort _port = ReceivePort();
+
   @override
   void onReady() {
       super.onReady();
@@ -67,20 +68,24 @@ class DrawerScreenController extends GetxController {
       return;
     }
     _port.listen((dynamic data) {
-      String id = data[0];
-      DownloadTaskStatus status = data[1];
-      int progress = data[2];
-      print(id);
+      // String id = data[0];
+      // DownloadTaskStatus status = data[1];
+      // int progress = data[2];
+      print(data);
     });
     print("STATUS REGISTER PORT: $isSuccess");
+    FlutterDownloader.registerCallback(downloadCallback);
+  }
 
+  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
+    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
+    send.send([id, status, progress]);
+    // print(send);
   }
 
   void unbindBackgroundIsolate() {
     IsolateNameServer.removePortNameMapping('downloader_send_port');
   }
-
-
 
   //This function to implement close drawer
   void closeDrawer() {

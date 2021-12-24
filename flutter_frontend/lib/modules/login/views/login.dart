@@ -53,9 +53,9 @@ class LoginScreen extends StatelessWidget {
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                "Login",
+                                "Đăng nhập",
                                 style: TextStyle(
-                                  fontFamily: FontFamily.fontPoppins,
+                                  fontFamily: FontFamily.fontNunito,
                                   color: Palette.zodiacBlue,
                                   fontSize: ScreenUtil().setSp(36),
                                   fontWeight: FontWeight.w700,
@@ -109,12 +109,12 @@ class LoginScreen extends StatelessWidget {
                                   child: loginController.isLoading.value
                                     ? LoadingDot(size: 30,) : Center(
                                     child: Text(
-                                      "Log in",
+                                      "Đăng nhập",
                                       style: TextStyle(
-                                        fontFamily: FontFamily.fontPoppins,
+                                        fontFamily: FontFamily.fontNunito,
                                         color: Colors.white,
                                         fontWeight: FontWeight.w700,
-                                        fontSize: ScreenUtil().setSp(22),
+                                        fontSize: ScreenUtil().setSp(23),
                                       ),
                                     ),
                                   ),
@@ -162,7 +162,7 @@ class LoginScreen extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  "Don’t have an account? ",
+                                  "Chưa có tài khoản? ",
                                   style: TextStyle(
                                     color: Palette.zodiacBlue,
                                     fontFamily: FontFamily.fontPoppins,
@@ -173,7 +173,7 @@ class LoginScreen extends StatelessWidget {
                                 GestureDetector(
                                   onTap: loginController.navigateToSignUpScreen,
                                   child: Text(
-                                    "REGISTER",
+                                    "ĐĂNG KÝ",
                                     style: TextStyle(
                                       color: Palette.celticBlue,
                                       fontFamily: FontFamily.fontPoppins,

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_frontend/core/utils/encrypt_message.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
 import 'package:flutter_frontend/modules/home/controllers/home_controller.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
@@ -45,7 +46,10 @@ class SocketController extends GetxController {
         onReceiveCreateRoom();
         // onReceiveJoinRoom();
         onReceiveRoomMessage();
+
         onReceiveRemoveConversationMessage();
+        onReceiveRemoveRoomMessage();
+
         onReceiveCancelFriend();
         onRemoveFriendRequest();
       });
@@ -185,11 +189,13 @@ class SocketController extends GetxController {
 
   void emitSendConversationMessage({String conversationId, String fromId, String toId, String content, bool isImg = false}) {
     try {
+      final String encryptContent = EncryptMessage.encryptAES(content);
+
       socket.emit(SocketEvent.sendConversationMessage, {
         "converId": conversationId,
         "fromUserId": fromId,
         "toUserId": toId,
-        "content": content,
+        "content": encryptContent,
         "isImg": isImg,
       });
       // final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == conversationId);
@@ -303,9 +309,11 @@ class SocketController extends GetxController {
 
   void emitSendRoomMessage({@required String roomId, @required  String content, bool isImg = false}) {
     try {
+      final String encryptContent = EncryptMessage.encryptAES(content);
+
       socket.emit(SocketEvent.sendRoomMessage, {
         "roomId": roomId,
-        "content": content,
+        "content": encryptContent,
         "fromUserId": localRepository.infoCurrentUser.id,
         "isImg": isImg,
       });
@@ -341,6 +349,39 @@ class SocketController extends GetxController {
     }
   }
 
+  // this function to emit event delete room message
+  void sendRemoveRoomMessage(String roomId, String messageId) {
+    try {
+      socket.emit(SocketEvent.sendRemoveRoomMessage, {
+        "roomId": roomId,
+        "messageId": messageId,
+      });
+    } catch (e) {
+      print("Error in sendRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
+
+  void onReceiveRemoveRoomMessage() {
+    try {
+      socket.on(SocketEvent.receiveRemoveRoomMessage, (data) {
+        // get current conversation and remove message
+        final Conversation conversationTemp = homeController
+            .listConversationAndRoom.firstWhere((element) =>
+                element.id == data["roomId"],);
+        final Message messageTemp = conversationTemp.listMessage.firstWhere((
+            element,) => element.id == data["messageId"],);
+        messageTemp.isDeleted = true;
+        // get list which haven't current conversation
+        final List<Conversation> listTemp = List.from(
+            homeController.listConversationAndRoom,);
+        listTemp.removeWhere((element) => element.id == data["roomId"]);
+        // push current conversation to position 0 of list conversation
+        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+      });
+    } catch (e) {
+      print("Error in onReceiveRemoveConversationMessage() from SocketUtil $e");
+    }
+  }
 
   // ---- END SOCKET FOR CHAT ROOM ---- //
 }

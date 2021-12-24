@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "740021940494",
+    "project_id": "dut-message",
+    "storage_bucket": "dut-message.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:740021940494:android:795e7cdd0289b69bc8275f",
+        "android_client_info": {
+          "package_name": "com.example.flutter_frontend"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "740021940494-e9ki1s9ua198cn551tacvjhsloh3etpu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9tOL2i_gK7RKo0fmCalyse1MsotyMkgU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "740021940494-e9ki1s9ua198cn551tacvjhsloh3etpu.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "740021940494-pcq2gg74cttsad8g7o6i9qt0d6g20mjt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.dut.dutmessage"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
