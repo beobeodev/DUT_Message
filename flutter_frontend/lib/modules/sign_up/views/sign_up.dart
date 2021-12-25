@@ -37,8 +37,8 @@ class SignUpScreen extends StatelessWidget {
                     return Column(
                       children: [
                         SizedBox(
-                          width: double.infinity,
-                          height: ScreenUtil().setHeight(120),
+                          width: ScreenUtil().screenWidth - 180,
+                          height: ScreenUtil().setHeight(70),
                           child: SvgPicture.asset(
                             ImagePath.profileSignUp,
                             fit: BoxFit.fill,
@@ -106,6 +106,19 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         CustomTextFormField(
                           width: double.infinity,
+                          hintText: "Email",
+                          suffixIconWidget: Icon(
+                            Icons.email,
+                            color: Palette.celticBlue,
+                            size: 18,
+                          ),
+                          // errorText: signUpController.errorUsername.value,
+                          borderColor: Palette.celticBlue,
+                          validateFunc: signUpController.validateEmail,
+                          textEditingController: signUpController.emailEditingController,
+                        ),
+                        CustomTextFormField(
+                          width: double.infinity,
                           hintText: "Your phone number",
                           suffixIconWidget: Icon(
                             FontAwesomeIcons.phone,
@@ -165,7 +178,7 @@ class SignUpScreen extends StatelessWidget {
                             ),
                             child: SizedBox(
                               width: double.infinity,
-                              height: ScreenUtil().setHeight(55),
+                              height: ScreenUtil().setHeight(50),
                               child: signUpController.isLoading.value
                               ? LoadingDot(
                                 size: 30,

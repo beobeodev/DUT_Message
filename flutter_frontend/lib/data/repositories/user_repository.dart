@@ -275,4 +275,38 @@ class UserRepository{
     }
     return null;
   }
+
+  Future<CustomResponse> resetPassword(String email) async {
+    try {
+      final Map<String, String> body = {
+        "email": email,
+      };
+
+      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/forgot-password", body: body);
+
+      if (response.statusCode == 200) {
+        return CustomResponse(
+          responseBody: jsonDecode(response.body),
+        );
+      } else if (response.statusCode == 401) {
+        return CustomResponse(
+          statusCode: 401,
+          error: true,
+          errorMaps: {
+            "error": "user not found",
+          },
+        );
+      }
+    } catch (err) {
+      print("Error in resetPassword() from UserRepository: $err");
+      return CustomResponse(
+        statusCode: 500,
+        error: true,
+        errorMaps: {
+          "message": err,
+        },
+      );
+    }
+    return null;
+  }
 }

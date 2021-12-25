@@ -15,9 +15,11 @@ class SignUpController extends GetxController {
 
   final TextEditingController nameEditingController = TextEditingController();
   final TextEditingController usernameEditingController = TextEditingController();
+  final TextEditingController emailEditingController = TextEditingController();
   final TextEditingController phoneEditingController = TextEditingController();
   final TextEditingController passwordEditingController = TextEditingController();
   final TextEditingController confirmPasswordEditingController = TextEditingController();
+
 
   final RxString errorUsername = "".obs;
   final RxString errorPhoneNumber = "".obs;
@@ -71,7 +73,15 @@ class SignUpController extends GetxController {
       return "Mật khẩu xác nhận không khớp";
     }
     return null;
+  }
 
+  String validateEmail(String value) {
+    if (value == "") {
+      return "Email không được để trống";
+    } else if (!value.isEmail) {
+      return "Chưa đúng định dạng email";
+    }
+    return null;
   }
 
   Future<void> onTapSignUpButton() async {
@@ -82,6 +92,7 @@ class SignUpController extends GetxController {
       final Map<String, String> body = {
         "name": nameEditingController.text,
         "username": usernameEditingController.text,
+        "email": emailEditingController.text,
         "phone": phoneEditingController.text,
         "password": passwordEditingController.text,
       };

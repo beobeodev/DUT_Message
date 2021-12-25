@@ -69,9 +69,10 @@ class LoginScreen extends StatelessWidget {
                               textEditingController: loginController.usernameEditingController,
                               width: double.infinity,
                               validateFunc: loginController.validateUsername,
-                              hintText: "Username or phone number",
+                              hintText: "Username",
                               suffixIconWidget: Icon(
-                                Icons.mail,
+                                FontAwesomeIcons.user,
+                                size: 18,
                                 color: Palette.celticBlue,
                               ),
                               borderColor: Palette.celticBlue,
@@ -93,8 +94,19 @@ class LoginScreen extends StatelessWidget {
                               ),
                               borderColor: Palette.celticBlue,
                             ),
-                            SizedBox(
-                              height: ScreenUtil().setHeight(5),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: TextButton(
+                                onPressed: loginController.onTapForgotPass,
+                                child: Text(
+                                  "Quên mật khẩu?",
+                                  style: TextStyle(
+                                    color: Colors.red,
+                                    fontFamily: FontFamily.fontNunito,
+                                    fontSize: 16
+                                  ),
+                                ),
+                              ),
                             ),
                             GestureDetector(
                               onTap: loginController.onTapLoginButton,
@@ -122,8 +134,9 @@ class LoginScreen extends StatelessWidget {
                               ),
                             ),
                             SizedBox(
-                              height: ScreenUtil().setHeight(20.0),
+                              height: ScreenUtil().setHeight(25.0),
                             ),
+
                             // Row(
                             //   children: [
                             //     Expanded(

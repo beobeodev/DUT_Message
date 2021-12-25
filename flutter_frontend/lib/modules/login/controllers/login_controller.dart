@@ -59,5 +59,7 @@ class LoginController extends GetxController {
     FocusScope.of(Get.context).requestFocus(FocusNode());
   }
 
-
+  void onTapForgotPass() {
+    Get.toNamed(GetRouter.forgotPassword);
+  }
 }
