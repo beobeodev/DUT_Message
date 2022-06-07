@@ -11,15 +11,16 @@ import 'package:http/http.dart' as http;
 class ConversationRepository {
   final LocalRepository localRepository = LocalRepository();
 
-  static final ConversationRepository _singleton = ConversationRepository._init();
+  static final ConversationRepository _singleton =
+      ConversationRepository._init();
 
   factory ConversationRepository() {
     return _singleton;
   }
 
-  List<Conversation> listConversation;
-  List<Conversation> listRoom;
-  List<Conversation> listConversationAndRoom;
+  late List<Conversation> listConversation;
+  late List<Conversation> listRoom;
+  late List<Conversation> listConversationAndRoom;
 
   ConversationRepository._init();
 
@@ -31,7 +32,10 @@ class ConversationRepository {
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/conversation", header: header);
+      final http.Response response = await HttpProvider.getRequest(
+        "${dotenv.env['API_URL']}/conversation",
+        header: header,
+      );
 
       // print("in getListConversation() from CONVERSATION REPOSITORY: ${response.body}");
 
@@ -88,7 +92,10 @@ class ConversationRepository {
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/room", header: header);
+      final http.Response response = await HttpProvider.getRequest(
+        "${dotenv.env['API_URL']}/room",
+        header: header,
+      );
 
       // print("in getListConversation() from CONVERSATION REPOSITORY: ${response.body}");
 
@@ -140,17 +147,27 @@ class ConversationRepository {
     try {
       await getListConversation();
       await getListRoom();
-      final List<Conversation> listMessageEmpty = List.from(listConversation.where((element) => element.listMessage.isEmpty));
-      List<Conversation> listConversationAndRoomTemp = <Conversation>[...listConversation.where((element) => element.listMessage.isNotEmpty), ...listRoom];
+      final List<Conversation> listMessageEmpty = List.from(
+        listConversation.where((element) => element.listMessage.isEmpty),
+      );
+      List<Conversation> listConversationAndRoomTemp = <Conversation>[
+        ...listConversation.where((element) => element.listMessage.isNotEmpty),
+        ...listRoom
+      ];
       listConversationAndRoomTemp.sort((b, a) {
         final Message messagePrevious = a.listMessage.last;
         final Message messageAfter = b.listMessage.last;
         return messagePrevious.timeSend.compareTo(messageAfter.timeSend);
       });
-      listConversationAndRoomTemp = [...listMessageEmpty, ...listConversationAndRoomTemp];
+      listConversationAndRoomTemp = [
+        ...listMessageEmpty,
+        ...listConversationAndRoomTemp
+      ];
       listConversationAndRoom = listConversationAndRoomTemp;
     } catch (e) {
-      print("Error in getListConversationAndRoom() from ConversationRepository: $e");
+      print(
+        "Error in getListConversationAndRoom() from ConversationRepository: $e",
+      );
     }
   }
 }

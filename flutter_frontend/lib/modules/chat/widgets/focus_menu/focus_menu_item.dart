@@ -5,7 +5,12 @@ class FocusMenuItem extends StatelessWidget {
   final Icon icon;
   final dynamic Function() onTapItem;
 
-  const FocusMenuItem({Key key,@required this.title,@required this.icon,@required this.onTapItem}) : super(key: key);
+  const FocusMenuItem({
+    Key? key,
+    required this.title,
+    required this.icon,
+    required this.onTapItem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +25,7 @@ class FocusMenuItem extends StatelessWidget {
           padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 14),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              title,
-              icon
-            ],
+            children: <Widget>[title, icon],
           ),
         ),
       ),

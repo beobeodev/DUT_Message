@@ -4,10 +4,11 @@ class HeroPopupRoute<T> extends PageRoute<T> {
   final WidgetBuilder _builder;
 
   HeroPopupRoute({
-    @required WidgetBuilder builder,
-    RouteSettings settings,
+    required WidgetBuilder builder,
+    RouteSettings? settings,
     bool fullscreenDialog = false,
-  }): _builder = builder, super(settings: settings, fullscreenDialog: fullscreenDialog);
+  })  : _builder = builder,
+        super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
   // TODO: implement opaque
@@ -34,12 +35,21 @@ class HeroPopupRoute<T> extends PageRoute<T> {
   Duration get transitionDuration => const Duration(milliseconds: 100);
 
   @override
-  Widget buildPage(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+  Widget buildPage(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+  ) {
     return _builder(context);
   }
 
   @override
-  Widget buildTransitions(BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+  Widget buildTransitions(
+    BuildContext context,
+    Animation<double> animation,
+    Animation<double> secondaryAnimation,
+    Widget child,
+  ) {
     return child;
   }
 }

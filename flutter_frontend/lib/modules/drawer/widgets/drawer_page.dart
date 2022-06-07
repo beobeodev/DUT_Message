@@ -2,20 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/modules/drawer/controllers/drawer_screen_controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/drawer/widgets/menu_item.dart';
+import 'package:flutter_frontend/modules/drawer/widgets/drawer_menu_item.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class DrawerPage extends StatelessWidget {
-  final DrawerScreenController drawerController = Get.put(DrawerScreenController());
+  final DrawerScreenController drawerController =
+      Get.put(DrawerScreenController());
 
   @override
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
     return Padding(
-      padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, bottom: 40),
+      padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + 10, bottom: 40),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,7 +27,8 @@ class DrawerPage extends StatelessWidget {
             children: [
               CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(drawerController.currentUser.avatar),
+                backgroundImage:
+                    NetworkImage(drawerController.currentUser.avatar),
               ),
               const SizedBox(
                 width: 15,
@@ -48,14 +51,17 @@ class DrawerPage extends StatelessWidget {
               itemCount: drawerController.listMenuItem.length,
               itemBuilder: (context, index) {
                 return Padding(
-                  padding:  EdgeInsets.only(bottom: ScreenUtil().setHeight(20)),
+                  padding: EdgeInsets.only(bottom: ScreenUtil().setHeight(20)),
                   child: GestureDetector(
                     onTap: () {
-                      drawerController.onTapMenuItem(drawerController.listMenuItem[index]['icon'] as IconData);
+                      drawerController.onTapMenuItem(drawerController
+                          .listMenuItem[index]['icon'] as IconData);
                     },
-                    child: MenuItem(
-                      title: drawerController.listMenuItem[index]['title'] as String,
-                      icon: drawerController.listMenuItem[index]['icon'] as IconData,
+                    child: DrawerMenuItem(
+                      title: drawerController.listMenuItem[index]['title']
+                          as String,
+                      icon: drawerController.listMenuItem[index]['icon']
+                          as IconData,
                     ),
                   ),
                 );

@@ -8,25 +8,34 @@ import 'package:get/get.dart';
 
 class HomeController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
-  final ConversationRepository conversationRepository = ConversationRepository();
+  final ConversationRepository conversationRepository =
+      ConversationRepository();
 
-  final DrawerScreenController drawerScreenController = Get.put(DrawerScreenController());
+  final DrawerScreenController drawerScreenController =
+      Get.put(DrawerScreenController());
 
   RxList<Conversation> listConversationAndRoom = <Conversation>[].obs;
 
-  User currentUser;
+  late User currentUser;
 
   @override
   void onInit() {
     super.onInit();
     // get list conversation from repository;
-    listConversationAndRoom.value = conversationRepository.listConversationAndRoom;
+    listConversationAndRoom.value =
+        conversationRepository.listConversationAndRoom;
     currentUser = localRepository.infoCurrentUser;
   }
 
   //Handle event on tap message
   void onTapConversation(int index) {
     //Navigate to chat screen with detail message
-    Get.toNamed(GetRouter.chat, arguments: [listConversationAndRoom[index], listConversationAndRoom[index].isRoom]);
+    Get.toNamed(
+      GetRouter.chat,
+      arguments: [
+        listConversationAndRoom[index],
+        listConversationAndRoom[index].isRoom
+      ],
+    );
   }
 }

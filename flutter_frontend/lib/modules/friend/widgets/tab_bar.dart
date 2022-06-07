@@ -4,7 +4,11 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class TabNavigationBar extends StatelessWidget {
-  const TabNavigationBar({this.isOpenListTab, this.onTapListTab, this.onTapAddTab});
+  const TabNavigationBar({
+    required this.isOpenListTab,
+    required this.onTapListTab,
+    required this.onTapAddTab,
+  });
 
   final bool isOpenListTab;
   final void Function() onTapListTab;
@@ -14,7 +18,7 @@ class TabNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final Size size = MediaQuery.of(context).size;
 
-    return  Container(
+    return Container(
       margin: EdgeInsets.only(top: 15, bottom: 30),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -40,9 +44,7 @@ class TabNavigationBar extends StatelessWidget {
             onTap: onTapListTab,
             child: AnimatedContainer(
               decoration: BoxDecoration(
-                color: isOpenListTab
-                    ? Palette.metallicViolet
-                    : Colors.white,
+                color: isOpenListTab ? Palette.metallicViolet : Colors.white,
                 borderRadius: BorderRadius.circular(60),
               ),
               curve: Curves.fastOutSlowIn,
@@ -53,9 +55,7 @@ class TabNavigationBar extends StatelessWidget {
                 child: Text(
                   "Danh sách",
                   style: TextStyle(
-                    color: !isOpenListTab
-                        ? Palette.crayolaBlue
-                        : Colors.white,
+                    color: !isOpenListTab ? Palette.crayolaBlue : Colors.white,
                     fontSize: ScreenUtil().setSp(17),
                     fontFamily: FontFamily.fontNunito,
                     fontWeight: FontWeight.w700,
@@ -68,9 +68,7 @@ class TabNavigationBar extends StatelessWidget {
             onTap: onTapAddTab,
             child: AnimatedContainer(
               decoration: BoxDecoration(
-                color: !isOpenListTab
-                    ? Palette.crayolaBlue
-                    : Colors.white,
+                color: !isOpenListTab ? Palette.crayolaBlue : Colors.white,
                 borderRadius: BorderRadius.circular(60),
               ),
               width: size.width / 2 - 40,
@@ -80,9 +78,7 @@ class TabNavigationBar extends StatelessWidget {
                 child: Text(
                   "Kết bạn",
                   style: TextStyle(
-                    color: isOpenListTab
-                        ? Palette.crayolaBlue
-                        : Colors.white,
+                    color: isOpenListTab ? Palette.crayolaBlue : Colors.white,
                     fontSize: ScreenUtil().setSp(17),
                     fontFamily: FontFamily.fontNunito,
                     fontWeight: FontWeight.w700,

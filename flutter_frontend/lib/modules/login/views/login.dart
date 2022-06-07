@@ -15,7 +15,6 @@ class LoginScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
       onTap: loginController.onUnFocus,
       child: Scaffold(
@@ -25,8 +24,7 @@ class LoginScreen extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Palette.aliceBlue,
               ),
-              child: Obx(
-              () {
+              child: Obx(() {
                 return Form(
                   key: loginController.loginFormKey,
                   child: Column(
@@ -66,7 +64,8 @@ class LoginScreen extends StatelessWidget {
                               height: ScreenUtil().setHeight(25),
                             ),
                             CustomTextFormField(
-                              textEditingController: loginController.usernameEditingController,
+                              textEditingController:
+                                  loginController.usernameEditingController,
                               width: double.infinity,
                               validateFunc: loginController.validateUsername,
                               hintText: "Username or phone number",
@@ -74,10 +73,10 @@ class LoginScreen extends StatelessWidget {
                                 Icons.mail,
                                 color: Palette.celticBlue,
                               ),
-                              borderColor: Palette.celticBlue,
                             ),
                             CustomTextFormField(
-                              textEditingController: loginController.passwordEditingController,
+                              textEditingController:
+                                  loginController.passwordEditingController,
                               width: double.infinity,
                               validateFunc: loginController.validatePassword,
                               hintText: "Password",
@@ -91,7 +90,6 @@ class LoginScreen extends StatelessWidget {
                                   size: 18,
                                 ),
                               ),
-                              borderColor: Palette.celticBlue,
                             ),
                             SizedBox(
                               height: ScreenUtil().setHeight(5),
@@ -107,17 +105,20 @@ class LoginScreen extends StatelessWidget {
                                   width: double.infinity,
                                   height: ScreenUtil().setHeight(55),
                                   child: loginController.isLoading.value
-                                    ? LoadingDot(size: 30,) : Center(
-                                    child: Text(
-                                      "Đăng nhập",
-                                      style: TextStyle(
-                                        fontFamily: FontFamily.fontNunito,
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.w700,
-                                        fontSize: ScreenUtil().setSp(23),
-                                      ),
-                                    ),
-                                  ),
+                                      ? LoadingDot(
+                                          size: 30,
+                                        )
+                                      : Center(
+                                          child: Text(
+                                            "Đăng nhập",
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.fontNunito,
+                                              color: Colors.white,
+                                              fontWeight: FontWeight.w700,
+                                              fontSize: ScreenUtil().setSp(23),
+                                            ),
+                                          ),
+                                        ),
                                 ),
                               ),
                             ),

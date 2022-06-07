@@ -10,14 +10,17 @@ import 'package:get/get.dart';
 class MenuChatScreen extends StatelessWidget {
   final MenuChatController menuChatController = Get.put(MenuChatController());
 
-  MenuChatScreen({Key key}) : super(key: key);
+  MenuChatScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       body: Padding(
-        padding: EdgeInsets.only(top: MediaQuery.of(context).padding.top + 10, left: 15, right: 15),
+        padding: EdgeInsets.only(
+          top: MediaQuery.of(context).padding.top + 10,
+          left: 15,
+          right: 15,
+        ),
         child: Column(
           children: [
             Align(
@@ -38,7 +41,11 @@ class MenuChatScreen extends StatelessWidget {
             Align(
               child: CircleAvatar(
                 radius: 40,
-                backgroundImage: NetworkImage(menuChatController.infoConversation is User ? menuChatController.infoConversation.avatar : menuChatController.infoConversation.avatarRoom),
+                backgroundImage: NetworkImage(
+                  menuChatController.infoConversation is User
+                      ? menuChatController.infoConversation.avatar
+                      : menuChatController.infoConversation.avatarRoom,
+                ),
               ),
             ),
             SizedBox(
@@ -56,36 +63,37 @@ class MenuChatScreen extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
-            if (menuChatController.infoConversation is User) TextButton(
-              style: TextButton.styleFrom(
-                backgroundColor: Colors.white,
-                padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
-                shape:  const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+            if (menuChatController.infoConversation is User)
+              TextButton(
+                style: TextButton.styleFrom(
+                  backgroundColor: Colors.white,
+                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                  ),
+                ),
+                onPressed: menuChatController.openBottomSheet,
+                child: Row(
+                  children: [
+                    Icon(
+                      FontAwesomeIcons.userFriends,
+                      color: Palette.zodiacBlue,
+                    ),
+                    const SizedBox(
+                      width: 30,
+                    ),
+                    Text(
+                      "Tạo nhóm chat với ${menuChatController.infoConversation.name}",
+                      style: TextStyle(
+                        fontFamily: FontFamily.fontNunito,
+                        color: Palette.blue,
+                        fontWeight: FontWeight.w700,
+                        fontSize: ScreenUtil().setSp(14),
+                      ),
+                    ),
+                  ],
                 ),
               ),
-              onPressed: menuChatController.openBottomSheet,
-              child:  Row(
-                children: [
-                  Icon(
-                    FontAwesomeIcons.userFriends,
-                    color: Palette.zodiacBlue,
-                  ),
-                  const SizedBox(
-                    width: 30,
-                  ),
-                  Text(
-                    "Tạo nhóm chat với ${menuChatController.infoConversation.name}",
-                    style: TextStyle(
-                      fontFamily: FontFamily.fontNunito,
-                      color: Palette.blue,
-                      fontWeight: FontWeight.w700,
-                      fontSize: ScreenUtil().setSp(14),
-                    ),
-                  ),
-                ],
-              ),
-            ),
           ],
         ),
       ),

@@ -7,7 +7,8 @@ import 'package:get/get.dart';
 
 class SplashController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
-  final ConversationRepository conversationRepository = ConversationRepository();
+  final ConversationRepository conversationRepository =
+      ConversationRepository();
   final UserRepository userRepository = UserRepository();
   final FirebaseRepository firebaseRepository = FirebaseRepository();
 
@@ -19,7 +20,8 @@ class SplashController extends GetxController {
 
   Future<void> completeAnimation() async {
     await Future<void>.delayed(Duration(milliseconds: 1600));
-    if (localRepository.getNewUser() == null || localRepository.getNewUser() == false) {
+    if (localRepository.getNewUser() == null ||
+        localRepository.getNewUser() == false) {
       Get.offAllNamed(GetRouter.onboard);
     } else if (localRepository.getAccessToken() != null) {
       await initData();

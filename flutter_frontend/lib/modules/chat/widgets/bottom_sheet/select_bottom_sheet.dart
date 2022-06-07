@@ -8,7 +8,8 @@ import 'package:snapping_sheet/snapping_sheet.dart';
 class SelectBottomSheet extends StatelessWidget {
   final void Function(FileType fileType) onPressItem;
 
-  const SelectBottomSheet({Key key,@required this.onPressItem}) : super(key: key);
+  const SelectBottomSheet({Key? key, required this.onPressItem})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +30,7 @@ class SelectBottomSheet extends StatelessWidget {
       ],
       grabbing: ClipRRect(
         borderRadius: BorderRadius.vertical(
-            top: Radius.circular(16),
+          top: Radius.circular(16),
         ),
         child: DecoratedBox(
           decoration: BoxDecoration(

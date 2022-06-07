@@ -7,7 +7,7 @@ import 'package:flutter_frontend/data/providers/http_provider.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:http/http.dart' as http;
 
-class UserRepository{
+class UserRepository {
   final LocalRepository localRepository = LocalRepository();
 
   static final UserRepository _singleton = UserRepository._init();
@@ -29,9 +29,7 @@ class UserRepository{
   // this function to get info of user by phone number
   Future<CustomResponse> getUserByPhoneNumber(String phoneNumber) async {
     try {
-      final Map<String, String> body = {
-        "phone": phoneNumber
-      };
+      final Map<String, String> body = {"phone": phoneNumber};
 
       final Map<String, String> header = {
         "accessToken": localRepository.accessToken,
@@ -39,7 +37,11 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response responseGetUser = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/find-by-phone", body: body, header: header);
+      final http.Response responseGetUser = await HttpProvider.postRequest(
+        "${dotenv.env['API_URL']}/user/find-by-phone",
+        body: body,
+        header: header,
+      );
 
       if (responseGetUser.statusCode == 200) {
         return CustomResponse(
@@ -57,34 +59,36 @@ class UserRepository{
     } catch (err) {
       print("Error in getUserByPhoneNumber() from UserRepository: $err");
       return CustomResponse(
-          statusCode: 500,
-          error: true,
-          errorMaps: {
-            "message": err,
-          },
-      );
-    }
-    return CustomResponse(
         statusCode: 500,
         error: true,
         errorMaps: {
-          "message": "invalid request",
+          "message": err,
         },
+      );
+    }
+    return CustomResponse(
+      statusCode: 500,
+      error: true,
+      errorMaps: {
+        "message": "invalid request",
+      },
     );
   }
 
   // this function to check status of add friend request
   Future<CustomResponse> checkAddFriendRequest(String toId) async {
     try {
-      final Map<String, String> body = {
-        "toId": toId
-      };
+      final Map<String, String> body = {"toId": toId};
 
       final Map<String, String> header = {
         "id": localRepository.getCurrentUser()["_id"],
       };
 
-      final http.Response responseGetUser = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/checkFriendRequest", body: body, header: header);
+      final http.Response responseGetUser = await HttpProvider.postRequest(
+        "${dotenv.env['API_URL']}/user/checkFriendRequest",
+        body: body,
+        header: header,
+      );
 
       if (responseGetUser.statusCode == 200) {
         return CustomResponse(
@@ -127,7 +131,10 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/user/friend-request", header: header);
+      final http.Response response = await HttpProvider.getRequest(
+        "${dotenv.env['API_URL']}/user/friend-request",
+        header: header,
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
@@ -186,7 +193,10 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.getRequest("${dotenv.env['API_URL']}/user/friends", header: header);
+      final http.Response response = await HttpProvider.getRequest(
+        "${dotenv.env['API_URL']}/user/friends",
+        header: header,
+      );
 
       if (response.statusCode == 200) {
         final List<dynamic> listRequest = jsonDecode(response.body);
@@ -194,7 +204,9 @@ class UserRepository{
 
         for (final element in listRequest) {
           // print(element);
-          listFriendTemp.add(User.fromMap(element),);
+          listFriendTemp.add(
+            User.fromMap(element),
+          );
         }
 
         listFriend = listFriendTemp;
@@ -248,7 +260,11 @@ class UserRepository{
         "id": localRepository.infoCurrentUser.id,
       };
 
-      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/user/update-info", body: body, header: header);
+      final http.Response response = await HttpProvider.postRequest(
+        "${dotenv.env['API_URL']}/user/update-info",
+        body: body,
+        header: header,
+      );
 
       if (response.statusCode == 200) {
         return CustomResponse(
@@ -265,14 +281,13 @@ class UserRepository{
       }
     } catch (err) {
       print("Error in updateProfile() from UserRepository: $err");
-      return CustomResponse(
-        statusCode: 500,
-        error: true,
-        errorMaps: {
-          "message": err,
-        },
-      );
     }
-    return null;
+    return CustomResponse(
+      statusCode: 500,
+      error: true,
+      errorMaps: {
+        "message": "error",
+      },
+    );
   }
 }

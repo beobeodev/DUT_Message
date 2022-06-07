@@ -23,7 +23,7 @@ class ProfileController extends GetxController {
   final TextEditingController emailEditingController = TextEditingController();
   final TextEditingController phoneEditingController = TextEditingController();
 
-  Rx<User> currentUser;
+  late Rx<User> currentUser;
   final RxBool isUpdate = false.obs;
   final RxBool isLoading = false.obs;
 
@@ -39,17 +39,17 @@ class ProfileController extends GetxController {
     phoneEditingController.text = currentUser.value.phone;
   }
 
-  String validateName(String value) {
+  String? validateName(String? value) {
     if (value == "") {
       return "Tên không được để trống";
     }
     return null;
   }
 
-  String validateEmail(String value) {
+  String? validateEmail(String? value) {
     if (value == "") {
       return "Email không dược để trống";
-    } else if (!value.isEmail) {
+    } else if (!value!.isEmail) {
       return "Không đúng định dạng email";
     }
     return null;
@@ -66,36 +66,40 @@ class ProfileController extends GetxController {
   }
 
   Future<void> onTapAvatar() async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(type: FileType.image);
+    final FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       isLoading.value = true;
-      final File file = File(result.files.single.path);
-      final String url = await firebaseRepository.uploadToFireStorage(FileType.image, file);
+      final File file = File(result.files.single.path!);
+      final String url =
+          await firebaseRepository.uploadToFireStorage(FileType.image, file);
       isLoading.value = false;
       isUpdate.value = true;
       currentUser.update((val) {
-        val.avatar = url;
+        val!.avatar = url;
       });
     }
   }
 
   Future<void> onTapUpdate() async {
-    if (!profileFormKey.currentState.validate()) {
+    if (!profileFormKey.currentState!.validate()) {
       return;
     } else {
+      Timer? _timer;
+
       isLoading.value = true;
-      final CustomResponse customResponse = await userRepository.updateProfile(currentUser.value);
+      final CustomResponse customResponse =
+          await userRepository.updateProfile(currentUser.value);
       isLoading.value = false;
       if (true) {
-        Timer _timer;
         await showDialog(
-          context: Get.context,
+          context: Get.context!,
           builder: (BuildContext builderContext) {
             _timer = Timer(Duration(milliseconds: 600), () {
               Get.back();
             });
 
-            return  AlertDialog(
+            return AlertDialog(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -127,9 +131,9 @@ class ProfileController extends GetxController {
               ),
             );
           },
-        ).then((val){
-          if (_timer.isActive) {
-            _timer.cancel();
+        ).then((val) {
+          if (_timer!.isActive) {
+            _timer!.cancel();
           }
         });
         isUpdate.value = false;

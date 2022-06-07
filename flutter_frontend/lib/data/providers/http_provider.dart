@@ -1,7 +1,10 @@
 import 'package:http/http.dart' as http;
 
 class HttpProvider {
-  static Future<http.Response> getRequest(String apiLink, {Map<String, String> header = const <String, String>{}}) async {
+  static Future<http.Response> getRequest(
+    String apiLink, {
+    Map<String, String> header = const <String, String>{},
+  }) async {
     final http.Response response = await http.get(
       Uri.parse(apiLink),
       headers: header,
@@ -9,7 +12,11 @@ class HttpProvider {
     return response;
   }
 
-  static Future<http.Response> postRequest(String apiLink, {Map<String, String> body, Map<String, String> header = const <String, String>{}}) async {
+  static Future<http.Response> postRequest(
+    String apiLink, {
+    required Map<String, String> body,
+    Map<String, String> header = const <String, String>{},
+  }) async {
     final http.Response response = await http.post(
       Uri.parse(apiLink),
       body: body,

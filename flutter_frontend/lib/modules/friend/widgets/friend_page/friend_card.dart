@@ -8,7 +8,11 @@ class FriendCard extends StatelessWidget {
   final String name;
   final void Function() onTapCard;
 
-  const FriendCard({this.avatar, this.name, this.onTapCard});
+  const FriendCard({
+    required this.avatar,
+    required this.name,
+    required this.onTapCard,
+  });
 
   @override
   Widget build(BuildContext context) {

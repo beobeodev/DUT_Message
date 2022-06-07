@@ -10,7 +10,8 @@ import 'package:get/get.dart';
 class ListConversationWidget extends StatelessWidget {
   final HomeController homeController;
 
-  const ListConversationWidget({Key key, this.homeController}) : super(key: key);
+  const ListConversationWidget({Key? key, required this.homeController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,132 +36,155 @@ class ListConversationWidget extends StatelessWidget {
           ),
           child: Obx(
             () => ListView.builder(
-                itemCount: homeController.listConversationAndRoom.length,
-                padding: EdgeInsets.only(
-                  top: 0.1,
-                ),
-                itemBuilder: (context, index) {
-                  if (homeController.listConversationAndRoom[index].listMessage.isNotEmpty) {
-                    // get info of user who is chatting
-                    final User friend = homeController.listConversationAndRoom[index].listUserIn.firstWhere((element) => homeController.currentUser.id != element.id);
-                    // show name of CONVERSATION, if conversation IS ROOM
-                    // => SHOW ROOM NAME
-                    String conversationName = friend.name;
-                    // show AVATAR OF CONVERSATION, if conversation IS ROOM
-                    // => SHOW AVATAR OF ROOM
-                    // ELSE => SHOW AVATAR OF FRIEND
-                    String avatar = friend.avatar;
+              itemCount: homeController.listConversationAndRoom.length,
+              padding: EdgeInsets.only(
+                top: 0.1,
+              ),
+              itemBuilder: (context, index) {
+                if (homeController
+                    .listConversationAndRoom[index].listMessage.isNotEmpty) {
+                  // get info of user who is chatting
+                  final User friend = homeController
+                      .listConversationAndRoom[index].listUserIn
+                      .firstWhere(
+                    (element) => homeController.currentUser.id != element.id,
+                  );
+                  // show name of CONVERSATION, if conversation IS ROOM
+                  // => SHOW ROOM NAME
+                  String conversationName = friend.name;
+                  // show AVATAR OF CONVERSATION, if conversation IS ROOM
+                  // => SHOW AVATAR OF ROOM
+                  // ELSE => SHOW AVATAR OF FRIEND
+                  String avatar = friend.avatar;
 
-                    final int indexLast = homeController.listConversationAndRoom[index].listMessage.length - 1;
-                    // get latest message of conversation to show in view
-                    final Message lastMessage = homeController.listConversationAndRoom[index].listMessage[indexLast];
-                    // check if last message is image
-                    // => SHOW TEXT "ĐÃ GỬI MỘT TỆP ĐÍNH KÈM"
-                    final bool isImage = homeController.listConversationAndRoom[index].listMessage[indexLast].isImage;
-                    // check if CURRENT CONVERSATION IS ROOM MESSAGE
-                    final bool isRoom = homeController.listConversationAndRoom[index].isRoom;
+                  final int indexLast = homeController
+                          .listConversationAndRoom[index].listMessage.length -
+                      1;
+                  // get latest message of conversation to show in view
+                  final Message lastMessage = homeController
+                      .listConversationAndRoom[index].listMessage[indexLast];
+                  // check if last message is image
+                  // => SHOW TEXT "ĐÃ GỬI MỘT TỆP ĐÍNH KÈM"
+                  final bool isImage = homeController
+                      .listConversationAndRoom[index]
+                      .listMessage[indexLast]
+                      .isImage;
+                  // check if CURRENT CONVERSATION IS ROOM MESSAGE
+                  final bool isRoom =
+                      homeController.listConversationAndRoom[index].isRoom;
 
-                    if (isRoom) {
-                      conversationName = homeController.listConversationAndRoom[index].name;
-                      avatar = homeController.listConversationAndRoom[index].avatarRoom;
+                  if (isRoom) {
+                    conversationName =
+                        homeController.listConversationAndRoom[index].name;
+                    avatar = homeController
+                        .listConversationAndRoom[index].avatarRoom;
+                  }
+                  // this variable to show latest content of message
+                  // in current conversation
+                  String lastText = "Bạn: ${lastMessage.content}";
+                  if (lastMessage.author.id == homeController.currentUser.id) {
+                    if (isImage) {
+                      lastText = "Bạn đã gửi một tệp đính kèm";
+                    } else if (indexLast == 0 && isRoom) {
+                      lastText = "Bạn đã tạo nhóm này";
+                    } else if (lastMessage.isDeleted) {
+                      lastText = "Bạn đã gỡ một tin nhắn";
+                    } else {
+                      lastText = "Bạn: ${lastMessage.content}";
                     }
-                    // this variable to show latest content of message
-                    // in current conversation
-                    String lastText = "Bạn: ${lastMessage.content}";
-                    if (lastMessage.author.id == homeController.currentUser.id) {
+                  } else {
+                    if (isRoom) {
                       if (isImage) {
-                        lastText = "Bạn đã gửi một tệp đính kèm";
-                      } else if (indexLast == 0 && isRoom) {
-                        lastText = "Bạn đã tạo nhóm này";
+                        lastText =
+                            "${lastMessage.author.name}: đã gửi một tệp đính kèm";
+                      } else if (indexLast == 0) {
+                        lastText = "${lastMessage.author.name} đã tạo nhóm này";
                       } else if (lastMessage.isDeleted) {
-                        lastText = "Bạn đã gỡ một tin nhắn";
+                        lastText =
+                            "${lastMessage.author.name}: đã gỡ một tin nhắn";
                       } else {
-                        lastText = "Bạn: ${lastMessage.content}";
+                        lastText =
+                            "${lastMessage.author.name}: ${lastMessage.content}";
                       }
                     } else {
-                      if (isRoom) {
-                        if (isImage) {
-                          lastText = "${lastMessage.author.name}: đã gửi một tệp đính kèm";
-                        } else if (indexLast == 0) {
-                          lastText = "${lastMessage.author.name} đã tạo nhóm này";
-                        } else if (lastMessage.isDeleted) {
-                          lastText = "${lastMessage.author.name}: đã gỡ một tin nhắn";
-                        } else {
-                          lastText = "${lastMessage.author.name}: ${lastMessage.content}";
-                        }
+                      if (isImage) {
+                        lastText = "Đã gửi một tệp đính kèm";
                       } else {
-                        if (isImage) {
-                          lastText = "Đã gửi một tệp đính kèm";
-                        } else {
-                          lastText = lastMessage.content;
-                        }
+                        lastText = lastMessage.content;
                       }
                     }
-
-                    return GestureDetector(
-                      onTap: () {
-                        homeController.onTapConversation(index);
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          color: Palette.americanSilver,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        height: ScreenUtil().setHeight(65),
-                        padding: EdgeInsets.only(
-                          left: 15,
-                          top: 5,
-                          bottom: 5,
-                        ),
-                        margin: EdgeInsets.only(bottom: 6.0),
-                        child: Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 30,
-                              backgroundImage: NetworkImage(avatar),
-                            ),
-                            const SizedBox(
-                              width: 18,
-                            ),
-                            Flexible(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    conversationName,
-                                    style: TextStyle(
-                                      color: Palette.zodiacBlue,
-                                      fontWeight: FontWeight.w700,
-                                      fontFamily: FontFamily.fontNunito,
-                                      fontSize: ScreenUtil().setSp(17),
-                                    ),
-                                  ),
-                                  const SizedBox(
-                                    height: 2,
-                                  ),
-                                  Text(
-                                    lastText,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 1,
-                                    style: TextStyle(
-                                      color: lastMessage.author.id == homeController.currentUser.id ? Colors.white : Colors.black,
-                                      fontWeight: lastMessage.author.id == homeController.currentUser.id ? FontWeight.w400 : FontWeight.w700,
-                                      fontFamily: FontFamily.fontNunito,
-                                      fontSize: ScreenUtil().setSp(15),
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )
-                          ],
-                        ),
-                      ),
-                    );
-                  } else {
-                    return const SizedBox();
                   }
-                },
+
+                  return GestureDetector(
+                    onTap: () {
+                      homeController.onTapConversation(index);
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: Palette.americanSilver,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      height: ScreenUtil().setHeight(65),
+                      padding: EdgeInsets.only(
+                        left: 15,
+                        top: 5,
+                        bottom: 5,
+                      ),
+                      margin: EdgeInsets.only(bottom: 6.0),
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 30,
+                            backgroundImage: NetworkImage(avatar),
+                          ),
+                          const SizedBox(
+                            width: 18,
+                          ),
+                          Flexible(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  conversationName,
+                                  style: TextStyle(
+                                    color: Palette.zodiacBlue,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: FontFamily.fontNunito,
+                                    fontSize: ScreenUtil().setSp(17),
+                                  ),
+                                ),
+                                const SizedBox(
+                                  height: 2,
+                                ),
+                                Text(
+                                  lastText,
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 1,
+                                  style: TextStyle(
+                                    color: lastMessage.author.id ==
+                                            homeController.currentUser.id
+                                        ? Colors.white
+                                        : Colors.black,
+                                    fontWeight: lastMessage.author.id ==
+                                            homeController.currentUser.id
+                                        ? FontWeight.w400
+                                        : FontWeight.w700,
+                                    fontFamily: FontFamily.fontNunito,
+                                    fontSize: ScreenUtil().setSp(15),
+                                  ),
+                                )
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                } else {
+                  return const SizedBox();
+                }
+              },
             ),
           ),
         ),

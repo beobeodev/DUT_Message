@@ -1,9 +1,8 @@
 class CustomResponse {
-
   int statusCode;
-  Map<String, dynamic> responseBody;
+  Map<String, dynamic>? responseBody;
   bool error;
-  Map<String, dynamic> errorMaps;
+  Map<String, dynamic>? errorMaps;
 
   CustomResponse({
     this.statusCode = 200,
@@ -12,8 +11,8 @@ class CustomResponse {
     this.errorMaps,
   });
 
-  CustomResponse.fromJson(Map<String, dynamic> json) {
-    error = json['error'];
-    errorMaps = json['errorMaps'];
-  }
+  factory CustomResponse.fromJson(Map<String, dynamic> json) => CustomResponse(
+        error: json['error'],
+        errorMaps: json['errorMaps'],
+      );
 }

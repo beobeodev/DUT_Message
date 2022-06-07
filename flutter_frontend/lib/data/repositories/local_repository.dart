@@ -4,11 +4,11 @@ import 'package:hive/hive.dart';
 class LocalRepository {
   static final LocalRepository _singleton = LocalRepository._init();
 
-  String accessToken;
-  String refreshToken;
-  User infoCurrentUser;
+  late String accessToken;
+  late String refreshToken;
+  late User infoCurrentUser;
 
-  Box authBox;
+  late Box authBox;
 
   LocalRepository._init() {
     //init hive with jwt box to store token
@@ -35,7 +35,11 @@ class LocalRepository {
     // print("In initData() from LOCAL REPOSITORY: ${infoCurrentUser.id}");
   }
 
-  Future<void> setAllNewData(String accessToken, String refreshToken, Map<String, dynamic> dataUser) async {
+  Future<void> setAllNewData(
+    String accessToken,
+    String refreshToken,
+    Map<String, dynamic> dataUser,
+  ) async {
     await authBox.put('access_token', accessToken);
     await authBox.put('refresh_token', refreshToken);
     await authBox.put('current_user', dataUser);
@@ -65,7 +69,7 @@ class LocalRepository {
     await authBox.put('new_user', true);
   }
 
-  bool getNewUser() {
+  bool? getNewUser() {
     return authBox.get('new_user');
   }
 

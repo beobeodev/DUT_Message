@@ -1,24 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
+import 'package:flutter_frontend/core/theme/palette.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({this.label, this.isObsecure, this.width, this.height, this.gap, this.textEditingController, this.borderRadius, this.hintText, this.borderColor, this.suffixIconWidget, this.prefixIconWidget, this.fillColor, this.errorText, this.validateFunc});
+  const CustomTextFormField({
+    this.label = '',
+    this.isObsecure = false,
+    required this.width,
+    this.height,
+    this.gap = 10,
+    this.textEditingController,
+    this.borderRadius = 6,
+    this.hintText = '',
+    this.borderColor = Palette.celticBlue,
+    this.suffixIconWidget,
+    this.prefixIconWidget,
+    this.fillColor = Colors.white,
+    this.errorText,
+    this.validateFunc,
+  });
 
   final String label;
   final bool isObsecure;
   final double width;
-  final double height;
+  final double? height;
   //This gap between label and text field
   final double gap;
-  final TextEditingController textEditingController;
+  final TextEditingController? textEditingController;
   final double borderRadius;
   final String hintText;
   final Color borderColor;
-  final Widget suffixIconWidget;
-  final Widget prefixIconWidget;
+  final Widget? suffixIconWidget;
+  final Widget? prefixIconWidget;
   final Color fillColor;
-  final String errorText;
-  final String Function(String value) validateFunc;
+  final String? errorText;
+  final String? Function(String? value)? validateFunc;
 
   @override
   Widget build(BuildContext context) {
@@ -26,15 +42,17 @@ class CustomTextFormField extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        if (label != null) Text(
-          label,
-          style: TextStyle(
-            fontFamily: FontFamily.fontPoppins,
+        if (label == '')
+          Text(
+            label,
+            style: TextStyle(
+              fontFamily: FontFamily.fontPoppins,
+            ),
           ),
-        ),
-        if (label != null) SizedBox(
-          height: gap,
-        ),
+        if (label == '')
+          SizedBox(
+            height: gap,
+          ),
         SizedBox(
           width: width,
           height: height,
@@ -44,11 +62,11 @@ class CustomTextFormField extends StatelessWidget {
             onChanged: (val) {},
             onTap: () {},
             validator: validateFunc,
-            obscureText: isObsecure == null ? false : true,
+            obscureText: isObsecure,
             decoration: InputDecoration(
               hintText: hintText,
               focusedErrorBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(borderRadius ?? 6.0),
+                borderRadius: BorderRadius.circular(borderRadius),
                 borderSide: BorderSide(
                   color: borderColor,
                   width: 0.5,
@@ -80,11 +98,11 @@ class CustomTextFormField extends StatelessWidget {
                 color: Color(0xFFd1c4df),
                 fontSize: 14,
               ),
-              fillColor: fillColor ?? Colors.white,
+              fillColor: fillColor,
               filled: true,
               contentPadding: EdgeInsets.only(left: 14),
               helperText: "",
-              errorText: (errorText == null || errorText == "") ? null : errorText,
+              errorText: (errorText == "") ? null : errorText,
               suffixIcon: suffixIconWidget,
               prefixIcon: prefixIconWidget,
             ),

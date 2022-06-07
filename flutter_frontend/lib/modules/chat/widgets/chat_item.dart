@@ -7,14 +7,15 @@ import 'package:get/get.dart';
 
 class ChatItem extends StatelessWidget {
   ChatItem({
-    this.isSender,
-    this.time,
-    this.content,
+    required this.isSender,
+    required this.time,
+    required this.content,
     this.isImage = false,
-    this.avatar, this.authorName,
-    this.isRoom,
-    @required this.isDeleted,
-    @required this.messageId,
+    required this.avatar,
+    required this.authorName,
+    required this.isRoom,
+    required this.isDeleted,
+    required this.messageId,
   });
 
   //check sender is current user or others
@@ -42,36 +43,40 @@ class ChatItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Row(
-      mainAxisAlignment: isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
+      mainAxisAlignment:
+          isSender ? MainAxisAlignment.end : MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        if (isSender) Text(
-          time,
-          style: TextStyle(
-            color: Colors.black26,
-            fontSize: ScreenUtil().setSp(12),
-            fontFamily: FontFamily.fontNunito,
-            fontWeight: FontWeight.w400,
+        if (isSender)
+          Text(
+            time,
+            style: TextStyle(
+              color: Colors.black26,
+              fontSize: ScreenUtil().setSp(12),
+              fontFamily: FontFamily.fontNunito,
+              fontWeight: FontWeight.w400,
+            ),
+          )
+        else
+          CircleAvatar(
+            radius: ScreenUtil().setWidth(13),
+            backgroundImage: NetworkImage(
+              avatar,
+            ),
           ),
-        ) else CircleAvatar(
-          radius: ScreenUtil().setWidth(13),
-          backgroundImage: NetworkImage(
-            avatar,
-          ),
-        ),
         Flexible(
           child: GestureDetector(
             key: testKey,
             onLongPress: () {
-             if (!isDeleted) {
-               chatController.onOpenFocusMenu(
-                testKey,
-                isFile: isImage,
-                isSender: isSender,
-                urlDownload: content,
-                messageId: messageId,
-              );
-             }
+              if (!isDeleted) {
+                chatController.onOpenFocusMenu(
+                  testKey,
+                  isFile: isImage,
+                  isSender: isSender,
+                  urlDownload: content,
+                  messageId: messageId,
+                );
+              }
             },
             child: ChatItemContent(
               isImage: isImage,
@@ -83,18 +88,19 @@ class ChatItem extends StatelessWidget {
             ),
           ),
         ),
-        if (!isSender) Padding(
-          padding: EdgeInsets.only(left: 10),
-          child: Text(
-            time,
-            style: TextStyle(
-              color: Colors.black26,
-              fontSize: ScreenUtil().setSp(12),
-              fontFamily: FontFamily.fontNunito,
-              fontWeight: FontWeight.w400,
+        if (!isSender)
+          Padding(
+            padding: EdgeInsets.only(left: 10),
+            child: Text(
+              time,
+              style: TextStyle(
+                color: Colors.black26,
+                fontSize: ScreenUtil().setSp(12),
+                fontFamily: FontFamily.fontNunito,
+                fontWeight: FontWeight.w400,
+              ),
             ),
-          ),
-        )
+          )
       ],
     );
   }

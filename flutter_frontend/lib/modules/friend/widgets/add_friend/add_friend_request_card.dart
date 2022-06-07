@@ -10,8 +10,12 @@ class RequestAddFriendCard extends StatelessWidget {
   final void Function() onTapAccept;
   final void Function() onTapRefuse;
 
-
-  const RequestAddFriendCard({this.avatar, this.name, this.onTapAccept, this.onTapRefuse});
+  const RequestAddFriendCard({
+    required this.avatar,
+    required this.name,
+    required this.onTapAccept,
+    required this.onTapRefuse,
+  });
 
   @override
   Widget build(BuildContext context) {

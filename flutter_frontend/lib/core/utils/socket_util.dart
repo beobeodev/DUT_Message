@@ -12,16 +12,16 @@ import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:get/get.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class SocketController extends GetxController {
   final LocalRepository localRepository = LocalRepository();
   final UserRepository userRepository = UserRepository();
 
-  FriendController friendController;
-  HomeController homeController;
+  late FriendController friendController;
+  late HomeController homeController;
 
-  IO.Socket socket;
+  late io.Socket socket;
 
   @override
   void onInit() {
@@ -29,13 +29,13 @@ class SocketController extends GetxController {
     print("init SocketController");
     try {
       final String id = localRepository.getCurrentUser()["_id"];
-      socket = IO.io(dotenv.env['SOCKET_URL'],
-        IO.OptionBuilder()
-        .setTransports(['websocket']) // for Flutter or Dart VM
-        // .enableAutoConnect()
-        // .enableReconnection()// enable auto-connection
-        .setQuery({'userId': id})
-        .build(),
+      socket = io.io(
+        dotenv.env['SOCKET_URL'],
+        io.OptionBuilder()
+            .setTransports(['websocket']) // for Flutter or Dart VM
+            // .enableAutoConnect()
+            // .enableReconnection()// enable auto-connection
+            .setQuery({'userId': id}).build(),
       );
       socket.connect();
       socket.onConnect((_) {
@@ -102,7 +102,9 @@ class SocketController extends GetxController {
           fromId: data["from"]["_id"],
           toId: currentId,
           name: data["from"]["name"],
-          avatar: data["from"]["avatar"] == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : data["from"]["avatar"],
+          avatar: data["from"]["avatar"] == ""
+              ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png"
+              : data["from"]["avatar"],
         );
         friendController.listAddFriendRequest.add(friendRequest);
       });
@@ -118,7 +120,8 @@ class SocketController extends GetxController {
         "fromId": fromId,
         "toId": localRepository.infoCurrentUser.id,
       });
-      friendController.listAddFriendRequest.removeWhere((element) => element.fromId == fromId);
+      friendController.listAddFriendRequest
+          .removeWhere((element) => element.fromId == fromId);
     } catch (e) {
       print("Error in onAcceptAddFriendRequest() from SocketUtil $e");
     }
@@ -155,7 +158,8 @@ class SocketController extends GetxController {
   void onReceiveCancelFriend() {
     try {
       socket.on(SocketEvent.receiveCancelFriend, (data) {
-        friendController.listFriend.removeWhere((element) => element.id == data);
+        friendController.listFriend
+            .removeWhere((element) => element.id == data);
       });
     } catch (e) {
       print("Error in onReceiveCancelFriend() from SocketUtil $e");
@@ -178,7 +182,8 @@ class SocketController extends GetxController {
   void onRemoveFriendRequest() {
     try {
       socket.on(SocketEvent.removeFriendRequest, (data) {
-        friendController.listAddFriendRequest.removeWhere((element) => element.friendRequestId == data["_id"]);
+        friendController.listAddFriendRequest
+            .removeWhere((element) => element.friendRequestId == data["_id"]);
       });
     } catch (e) {
       print("Error in onRemoveFriendRequest() from SocketController $e");
@@ -187,7 +192,13 @@ class SocketController extends GetxController {
 
   // ---- SOCKET FOR CHAT ONE TO ONE ----- //
 
-  void emitSendConversationMessage({String conversationId, String fromId, String toId, String content, bool isImg = false}) {
+  void emitSendConversationMessage({
+    required String conversationId,
+    required String fromId,
+    required String toId,
+    required String content,
+    bool isImg = false,
+  }) {
     try {
       final String encryptContent = EncryptMessage.encryptAES(content);
 
@@ -217,12 +228,18 @@ class SocketController extends GetxController {
     try {
       print("onReceiveConversationMessage() was called");
       socket.on(SocketEvent.receiveConversationMessage, (data) {
-        final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["converId"]);
-        final Conversation conversationTemp = homeController.listConversationAndRoom[index];
+        final int index = homeController.listConversationAndRoom
+            .indexWhere((element) => element.id == data["converId"]);
+        final Conversation conversationTemp =
+            homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
-        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        final List<Conversation> listTemp =
+            List.from(homeController.listConversationAndRoom);
         listTemp.removeWhere((element) => element.id == data["converId"]);
-        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+        homeController.listConversationAndRoom.value = [
+          conversationTemp,
+          ...listTemp
+        ];
       });
     } catch (e) {
       print("Error in onReceiveConversationMessage() from SocketUtil $e");
@@ -247,14 +264,21 @@ class SocketController extends GetxController {
     try {
       socket.on(SocketEvent.receiveRemoveConversationMessage, (data) {
         // get current conversation and remove message
-        final Conversation conversationTemp = homeController.listConversationAndRoom.firstWhere((element) => element.id == data["converId"]);
-        final Message messageTemp = conversationTemp.listMessage.firstWhere((element) => element.id == data["messageId"]);
+        final Conversation conversationTemp = homeController
+            .listConversationAndRoom
+            .firstWhere((element) => element.id == data["converId"]);
+        final Message messageTemp = conversationTemp.listMessage
+            .firstWhere((element) => element.id == data["messageId"]);
         messageTemp.isDeleted = true;
         // get list which haven't current conversation
-        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        final List<Conversation> listTemp =
+            List.from(homeController.listConversationAndRoom);
         listTemp.removeWhere((element) => element.id == data["converId"]);
         // push current conversation to position 0 of list conversation
-        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+        homeController.listConversationAndRoom.value = [
+          conversationTemp,
+          ...listTemp
+        ];
       });
     } catch (e) {
       print("Error in onReceiveRemoveConversationMessage() from SocketUtil $e");
@@ -284,8 +308,19 @@ class SocketController extends GetxController {
           "roomId": data["_id"],
         });
         final Conversation roomChat = Conversation.fromMapRoom(data);
-        homeController.listConversationAndRoom.value = [roomChat, ...homeController.listConversationAndRoom];
-        Get.offNamedUntil(GetRouter.chat, ModalRoute.withName(GetRouter.drawer), arguments: [homeController.listConversationAndRoom.firstWhere((element) => element.id == roomChat.id), true]);
+        homeController.listConversationAndRoom.value = [
+          roomChat,
+          ...homeController.listConversationAndRoom
+        ];
+        Get.offNamedUntil(
+          GetRouter.chat,
+          ModalRoute.withName(GetRouter.drawer),
+          arguments: [
+            homeController.listConversationAndRoom
+                .firstWhere((element) => element.id == roomChat.id),
+            true
+          ],
+        );
       });
     } catch (e) {
       print("Error in onReceiveCreateRoom() from SocketController: $e");
@@ -307,7 +342,11 @@ class SocketController extends GetxController {
   //   }
   // }
 
-  void emitSendRoomMessage({@required String roomId, @required  String content, bool isImg = false}) {
+  void emitSendRoomMessage({
+    required String roomId,
+    required String content,
+    bool isImg = false,
+  }) {
     try {
       final String encryptContent = EncryptMessage.encryptAES(content);
 
@@ -334,15 +373,21 @@ class SocketController extends GetxController {
   void onReceiveRoomMessage() {
     try {
       socket.on(SocketEvent.receiveRoomMessage, (data) {
-        final int index = homeController.listConversationAndRoom.indexWhere((element) => element.id == data["roomId"]);
+        final int index = homeController.listConversationAndRoom
+            .indexWhere((element) => element.id == data["roomId"]);
         // get current conversation and add message to it
-        final Conversation conversationTemp = homeController.listConversationAndRoom[index];
+        final Conversation conversationTemp =
+            homeController.listConversationAndRoom[index];
         conversationTemp.listMessage.add(Message.fromMap(data["message"]));
         // get list which haven't current conversation
-        final List<Conversation> listTemp =  List.from(homeController.listConversationAndRoom);
+        final List<Conversation> listTemp =
+            List.from(homeController.listConversationAndRoom);
         listTemp.removeWhere((element) => element.id == data["roomId"]);
         // push current conversation to position 0 of list conversation
-        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+        homeController.listConversationAndRoom.value = [
+          conversationTemp,
+          ...listTemp
+        ];
       });
     } catch (e) {
       print("ERROR in onReceiveRoomMessage() from SocketController: $e");
@@ -365,18 +410,27 @@ class SocketController extends GetxController {
     try {
       socket.on(SocketEvent.receiveRemoveRoomMessage, (data) {
         // get current conversation and remove message
-        final Conversation conversationTemp = homeController
-            .listConversationAndRoom.firstWhere((element) =>
-                element.id == data["roomId"],);
-        final Message messageTemp = conversationTemp.listMessage.firstWhere((
-            element,) => element.id == data["messageId"],);
+        final Conversation conversationTemp =
+            homeController.listConversationAndRoom.firstWhere(
+          (element) => element.id == data["roomId"],
+        );
+        final Message messageTemp = conversationTemp.listMessage.firstWhere(
+          (
+            element,
+          ) =>
+              element.id == data["messageId"],
+        );
         messageTemp.isDeleted = true;
         // get list which haven't current conversation
         final List<Conversation> listTemp = List.from(
-            homeController.listConversationAndRoom,);
+          homeController.listConversationAndRoom,
+        );
         listTemp.removeWhere((element) => element.id == data["roomId"]);
         // push current conversation to position 0 of list conversation
-        homeController.listConversationAndRoom.value = [conversationTemp, ...listTemp];
+        homeController.listConversationAndRoom.value = [
+          conversationTemp,
+          ...listTemp
+        ];
       });
     } catch (e) {
       print("Error in onReceiveRemoveConversationMessage() from SocketUtil $e");

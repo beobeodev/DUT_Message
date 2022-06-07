@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 class AddFriendPage extends StatelessWidget {
   final FriendController friendController;
 
-  const AddFriendPage({this.friendController});
+  const AddFriendPage({required this.friendController});
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +53,9 @@ class AddFriendPage extends StatelessWidget {
                         : friendController.errorPhoneNumber.value,
                     isDense: true,
                     contentPadding: EdgeInsets.only(
-                      left: 12, top: 16, bottom: 16,
+                      left: 12,
+                      top: 16,
+                      bottom: 16,
                     ),
                   ),
                   keyboardType: TextInputType.number,
@@ -126,7 +128,8 @@ class AddFriendPage extends StatelessWidget {
                   },
                   onTapRefuse: () {
                     friendController.onTapRefuseAddFriendRequest(
-                      friendController.listAddFriendRequest[index].friendRequestId,
+                      friendController
+                          .listAddFriendRequest[index].friendRequestId,
                       friendController.listAddFriendRequest[index].fromId,
                     );
                   },
@@ -139,5 +142,3 @@ class AddFriendPage extends StatelessWidget {
     );
   }
 }
-
-

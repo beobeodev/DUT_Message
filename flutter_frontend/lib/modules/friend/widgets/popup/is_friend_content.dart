@@ -7,7 +7,11 @@ class IsFriendContent extends StatelessWidget {
   final void Function() onPressButtonChat;
   final void Function() onPressCancelFriend;
 
-  const IsFriendContent({Key key, this.onPressButtonChat, this.onPressCancelFriend}) : super(key: key);
+  const IsFriendContent({
+    Key? key,
+    required this.onPressButtonChat,
+    required this.onPressCancelFriend,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

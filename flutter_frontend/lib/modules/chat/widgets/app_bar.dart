@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class AppBarChat extends StatelessWidget {
-  const AppBarChat({this.chatController});
+  const AppBarChat({required this.chatController});
 
   final ChatController chatController;
 
@@ -19,7 +19,7 @@ class AppBarChat extends StatelessWidget {
       child: SizedBox(
         height: 65 + MediaQuery.of(context).padding.top,
         child: Padding(
-          padding:  EdgeInsets.only(
+          padding: EdgeInsets.only(
             top: MediaQuery.of(context).padding.top,
             bottom: ScreenUtil().setHeight(10),
             right: ScreenUtil().setWidth(10),
@@ -51,17 +51,19 @@ class AppBarChat extends StatelessWidget {
                     CircleAvatar(
                       radius: 30,
                       backgroundImage: chatController.isRoom
-                        ? NetworkImage(
-                        chatController.currentConversation.value.avatarRoom,)
-                      : NetworkImage(chatController.friendUser.avatar),
+                          ? NetworkImage(
+                              chatController
+                                  .currentConversation.value.avatarRoom,
+                            )
+                          : NetworkImage(chatController.friendUser.avatar),
                     ),
                     SizedBox(
                       width: ScreenUtil().setWidth(10),
                     ),
                     Text(
                       chatController.isRoom
-                        ? chatController.currentConversation.value.name
-                        : chatController.friendUser.name,
+                          ? chatController.currentConversation.value.name
+                          : chatController.friendUser.name,
                       style: TextStyle(
                         fontFamily: FontFamily.fontNunito,
                         color: Palette.zodiacBlue,
@@ -98,6 +100,6 @@ class AppBarChat extends StatelessWidget {
           ),
         ),
       ),
-    ) ;
+    );
   }
 }

@@ -5,7 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
 class PageItem extends StatelessWidget {
-  const PageItem({Key key, this.imagePath, this.title, this.content}) : super(key: key);
+  const PageItem(
+      {Key? key,
+      required this.imagePath,
+      required this.title,
+      required this.content})
+      : super(key: key);
 
   final String imagePath;
   final String title;

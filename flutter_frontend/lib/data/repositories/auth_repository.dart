@@ -10,7 +10,8 @@ import 'package:http/http.dart' as http;
 
 class AuthRepository {
   final LocalRepository localRepository = LocalRepository();
-  final ConversationRepository conversationRepository = ConversationRepository();
+  final ConversationRepository conversationRepository =
+      ConversationRepository();
   final UserRepository userRepository = UserRepository();
 
   static final AuthRepository _singleton = AuthRepository._init();
@@ -27,7 +28,10 @@ class AuthRepository {
     };
 
     // final http.Response response = await AuthProvider.checkUsernameExist(body);
-    final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/checkUsernameExist", body: body);
+    final http.Response response = await HttpProvider.postRequest(
+      "${dotenv.env['API_URL']}/auth/checkUsernameExist",
+      body: body,
+    );
 
     if (response.statusCode == 200) {
       final result = jsonDecode(response.body);
@@ -39,7 +43,10 @@ class AuthRepository {
 
   Future<CustomResponse> signUp(Map<String, String> body) async {
     try {
-      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/signup", body: body);
+      final http.Response response = await HttpProvider.postRequest(
+        "${dotenv.env['API_URL']}/auth/signup",
+        body: body,
+      );
 
       final dynamic signUpResponse = jsonDecode(response.body);
 
@@ -58,13 +65,14 @@ class AuthRepository {
         );
       }
     } catch (err) {
-      print ("Error in signUp() from AuthRepository: $err");
+      print("Error in signUp() from AuthRepository: $err");
       return CustomResponse(
         statusCode: 500,
         error: true,
         errorMaps: {
-        "exception": err.message,
-      },);
+          "exception": err.toString(),
+        },
+      );
     }
     return CustomResponse(
       statusCode: 500,
@@ -78,7 +86,10 @@ class AuthRepository {
         "password": password
       };
 
-      final http.Response response = await HttpProvider.postRequest("${dotenv.env['API_URL']}/auth/login", body: body);
+      final http.Response response = await HttpProvider.postRequest(
+        "${dotenv.env['API_URL']}/auth/login",
+        body: body,
+      );
 
       // if login SUCCESS
       if (response.statusCode == 200) {
@@ -93,7 +104,11 @@ class AuthRepository {
         // await localRepository.setCurrentUser(currentUser.toMap());
         // save access token and refresh token to local database
         // await localRepository.setToken(responseBody["accessToken"], responseBody["refreshToken"]);
-        await localRepository.setAllNewData(responseBody["accessToken"], responseBody["refreshToken"], currentUser.toMap());
+        await localRepository.setAllNewData(
+          responseBody["accessToken"],
+          responseBody["refreshToken"],
+          currentUser.toMap(),
+        );
         // print(responseBody["refreshToken"]);
         // print(currentUser.toMap());
         localRepository.initData();
@@ -120,7 +135,8 @@ class AuthRepository {
         error: true,
         errorMaps: {
           "exception": err,
-        },);
+        },
+      );
     }
     return CustomResponse(
       statusCode: 500,

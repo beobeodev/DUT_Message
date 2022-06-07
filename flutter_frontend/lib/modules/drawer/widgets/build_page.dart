@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
 
 class BuildPage extends StatelessWidget {
-  const BuildPage({Key key, this.isDrawerOpen, this.xOffset, this.yOffset, this.scaleFactor, this.pageItem, this.closeDrawer}) : super(key: key);
+  const BuildPage({
+    Key? key,
+    required this.isDrawerOpen,
+    required this.xOffset,
+    required this.yOffset,
+    required this.scaleFactor,
+    required this.pageItem,
+    required this.closeDrawer,
+  }) : super(key: key);
 
   final bool isDrawerOpen;
   final double xOffset;
@@ -9,7 +17,6 @@ class BuildPage extends StatelessWidget {
   final double scaleFactor;
   final Widget pageItem;
   final void Function() closeDrawer;
-
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +29,8 @@ class BuildPage extends StatelessWidget {
         child: AnimatedContainer(
           duration: Duration(milliseconds: 250),
           curve: Curves.easeInOutCirc,
-          transform: Matrix4.translationValues(xOffset, yOffset, 0)..scale(scaleFactor),
+          transform: Matrix4.translationValues(xOffset, yOffset, 0)
+            ..scale(scaleFactor),
           child: AbsorbPointer(
             absorbing: isDrawerOpen,
             child: ClipRRect(

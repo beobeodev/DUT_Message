@@ -17,7 +17,13 @@ class PopUpProfileFriend extends StatelessWidget {
   final FriendController friendController;
   final AddFriendStatus addFriendStatus;
 
-  const PopUpProfileFriend({this.imageURL, this.name, this.friendId, this.friendController, this.addFriendStatus});
+  const PopUpProfileFriend({
+    required this.imageURL,
+    required this.name,
+    required this.friendId,
+    required this.friendController,
+    required this.addFriendStatus,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +33,16 @@ class PopUpProfileFriend extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         child: SizedBox(
-          width: ScreenUtil().screenWidth/2 + 100,
-          height: ScreenUtil().screenHeight/2 - 120,
+          width: ScreenUtil().screenWidth / 2 + 100,
+          height: ScreenUtil().screenHeight / 2 - 120,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                  imageURL == "" ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png" : imageURL,
+                  imageURL == ""
+                      ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png"
+                      : imageURL,
                 ),
                 radius: 50,
               ),
@@ -51,41 +59,48 @@ class PopUpProfileFriend extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              if (addFriendStatus == AddFriendStatus.isFriend) IsFriendContent(
-                onPressButtonChat: () {
-                  friendController.onPressButtonChat(friendId);
-                },
-                onPressCancelFriend: () {
-                  friendController.onPressCancelFriend(friendId);
-                },
-              )
-              else if (addFriendStatus == AddFriendStatus.haveSendAddFriendRequest) HaveSendContent()
-              else if (addFriendStatus == AddFriendStatus.haveReceiveAddFriendRequest) HaveReceiveContent(
-                onTapAccept: () {
-                  friendController.onTapAcceptAddFriendRequest(friendId);
-                  Get.back();
-                },
-                )
-              else if (addFriendStatus == AddFriendStatus.noAddFriendRequest) Padding(
-                padding: const EdgeInsets.only(top: 35.0),
-                child: TextButton(
-                  style: TextButton.styleFrom(
-                    primary: Colors.white,
-                    backgroundColor: Color(0xFF3570EC),
-                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  ),
-                  onPressed: () {
-                    friendController.onPressAddFriend(friendId);
+              if (addFriendStatus == AddFriendStatus.isFriend)
+                IsFriendContent(
+                  onPressButtonChat: () {
+                    friendController.onPressButtonChat(friendId);
                   },
-                  child: Text(
-                    'Kết bạn',
-                    style: TextStyle(
-                      fontFamily: FontFamily.fontNunito,
-                      fontSize: ScreenUtil().setSp(16),
+                  onPressCancelFriend: () {
+                    friendController.onPressCancelFriend(friendId);
+                  },
+                )
+              else if (addFriendStatus ==
+                  AddFriendStatus.haveSendAddFriendRequest)
+                HaveSendContent()
+              else if (addFriendStatus ==
+                  AddFriendStatus.haveReceiveAddFriendRequest)
+                HaveReceiveContent(
+                  onTapAccept: () {
+                    friendController.onTapAcceptAddFriendRequest(friendId);
+                    Get.back();
+                  },
+                )
+              else if (addFriendStatus == AddFriendStatus.noAddFriendRequest)
+                Padding(
+                  padding: const EdgeInsets.only(top: 35.0),
+                  child: TextButton(
+                    style: TextButton.styleFrom(
+                      primary: Colors.white,
+                      backgroundColor: Color(0xFF3570EC),
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                    ),
+                    onPressed: () {
+                      friendController.onPressAddFriend(friendId);
+                    },
+                    child: Text(
+                      'Kết bạn',
+                      style: TextStyle(
+                        fontFamily: FontFamily.fontNunito,
+                        fontSize: ScreenUtil().setSp(16),
+                      ),
                     ),
                   ),
-                ),
-              )
+                )
             ],
           ),
         ),

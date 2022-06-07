@@ -22,12 +22,12 @@ class DrawerScreenController extends GetxController {
 
   final RxDouble xOffset = 0.0.obs;
   final RxDouble yOffset = 0.0.obs;
-  final RxDouble scaleFactor  = 1.0.obs;
+  final RxDouble scaleFactor = 1.0.obs;
 
   // default screen is home screen
   final Rx<CurrentScreen> currentPage = CurrentScreen.home.obs;
 
-  User currentUser;
+  late User currentUser;
 
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
@@ -35,10 +35,7 @@ class DrawerScreenController extends GetxController {
       "title": "Nhắn tin",
       "icon": FontAwesomeIcons.commentAlt,
     },
-    <String, dynamic>{
-      "title": "Bạn bè",
-      "icon": FontAwesomeIcons.userFriends
-    },
+    <String, dynamic>{"title": "Bạn bè", "icon": FontAwesomeIcons.userFriends},
     <String, dynamic>{
       "title": "Hồ sơ",
       "icon": FontAwesomeIcons.idBadge,
@@ -51,17 +48,19 @@ class DrawerScreenController extends GetxController {
     currentUser = localRepository.infoCurrentUser;
   }
 
-
   final ReceivePort _port = ReceivePort();
 
   @override
   void onReady() {
-      super.onReady();
-      bindBackgroundIsolate();
+    super.onReady();
+    bindBackgroundIsolate();
   }
 
   void bindBackgroundIsolate() {
-    final bool isSuccess = IsolateNameServer.registerPortWithName(_port.sendPort, 'downloader_send_port');
+    final bool isSuccess = IsolateNameServer.registerPortWithName(
+      _port.sendPort,
+      'downloader_send_port',
+    );
     if (!isSuccess) {
       unbindBackgroundIsolate();
       bindBackgroundIsolate();
@@ -77,9 +76,16 @@ class DrawerScreenController extends GetxController {
     FlutterDownloader.registerCallback(downloadCallback);
   }
 
-  static void downloadCallback(String id, DownloadTaskStatus status, int progress) {
-    final SendPort send = IsolateNameServer.lookupPortByName('downloader_send_port');
-    send.send([id, status, progress]);
+  static void downloadCallback(
+    String id,
+    DownloadTaskStatus status,
+    int progress,
+  ) {
+    final SendPort? send =
+        IsolateNameServer.lookupPortByName('downloader_send_port');
+    if (send != null) {
+      send.send([id, status, progress]);
+    }
     // print(send);
   }
 
@@ -132,13 +138,13 @@ class DrawerScreenController extends GetxController {
     const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
 
     try {
-      final bool launched = await launch(fbProtocolUrl, forceSafariVC: false, forceWebView: false);
+      final bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
 
       if (!launched) {
-        await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+        await launch(fallbackUrl, forceSafariVC: false);
       }
     } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false, forceWebView: false);
+      await launch(fallbackUrl, forceSafariVC: false);
     }
   }
 }

@@ -19,7 +19,8 @@ class FriendController extends GetxController {
   final SocketController socketController = Get.put(SocketController());
   final HomeController homeController = Get.put(HomeController());
 
-  final TextEditingController phoneNumberEditingController = TextEditingController();
+  final TextEditingController phoneNumberEditingController =
+      TextEditingController();
 
   final PageController pageController = PageController();
 
@@ -88,18 +89,22 @@ class FriendController extends GetxController {
       return;
     } else if (phoneNumberEditingController.text.length != 10) {
       errorPhoneNumber.value = "Số điện thoại không hợp lệ";
-      return ;
-    } else if (phoneNumberEditingController.text == localRepository.infoCurrentUser.phone) {
+      return;
+    } else if (phoneNumberEditingController.text ==
+        localRepository.infoCurrentUser.phone) {
       errorPhoneNumber.value = "Đây là số điện thoại của bạn";
     } else {
-      final CustomResponse response = await userRepository.getUserByPhoneNumber(phoneNumberEditingController.text);
+      final CustomResponse response = await userRepository
+          .getUserByPhoneNumber(phoneNumberEditingController.text);
       // check if user not exist with phone number which need get info user
       if (response.error && response.statusCode == 404) {
         errorPhoneNumber.value = "Số điện thoại này chưa được đăng ký";
       } else if (response.statusCode == 200) {
-        final Map<String, dynamic> responseBody = response.responseBody;
+        final Map<String, dynamic> responseBody = response.responseBody!;
         // check add friend request status
-        final Map<String, dynamic> responseCheckAddFriendRequest = (await userRepository.checkAddFriendRequest(responseBody["_id"])).responseBody;
+        final Map<String, dynamic> responseCheckAddFriendRequest =
+            (await userRepository.checkAddFriendRequest(responseBody["_id"]))
+                .responseBody!;
 
         AddFriendStatus addFriendStatus;
 
@@ -107,21 +112,23 @@ class FriendController extends GetxController {
         // => popup show button "HUỶ KẾT BẠN", "NHẮN TIN"
         if (responseCheckAddFriendRequest["message"] == "is friend") {
           addFriendStatus = AddFriendStatus.isFriend;
-        } else if (responseCheckAddFriendRequest["message"] == "have send add friend request") {
-        // if STATUS is HAVE SEND REQUEST
-        // => popup show button "HUỶ GỬI"
+        } else if (responseCheckAddFriendRequest["message"] ==
+            "have send add friend request") {
+          // if STATUS is HAVE SEND REQUEST
+          // => popup show button "HUỶ GỬI"
           addFriendStatus = AddFriendStatus.haveSendAddFriendRequest;
-        } else if (responseCheckAddFriendRequest["message"] == "have receive add friend request") {
-        // if STATUS is HAVE SEND REQUEST
-        // => popup show button "TỪ CHỐI", "CHẤP NHẬN"
+        } else if (responseCheckAddFriendRequest["message"] ==
+            "have receive add friend request") {
+          // if STATUS is HAVE SEND REQUEST
+          // => popup show button "TỪ CHỐI", "CHẤP NHẬN"
           addFriendStatus = AddFriendStatus.haveReceiveAddFriendRequest;
         } else {
-        // if STATUS is NO SEND REQUEST
-        // => popup show button "KẾT BẠN"
+          // if STATUS is NO SEND REQUEST
+          // => popup show button "KẾT BẠN"
           addFriendStatus = AddFriendStatus.noAddFriendRequest;
         }
         // open info of user finding
-        Navigator.of(Get.context).push(
+        Navigator.of(Get.context!).push(
           HeroPopupRoute(
             builder: (context) => Center(
               child: PopUpProfileFriend(
@@ -162,14 +169,16 @@ class FriendController extends GetxController {
   // this function to handle event on change
   // of text field find friend, with input is friend's name
   void onChangeTextFieldFindFriend(String value) {
-    listFriendFilter.value = listFriend.where((e) => e.name.toLowerCase().contains(value.toLowerCase())).toList();
+    listFriendFilter.value = listFriend
+        .where((e) => e.name.toLowerCase().contains(value.toLowerCase()))
+        .toList();
   }
 
   // this function to handle event on tap friend card
   // in list friend page
   void onTapFriendCard(int index) {
     // open popup about info of friend
-    Navigator.of(Get.context).push(
+    Navigator.of(Get.context!).push(
       HeroPopupRoute(
         builder: (context) => Center(
           child: PopUpProfileFriend(
@@ -191,7 +200,12 @@ class FriendController extends GetxController {
     // final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2);
     Get.toNamed(
       GetRouter.chat,
-      arguments: [homeController.listConversationAndRoom.firstWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2), false],
+      arguments: [
+        homeController.listConversationAndRoom.firstWhere((element) =>
+            element.listUserIn.any((element) => element.id == friendId) &&
+            element.listUserIn.length == 2),
+        false
+      ],
     );
   }
 

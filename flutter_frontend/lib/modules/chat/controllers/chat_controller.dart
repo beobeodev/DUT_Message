@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:io';
-import 'dart:isolate';
 import 'dart:ui';
 
 import 'package:file_picker/file_picker.dart';
@@ -34,14 +33,15 @@ class ChatController extends GetxController {
   final SocketController socketController = Get.put(SocketController());
 
   // get current conversation from argument
-  final Rx<Conversation> currentConversation = (Get.arguments[0] as Conversation).obs;
+  final Rx<Conversation> currentConversation =
+      (Get.arguments[0] as Conversation).obs;
   // check if current conversation is room chat (GROUP CHAT)
   final bool isRoom = Get.arguments[1];
 
   final ScrollController scrollController = ScrollController();
   final TextEditingController inputEditingController = TextEditingController();
 
-  User friendUser;
+  late User friendUser;
 
   @override
   void onInit() {
@@ -49,11 +49,15 @@ class ChatController extends GetxController {
     // currentConversation = homeController.listConversationAndRoom.firstWhere((p0) => p0.id == Get.arguments[0]).obs;
     // if not room chat, then get info of FRIEND to SHOW AVATAR AND GET ID
     if (!isRoom) {
-      friendUser = currentConversation.value.listUserIn.firstWhere((element) => element.id != localRepository.infoCurrentUser.id,);
+      friendUser = currentConversation.value.listUserIn.firstWhere(
+        (element) => element.id != localRepository.infoCurrentUser.id,
+      );
     }
     homeController.listConversationAndRoom.listen((p0) {
       currentConversation.update((val) {
-        val = p0.firstWhere((element) => element.id == currentConversation.value.id);
+        val = p0.firstWhere(
+          (element) => element.id == currentConversation.value.id,
+        );
       });
     });
     // print(currentConversation.value.listMessage.length);
@@ -68,13 +72,20 @@ class ChatController extends GetxController {
       }
     });
     scrollController.jumpTo(scrollController.position.maxScrollExtent);
-    homeController.listConversationAndRoom.listen((p0) {
-      Timer(Duration(milliseconds: 200), () => {
-        if (scrollController.hasClients) {
-          scrollController.jumpTo(scrollController.position.maxScrollExtent)
-        }
-      },);
-    },);
+    homeController.listConversationAndRoom.listen(
+      (p0) {
+        Timer(
+          Duration(milliseconds: 200),
+          () => {
+            if (scrollController.hasClients)
+              {
+                scrollController
+                    .jumpTo(scrollController.position.maxScrollExtent)
+              }
+          },
+        );
+      },
+    );
   }
 
   //This function to handle event onTap back icon
@@ -90,8 +101,8 @@ class ChatController extends GetxController {
     if (inputEditingController.text != "") {
       if (isRoom) {
         socketController.emitSendRoomMessage(
-            roomId: currentConversation.value.id,
-            content: inputEditingController.text,
+          roomId: currentConversation.value.id,
+          content: inputEditingController.text,
         );
       } else {
         socketController.emitSendConversationMessage(
@@ -113,10 +124,11 @@ class ChatController extends GetxController {
     // update();
   }
 
-  Future<void > showFilePicker(FileType fileType) async {
-    final FilePickerResult result = await FilePicker.platform.pickFiles(type: fileType);
+  Future<void> showFilePicker(FileType fileType) async {
+    final FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: fileType);
     if (result != null) {
-      final File file = File(result.files.single.path);
+      final File file = File(result.files.single.path!);
       final int sizeInBytes = file.lengthSync();
       final double sizeInMb = sizeInBytes / (1024 * 1024);
       if (sizeInMb > 15) {
@@ -153,7 +165,8 @@ class ChatController extends GetxController {
           ),
         );
       } else {
-        final String url = await firebaseRepository.uploadToFireStorage(fileType, file);
+        final String url =
+            await firebaseRepository.uploadToFireStorage(fileType, file);
         if (isRoom) {
           socketController.emitSendRoomMessage(
             roomId: currentConversation.value.id,
@@ -175,7 +188,7 @@ class ChatController extends GetxController {
 
   Future<void> showSelectModalBottom() async {
     await showModalBottomSheet(
-      context: Get.context,
+      context: Get.context!,
       barrierColor: Colors.black26,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -214,10 +227,17 @@ class ChatController extends GetxController {
   }
 
   //
-  Future<void> onOpenFocusMenu(GlobalKey testKey, {bool isFile = false, bool isSender = true, String urlDownload, @required String messageId}) async {
+  Future<void> onOpenFocusMenu(
+    GlobalKey testKey, {
+    bool isFile = false,
+    bool isSender = true,
+    String? urlDownload,
+    required String messageId,
+  }) async {
     Offset childOffset = Offset(0, 0);
     Size childSize;
-    final RenderBox renderBox = testKey.currentContext.findRenderObject() as RenderBox;
+    final RenderBox renderBox =
+        testKey.currentContext?.findRenderObject() as RenderBox;
     final Size size = renderBox.size;
     final Offset offset = renderBox.localToGlobal(Offset.zero);
     childOffset = Offset(offset.dx, offset.dy);
@@ -226,10 +246,15 @@ class ChatController extends GetxController {
     const double menuWidth = 200;
     const double menuHeight = 100;
 
-    final leftMargin = (childOffset.dx + menuWidth ) < ScreenUtil().screenWidth ? childOffset.dx + 10 : (ScreenUtil().screenWidth - menuWidth - 20);
-    final topMargin = (childOffset.dy + menuHeight + childSize.height + 50) < ScreenUtil().screenHeight ? childOffset.dy + childSize.height + 8 : childOffset.dy - menuHeight;
+    final leftMargin = (childOffset.dx + menuWidth) < ScreenUtil().screenWidth
+        ? childOffset.dx + 10
+        : (ScreenUtil().screenWidth - menuWidth - 20);
+    final topMargin = (childOffset.dy + menuHeight + childSize.height + 50) <
+            ScreenUtil().screenHeight
+        ? childOffset.dy + childSize.height + 8
+        : childOffset.dy - menuHeight;
 
-    await Navigator.of(Get.context).push(
+    await Navigator.of(Get.context!).push(
       PageRouteBuilder(
         transitionDuration: Duration(milliseconds: 100),
         barrierDismissible: true,
@@ -240,43 +265,45 @@ class ChatController extends GetxController {
               leftMargin: leftMargin,
               topMargin: topMargin,
               listFocusMenuItem: <FocusMenuItem>[
-                if (isSender) FocusMenuItem(
-                  title: Text(
-                    isSender ? "Gỡ tin nhắn" : "Xoá tin nhắn",
-                    style: TextStyle(
-                      color: Palette.zodiacBlue,
-                      fontFamily: FontFamily.fontNunito,
-                      fontSize: ScreenUtil().setSp(13),
+                if (isSender)
+                  FocusMenuItem(
+                    title: Text(
+                      isSender ? "Gỡ tin nhắn" : "Xoá tin nhắn",
+                      style: TextStyle(
+                        color: Palette.zodiacBlue,
+                        fontFamily: FontFamily.fontNunito,
+                        fontSize: ScreenUtil().setSp(13),
+                      ),
                     ),
-                  ),
-                  icon: Icon(
-                    FontAwesomeIcons.trash,
-                    color: Colors.red,
-                    size: 18,
-                  ),
-                  onTapItem: () {
-                    removeMessage(messageId);
-                    Get.back();
-                  },
-                ),
-                if (isFile) FocusMenuItem(
-                  title: Text(
-                    "Tải về",
-                    style: TextStyle(
-                      color: Palette.zodiacBlue,
-                      fontFamily: FontFamily.fontNunito,
-                      fontSize: ScreenUtil().setSp(13),
+                    icon: Icon(
+                      FontAwesomeIcons.trash,
+                      color: Colors.red,
+                      size: 18,
                     ),
+                    onTapItem: () {
+                      removeMessage(messageId);
+                      Get.back();
+                    },
                   ),
-                  icon: Icon(
-                    FontAwesomeIcons.download,
-                    color: Palette.metallicViolet,
-                    size: 18,
+                if (isFile)
+                  FocusMenuItem(
+                    title: Text(
+                      "Tải về",
+                      style: TextStyle(
+                        color: Palette.zodiacBlue,
+                        fontFamily: FontFamily.fontNunito,
+                        fontSize: ScreenUtil().setSp(13),
+                      ),
+                    ),
+                    icon: Icon(
+                      FontAwesomeIcons.download,
+                      color: Palette.metallicViolet,
+                      size: 18,
+                    ),
+                    onTapItem: () async {
+                      await implementDownload(urlDownload);
+                    },
                   ),
-                  onTapItem: () async {
-                    await implementDownload(urlDownload);
-                  },
-                ),
               ],
             ),
           );
@@ -300,9 +327,9 @@ class ChatController extends GetxController {
     return check;
   }
 
-  Future<void> implementDownload(String url) async {
+  Future<void> implementDownload(String? url) async {
     try {
-      Directory _path;
+      Directory? _path;
       if (Platform.isIOS) {
         _path = await getApplicationDocumentsDirectory();
       } else {
@@ -318,12 +345,10 @@ class ChatController extends GetxController {
       // print(savedDir.path);
       final status = await Permission.storage.request();
 
-      if(status.isGranted) {
-        final String taskId = await FlutterDownloader.enqueue(
-          url: url,
-          savedDir: _path.path,
-          showNotification: true, // show download progress in status bar (for Android)
-          openFileFromNotification: true, // click on notification to open downloaded file (for Android)
+      if (status.isGranted) {
+        final String? taskId = await FlutterDownloader.enqueue(
+          url: url!,
+          savedDir: _path!.path,
           saveInPublicStorage: true,
         );
       } else {
@@ -335,6 +360,4 @@ class ChatController extends GetxController {
     print("DOWNLOAD FILE SUCCESSFUL!!");
     Get.back();
   }
-
-
 }

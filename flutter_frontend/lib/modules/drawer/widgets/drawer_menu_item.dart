@@ -3,8 +3,8 @@ import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class MenuItem extends StatelessWidget {
-  const MenuItem({this.title, this.icon});
+class DrawerMenuItem extends StatelessWidget {
+  const DrawerMenuItem({required this.title, required this.icon});
 
   final String title;
   final IconData icon;

@@ -12,24 +12,27 @@ class OnboardController extends GetxController {
     {
       'imagePath': ImagePath.chatLottie,
       'title': 'Trò chuyện',
-      'content': 'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
+      'content':
+          'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
     },
     {
       'imagePath': ImagePath.chatLottie,
       'title': 'Trò chuyện',
-      'content': 'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
+      'content':
+          'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
     },
     {
       'imagePath': ImagePath.transitionLottie,
       'title': 'Trao đổi dữ liệu',
-      'content': 'Bên cạnh việc nhắn tin, trò chuyện cùng nhau, DUT Message còn cung cấp tính năng gửi dữ liệu như file, ảnh,...',
+      'content':
+          'Bên cạnh việc nhắn tin, trò chuyện cùng nhau, DUT Message còn cung cấp tính năng gửi dữ liệu như file, ảnh,...',
     }
   ];
 
   final PageController pageController = PageController();
 
   //This variable to store current index of PageView
-  RxInt currentIndex;
+  late RxInt currentIndex;
 
   //Init data
   @override

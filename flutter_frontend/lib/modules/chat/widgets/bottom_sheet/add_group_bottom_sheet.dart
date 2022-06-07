@@ -9,7 +9,8 @@ import 'package:snapping_sheet/snapping_sheet.dart';
 class AddGroupBottomSheet extends StatelessWidget {
   final MenuChatController menuChatController;
 
-  const AddGroupBottomSheet({Key key, this.menuChatController}) : super(key: key);
+  const AddGroupBottomSheet({Key? key, required this.menuChatController})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +95,11 @@ class AddGroupBottomSheet extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.blueGrey[50],
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[50]),
+                      borderSide: BorderSide(color: Colors.blueGrey[50]!),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[50]),
+                      borderSide: BorderSide(color: Colors.blueGrey[50]!),
                       borderRadius: BorderRadius.circular(5),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -112,7 +113,9 @@ class AddGroupBottomSheet extends StatelessWidget {
                     isDense: true,
                     // errorText:,
                     contentPadding: EdgeInsets.only(
-                      left: 16, top: 13, bottom: 12,
+                      left: 16,
+                      top: 13,
+                      bottom: 12,
                     ),
                   ),
                   style: TextStyle(
@@ -132,11 +135,11 @@ class AddGroupBottomSheet extends StatelessWidget {
                     filled: true,
                     fillColor: Colors.blueGrey[50],
                     enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[50]),
+                      borderSide: BorderSide(color: Colors.blueGrey[50]!),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.blueGrey[50]),
+                      borderSide: BorderSide(color: Colors.blueGrey[50]!),
                       borderRadius: BorderRadius.circular(50),
                     ),
                     errorBorder: OutlineInputBorder(
@@ -173,14 +176,22 @@ class AddGroupBottomSheet extends StatelessWidget {
                         return GestureDetector(
                           onTap: () {
                             // print(menuChatController.findEditingController.text);
-                            menuChatController.onTapSelectFriend(menuChatController.listSearchFriend[index]["user"]);
+                            menuChatController.onTapSelectFriend(
+                                menuChatController.listSearchFriend[index]
+                                    ["user"]);
                           },
                           child: Container(
                             margin: EdgeInsets.only(bottom: 5.0),
                             decoration: BoxDecoration(
                               border: Border.all(
-                                color: menuChatController.listSearchFriend[index]["beSelected"] ? Colors.blue : Palette.lighterBlack,
-                                width: menuChatController.listSearchFriend[index]["beSelected"] ? 2 : 1,
+                                color: menuChatController
+                                        .listSearchFriend[index]["beSelected"]
+                                    ? Colors.blue
+                                    : Palette.lighterBlack,
+                                width: menuChatController
+                                        .listSearchFriend[index]["beSelected"]
+                                    ? 2
+                                    : 1,
                               ),
                               color: Colors.white,
                               borderRadius: BorderRadius.circular(10),
@@ -194,7 +205,8 @@ class AddGroupBottomSheet extends StatelessWidget {
                               children: [
                                 CircleAvatar(
                                   backgroundImage: NetworkImage(
-                                    menuChatController.listSearchFriend[index]["user"].avatar,
+                                    menuChatController
+                                        .listSearchFriend[index]["user"].avatar,
                                   ),
                                   radius: 15,
                                 ),
@@ -203,7 +215,8 @@ class AddGroupBottomSheet extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: Text(
-                                    menuChatController.listSearchFriend[index]["user"].name,
+                                    menuChatController
+                                        .listSearchFriend[index]["user"].name,
                                     style: TextStyle(
                                       color: Palette.zodiacBlue,
                                       fontWeight: FontWeight.w700,

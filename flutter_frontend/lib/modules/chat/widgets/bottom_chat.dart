@@ -7,15 +7,18 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 class BottomChat extends StatelessWidget {
   final ChatController chatController;
 
-  const BottomChat({Key key, this.chatController}) : super(key: key);
+  const BottomChat({Key? key, required this.chatController}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return  ColoredBox(
+    return ColoredBox(
       color: Colors.white,
       child: Padding(
         padding: const EdgeInsets.only(
-          bottom: 16.0, top: 6, left: 15, right: 15,
+          bottom: 16.0,
+          top: 6,
+          left: 15,
+          right: 15,
         ),
         child: Row(
           children: [
@@ -37,16 +40,18 @@ class BottomChat extends StatelessWidget {
                   filled: true,
                   fillColor: Colors.blueGrey[50],
                   enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[50]),
+                    borderSide: BorderSide(color: Colors.blueGrey[50]!),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.blueGrey[50]),
+                    borderSide: BorderSide(color: Colors.blueGrey[50]!),
                     borderRadius: BorderRadius.circular(25),
                   ),
                   isDense: true,
                   contentPadding: EdgeInsets.only(
-                    left: 16, top: 13, bottom: 12,
+                    left: 16,
+                    top: 13,
+                    bottom: 12,
                   ),
                 ),
                 style: TextStyle(

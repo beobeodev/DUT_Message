@@ -8,7 +8,14 @@ class FocusMenuDetail extends StatelessWidget {
   final double topMargin;
   final List<Widget> listFocusMenuItem;
 
-  const FocusMenuDetail({Key key, this.menuWidth = 200, this.menuHeight = 100, @required this.leftMargin, @required this.topMargin, @required this.listFocusMenuItem}) : super(key: key);
+  const FocusMenuDetail({
+    Key? key,
+    this.menuWidth = 200,
+    this.menuHeight = 100,
+    required this.leftMargin,
+    required this.topMargin,
+    required this.listFocusMenuItem,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +38,13 @@ class FocusMenuDetail extends StatelessWidget {
               decoration: BoxDecoration(
                 color: Colors.grey.shade200,
                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),
-                boxShadow: const [BoxShadow(color: Colors.black38, blurRadius: 10, spreadRadius: 1)],
+                boxShadow: const [
+                  BoxShadow(
+                    color: Colors.black38,
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  )
+                ],
               ),
               child: ClipRRect(
                 borderRadius: const BorderRadius.all(Radius.circular(5.0)),

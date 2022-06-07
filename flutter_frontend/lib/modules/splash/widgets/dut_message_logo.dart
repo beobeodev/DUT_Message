@@ -4,14 +4,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class DUTMessageLogo extends StatefulWidget {
-
   @override
   _DUTMessageLogoState createState() => _DUTMessageLogoState();
 }
 
-class _DUTMessageLogoState extends State<DUTMessageLogo> with TickerProviderStateMixin {
-  AnimationController _controller;
-  Animation<double> _animation;
+class _DUTMessageLogoState extends State<DUTMessageLogo>
+    with TickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<double> _animation;
 
   @override
   void initState() {

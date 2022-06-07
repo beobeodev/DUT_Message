@@ -15,7 +15,8 @@ import 'package:get/get.dart';
 
 class MenuChatController extends GetxController {
   final UserRepository userRepository = UserRepository();
-  final ConversationRepository conversationRepository = ConversationRepository();
+  final ConversationRepository conversationRepository =
+      ConversationRepository();
 
   final dynamic infoConversation = Get.arguments;
 
@@ -24,10 +25,10 @@ class MenuChatController extends GetxController {
   final TextEditingController findEditingController = TextEditingController();
   final TextEditingController nameEditingController = TextEditingController();
 
-
   List<Map<String, dynamic>> listFriend = <Map<String, dynamic>>[];
-  final RxList<Map<String, dynamic>> listSearchFriend = <Map<String, dynamic>>[].obs;
-  List<String> listIDSelectedFriend;
+  final RxList<Map<String, dynamic>> listSearchFriend =
+      <Map<String, dynamic>>[].obs;
+  late List<String> listIDSelectedFriend;
   // final RxList<Map<String, dynamic>> listFilterFriend = <Map<String, dynamic>>[].obs;
   // final RxList<bool> listCheckSelectedFriend = <bool>[].obs;
   // final RxList<User> listSelectedFriend = <User>[].obs;
@@ -38,7 +39,10 @@ class MenuChatController extends GetxController {
     if (infoConversation is User) {
       // get list friend with condition have not id of friend
       // who is chatting
-      listFriend = List.from(userRepository.listFriend).toList().where((element) => element.id != infoConversation.id).map((e) {
+      listFriend = List.from(userRepository.listFriend)
+          .toList()
+          .where((element) => element.id != infoConversation.id)
+          .map((e) {
         return {
           "user": e,
           "beSelected": false,
@@ -47,10 +51,16 @@ class MenuChatController extends GetxController {
       listIDSelectedFriend = <String>[infoConversation.id];
     } else if (infoConversation is Conversation) {
       // get list id of users in current conversation
-      final List<String> listIDUserInConversation = (infoConversation as Conversation).listUserIn.map((e) => e.id).toList();
+      final List<String> listIDUserInConversation =
+          (infoConversation as Conversation)
+              .listUserIn
+              .map((e) => e.id)
+              .toList();
       // show list friend with condition have not
       // id of friends in listIDUserInConversation
-      listFriend = List.from(userRepository.listFriend).where((element) => !listIDUserInConversation.contains(element.id)).map((e) {
+      listFriend = List.from(userRepository.listFriend)
+          .where((element) => !listIDUserInConversation.contains(element.id))
+          .map((e) {
         return {
           "user": e,
           "beSelected": false,
@@ -61,12 +71,13 @@ class MenuChatController extends GetxController {
   }
 
   void onChangeTextFieldFind(String value) {
-    listSearchFriend.value = List.from(listFriend.where((element) => element["user"].name.toLowerCase().contains(value.toLowerCase())));
+    listSearchFriend.value = List.from(listFriend.where((element) =>
+        element["user"].name.toLowerCase().contains(value.toLowerCase())));
   }
 
   Future<void> openBottomSheet() async {
     await showModalBottomSheet(
-      context: Get.context,
+      context: Get.context!,
       barrierColor: Colors.black26,
       backgroundColor: Colors.transparent,
       isScrollControlled: true,
@@ -79,8 +90,10 @@ class MenuChatController extends GetxController {
   }
 
   void onTapSelectFriend(User selectedFriend) {
-    final int index = listFriend.indexWhere((element) => element["user"].id == selectedFriend.id);
-    final int indexInListSearch = listSearchFriend.indexWhere((element) => element["user"].id == selectedFriend.id);
+    final int index = listFriend
+        .indexWhere((element) => element["user"].id == selectedFriend.id);
+    final int indexInListSearch = listSearchFriend
+        .indexWhere((element) => element["user"].id == selectedFriend.id);
     listFriend[index] = <String, dynamic>{
       "user": listFriend[index]["user"],
       "beSelected": !listFriend[index]["beSelected"],
@@ -89,22 +102,24 @@ class MenuChatController extends GetxController {
     if (listFriend[index]["beSelected"]) {
       listIDSelectedFriend.add(selectedFriend.id);
     } else {
-      listIDSelectedFriend.removeWhere((element) => element == selectedFriend.id);
+      listIDSelectedFriend
+          .removeWhere((element) => element == selectedFriend.id);
     }
   }
 
   Future<void> onTapCreateButton() async {
     // await conversationRepository.getListConversationAndRoom();
+    Timer? _timer;
+
     if (listIDSelectedFriend.length < 2) {
-      Timer _timer;
       await showDialog(
-        context: Get.context,
+        context: Get.context!,
         builder: (BuildContext builderContext) {
           _timer = Timer(Duration(milliseconds: 600), () {
             Get.back();
           });
 
-          return  AlertDialog(
+          return AlertDialog(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
             ),
@@ -135,13 +150,14 @@ class MenuChatController extends GetxController {
             ),
           );
         },
-      ).then((val){
-        if (_timer.isActive) {
-          _timer.cancel();
+      ).then((val) {
+        if (_timer!.isActive) {
+          _timer!.cancel();
         }
       });
     } else {
-      socketController.emitSendCreateRoom(listIDSelectedFriend, nameEditingController.text);
+      socketController.emitSendCreateRoom(
+          listIDSelectedFriend, nameEditingController.text);
 
       // Get.toNamed(GetRouter.chat, arguments: [index, true]);
     }
@@ -150,10 +166,14 @@ class MenuChatController extends GetxController {
 
   void onTapCancelButton() {
     findEditingController.clear();
-    listFriend = listFriend.map((e) => {
-      "user": e["user"],
-      "beSelected": false,
-    },).toList();
+    listFriend = listFriend
+        .map(
+          (e) => {
+            "user": e["user"],
+            "beSelected": false,
+          },
+        )
+        .toList();
     listSearchFriend.value = listFriend;
     Get.back();
   }

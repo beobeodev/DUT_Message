@@ -4,7 +4,7 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class HaveSendContent extends StatelessWidget {
-  const HaveSendContent({Key key}) : super(key: key);
+  const HaveSendContent({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -31,8 +31,7 @@ class HaveSendContent extends StatelessWidget {
               backgroundColor: Palette.sweetRed,
               padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             ),
-            onPressed: () {
-            },
+            onPressed: () {},
             child: Text(
               'Huỷ gửi',
               style: TextStyle(
