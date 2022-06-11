@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
@@ -22,8 +21,8 @@ class SignUpScreen extends StatelessWidget {
         child: SafeArea(
           child: SingleChildScrollView(
             child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: Palette.aliceBlue,
+              decoration: const BoxDecoration(
+                color: Palette.gray100,
               ),
               child: Padding(
                 padding: EdgeInsets.only(
@@ -50,7 +49,7 @@ class SignUpScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Tham gia DUT Message",
+                            'Tham gia DUT Message',
                             style: TextStyle(
                               fontFamily: FontFamily.fontPoppins,
                               color: Palette.lighterBlack,
@@ -65,7 +64,7 @@ class SignUpScreen extends StatelessWidget {
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
-                            "Tạo tài khoản",
+                            'Tạo tài khoản',
                             style: TextStyle(
                               fontFamily: FontFamily.fontNunito,
                               color: Palette.zodiacBlue,
@@ -79,79 +78,74 @@ class SignUpScreen extends StatelessWidget {
                         ),
                         CustomTextFormField(
                           width: double.infinity,
-                          hintText: "Name",
-                          suffixIconWidget: Icon(
+                          hintText: 'Name',
+                          suffixIconWidget: const Icon(
                             FontAwesomeIcons.user,
-                            color: Palette.celticBlue,
+                            color: Palette.blue100,
                             size: 18,
                           ),
-                          borderColor: Palette.celticBlue,
                           validateFunc: signUpController.validateName,
-                          textEditingController: signUpController
-                              .nameEditingController,
+                          textEditingController:
+                              signUpController.nameEditingController,
                         ),
                         CustomTextFormField(
                           width: double.infinity,
-                          hintText: "Username",
-                          suffixIconWidget: Icon(
+                          hintText: 'Username',
+                          suffixIconWidget: const Icon(
                             FontAwesomeIcons.user,
-                            color: Palette.celticBlue,
+                            color: Palette.blue100,
                             size: 18,
                           ),
                           errorText: signUpController.errorUsername.value,
-                          borderColor: Palette.celticBlue,
                           validateFunc: signUpController.validateUsername,
-                          textEditingController: signUpController
-                              .usernameEditingController,
+                          textEditingController:
+                              signUpController.usernameEditingController,
                         ),
                         CustomTextFormField(
                           width: double.infinity,
-                          hintText: "Your phone number",
-                          suffixIconWidget: Icon(
+                          hintText: 'Your phone number',
+                          suffixIconWidget: const Icon(
                             FontAwesomeIcons.phone,
-                            color: Palette.celticBlue,
+                            color: Palette.blue100,
                             size: 18,
                           ),
                           errorText: signUpController.errorPhoneNumber.value,
-                          borderColor: Palette.celticBlue,
                           validateFunc: signUpController.validatePhoneNumber,
-                          textEditingController: signUpController
-                              .phoneEditingController,
+                          textEditingController:
+                              signUpController.phoneEditingController,
                         ),
                         CustomTextFormField(
                           width: double.infinity,
-                          hintText: "Password",
+                          hintText: 'Password',
                           suffixIconWidget: GestureDetector(
                             onTap: () {},
-                            child: Icon(
+                            child: const Icon(
                               FontAwesomeIcons.solidEyeSlash,
                               color: Colors.grey,
                               size: 18,
                             ),
                           ),
                           isObsecure: true,
-                          borderColor: Palette.celticBlue,
                           validateFunc: signUpController.validatePassword,
-                          textEditingController: signUpController
-                              .passwordEditingController,
+                          textEditingController:
+                              signUpController.passwordEditingController,
                         ),
                         CustomTextFormField(
                           width: double.infinity,
-                          hintText: "Confirm password",
+                          hintText: 'Confirm password',
                           suffixIconWidget: GestureDetector(
                             onTap: () {},
-                            child: Icon(
+                            child: const Icon(
                               FontAwesomeIcons.solidEyeSlash,
                               color: Colors.grey,
                               size: 18,
                             ),
                           ),
                           isObsecure: true,
-                          borderColor: Palette.celticBlue,
-                          validateFunc: signUpController
-                              .validateConfirmPassword,
-                          textEditingController: signUpController
-                              .confirmPasswordEditingController,
+                          validateFunc:
+                              signUpController.validateConfirmPassword,
+                          textEditingController:
+                              signUpController.confirmPasswordEditingController,
                         ),
                         SizedBox(
                           height: ScreenUtil().setHeight(10),
@@ -160,27 +154,25 @@ class SignUpScreen extends StatelessWidget {
                           onTap: signUpController.onTapSignUpButton,
                           child: DecoratedBox(
                             decoration: BoxDecoration(
-                              color: Palette.sweetRed,
+                              color: Palette.red100,
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: SizedBox(
                               width: double.infinity,
                               height: ScreenUtil().setHeight(55),
                               child: signUpController.isLoading.value
-                              ? LoadingDot(
-                                size: 30,
-                              ) :
-                              Center(
-                                child: Text(
-                                  "Đăng ký",
-                                  style: TextStyle(
-                                    fontFamily: FontFamily.fontPoppins,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w700,
-                                    fontSize: ScreenUtil().setSp(22),
-                                  ),
-                                ),
-                              ),
+                                  ? const LoadingDot()
+                                  : Center(
+                                      child: Text(
+                                        'Đăng ký',
+                                        style: TextStyle(
+                                          fontFamily: FontFamily.fontPoppins,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.w700,
+                                          fontSize: ScreenUtil().setSp(22),
+                                        ),
+                                      ),
+                                    ),
                             ),
                           ),
                         ),
@@ -191,7 +183,7 @@ class SignUpScreen extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Text(
-                              "Đã có tài khoản? ",
+                              'Đã có tài khoản? ',
                               style: TextStyle(
                                 color: Palette.zodiacBlue,
                                 fontFamily: FontFamily.fontPoppins,
@@ -202,9 +194,9 @@ class SignUpScreen extends StatelessWidget {
                             GestureDetector(
                               onTap: signUpController.navigateToLoginScreen,
                               child: Text(
-                                "ĐĂNG NHẬP",
+                                'ĐĂNG NHẬP',
                                 style: TextStyle(
-                                  color: Palette.celticBlue,
+                                  color: Palette.blue100,
                                   fontFamily: FontFamily.fontPoppins,
                                   fontWeight: FontWeight.w700,
                                   fontSize: ScreenUtil().setSp(18),
@@ -225,6 +217,3 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 }
-
-
-

@@ -29,11 +29,11 @@ class SelectBottomSheet extends StatelessWidget {
         ),
       ],
       grabbing: ClipRRect(
-        borderRadius: BorderRadius.vertical(
+        borderRadius: const BorderRadius.vertical(
           top: Radius.circular(16),
         ),
         child: DecoratedBox(
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.white,
             border: Border(
               bottom: BorderSide(
@@ -62,8 +62,8 @@ class SelectBottomSheet extends StatelessWidget {
             padding: const EdgeInsets.only(top: 8.0, left: 20.0, right: 20.0),
             child: Column(
               children: [
-                Text(
-                  "Chọn kiểu muốn gửi",
+                const Text(
+                  'Chọn kiểu muốn gửi',
                   style: TextStyle(
                     fontFamily: FontFamily.fontNunito,
                     fontWeight: FontWeight.bold,
@@ -75,12 +75,12 @@ class SelectBottomSheet extends StatelessWidget {
                   height: 10,
                 ),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.image,
                     color: Colors.green,
                     size: 30,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Ảnh',
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,
@@ -95,12 +95,12 @@ class SelectBottomSheet extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.videocam,
                     color: Colors.green,
                     size: 30,
                   ),
-                  title: Text(
+                  title: const Text(
                     'Video',
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,
@@ -115,12 +115,12 @@ class SelectBottomSheet extends StatelessWidget {
                   },
                 ),
                 ListTile(
-                  leading: Icon(
+                  leading: const Icon(
                     Icons.insert_drive_file,
                     color: Colors.green,
                     size: 30,
                   ),
-                  title: Text(
+                  title: const Text(
                     'File',
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,

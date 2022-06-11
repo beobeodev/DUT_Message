@@ -1,25 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-class TabNavigationBar extends StatelessWidget {
-  const TabNavigationBar({
-    required this.isOpenListTab,
-    required this.onTapListTab,
-    required this.onTapAddTab,
-  });
-
-  final bool isOpenListTab;
-  final void Function() onTapListTab;
-  final void Function() onTapAddTab;
+class TabNavigationBar extends GetView<FriendController> {
+  const TabNavigationBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final Size size = MediaQuery.of(context).size;
-
     return Container(
-      margin: EdgeInsets.only(top: 15, bottom: 30),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(30),
@@ -31,63 +22,47 @@ class TabNavigationBar extends StatelessWidget {
           ),
         ],
       ),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 10,
         vertical: 8,
       ),
       width: double.infinity,
-      height: ScreenUtil().setHeight(50),
+      height: 50.h,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-            onTap: onTapListTab,
-            child: AnimatedContainer(
-              decoration: BoxDecoration(
-                color: isOpenListTab ? Palette.metallicViolet : Colors.white,
-                borderRadius: BorderRadius.circular(60),
-              ),
-              curve: Curves.fastOutSlowIn,
-              duration: Duration(milliseconds: 400),
-              width: size.width / 2 - 40,
-              height: double.infinity,
-              child: Center(
-                child: Text(
-                  "Danh sách",
-                  style: TextStyle(
-                    color: !isOpenListTab ? Palette.crayolaBlue : Colors.white,
-                    fontSize: ScreenUtil().setSp(17),
-                    fontFamily: FontFamily.fontNunito,
-                    fontWeight: FontWeight.w700,
+        children: List.generate(2, (index) {
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                controller.onPressTab(index);
+              },
+              child: Obx(
+                () => AnimatedContainer(
+                  decoration: BoxDecoration(
+                    color: controller.currentTabIndex.value == index
+                        ? Palette.blue300
+                        : Colors.white,
+                    borderRadius: BorderRadius.circular(60),
+                  ),
+                  height: double.infinity,
+                  duration: const Duration(milliseconds: 200),
+                  child: Center(
+                    child: Text(
+                      index == 0 ? 'Danh sách' : 'Kết bạn',
+                      style: TextStyle(
+                        color: controller.currentTabIndex.value != index
+                            ? Palette.blue300
+                            : Colors.white,
+                        fontSize: ScreenUtil().setSp(17),
+                        fontFamily: FontFamily.fontNunito,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-          ),
-          GestureDetector(
-            onTap: onTapAddTab,
-            child: AnimatedContainer(
-              decoration: BoxDecoration(
-                color: !isOpenListTab ? Palette.crayolaBlue : Colors.white,
-                borderRadius: BorderRadius.circular(60),
-              ),
-              width: size.width / 2 - 40,
-              height: double.infinity,
-              duration: Duration(milliseconds: 400),
-              child: Center(
-                child: Text(
-                  "Kết bạn",
-                  style: TextStyle(
-                    color: isOpenListTab ? Palette.crayolaBlue : Colors.white,
-                    fontSize: ScreenUtil().setSp(17),
-                    fontFamily: FontFamily.fontNunito,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-              ),
-            ),
-          )
-        ],
+          );
+        }),
       ),
     );
   }

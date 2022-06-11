@@ -2,22 +2,29 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/data/models/custom_response.dart';
 import 'package:flutter_frontend/data/models/user.dart';
 import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
-import 'package:flutter_frontend/data/repositories/local_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
+import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
-  final LocalRepository localRepository = LocalRepository();
-  final UserRepository userRepository = UserRepository();
-  final FirebaseRepository firebaseRepository = FirebaseRepository();
+  final AuthController authController;
+  final RootController rootController;
+  final UserRepository userRepository;
+  final FirebaseRepository firebaseRepository;
+
+  ProfileController({
+    required this.authController,
+    required this.rootController,
+    required this.userRepository,
+    required this.firebaseRepository,
+  });
 
   final TextEditingController nameEditingController = TextEditingController();
   final TextEditingController emailEditingController = TextEditingController();
@@ -32,7 +39,7 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    currentUser = (localRepository.infoCurrentUser).obs;
+    currentUser = authController.currentUser!.obs;
 
     nameEditingController.text = currentUser.value.name;
     emailEditingController.text = currentUser.value.email;
@@ -40,17 +47,17 @@ class ProfileController extends GetxController {
   }
 
   String? validateName(String? value) {
-    if (value == "") {
-      return "Tên không được để trống";
+    if (value == '') {
+      return 'Tên không được để trống';
     }
     return null;
   }
 
   String? validateEmail(String? value) {
-    if (value == "") {
-      return "Email không dược để trống";
+    if (value == '') {
+      return 'Email không dược để trống';
     } else if (!value!.isEmail) {
-      return "Không đúng định dạng email";
+      return 'Không đúng định dạng email';
     }
     return null;
   }
@@ -85,17 +92,17 @@ class ProfileController extends GetxController {
     if (!profileFormKey.currentState!.validate()) {
       return;
     } else {
-      Timer? _timer;
+      Timer? timer;
 
       isLoading.value = true;
-      final CustomResponse customResponse =
-          await userRepository.updateProfile(currentUser.value);
+
+      await userRepository.updateProfile(currentUser.value);
       isLoading.value = false;
       if (true) {
         await showDialog(
           context: Get.context!,
           builder: (BuildContext builderContext) {
-            _timer = Timer(Duration(milliseconds: 600), () {
+            timer = Timer(const Duration(milliseconds: 600), () {
               Get.back();
             });
 
@@ -114,11 +121,11 @@ class ProfileController extends GetxController {
                     color: Colors.green,
                     size: ScreenUtil().setSp(72),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 20,
                   ),
                   Text(
-                    "Thành công!",
+                    'Thành công!',
                     style: TextStyle(
                       fontFamily: FontFamily.fontNunito,
                       color: Palette.zodiacBlue,
@@ -132,12 +139,12 @@ class ProfileController extends GetxController {
             );
           },
         ).then((val) {
-          if (_timer!.isActive) {
-            _timer!.cancel();
+          if (timer!.isActive) {
+            timer!.cancel();
           }
         });
         isUpdate.value = false;
-        await localRepository.setCurrentUser(currentUser.value.toMap());
+        await authController.setCurrentUser(currentUser.value);
       }
     }
   }

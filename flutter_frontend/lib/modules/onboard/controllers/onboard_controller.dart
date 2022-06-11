@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
-import 'package:flutter_frontend/core/router/router.dart';
-import 'package:flutter_frontend/data/repositories/local_repository.dart';
+import 'package:flutter_frontend/core/router/route_manager.dart';
+import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 import 'package:get/get.dart';
 
 class OnboardController extends GetxController {
-  final LocalRepository localRepository = LocalRepository();
+  final HiveLocalRepository localRepository = HiveLocalRepository();
 
   //This is list data include of imagepath, title, content in onboard screen
   final List<Map<String, String>> pageData = [
@@ -57,8 +57,8 @@ class OnboardController extends GetxController {
   }
 
   //This function to skip intro
-  void onSkip() {
+  Future<void> onSkip() async {
     localRepository.setNewUser();
-    Get.offAllNamed(GetRouter.login);
+    Get.offAllNamed(RouteManager.login);
   }
 }

@@ -12,7 +12,7 @@ class CustomTextFormField extends StatelessWidget {
     this.textEditingController,
     this.borderRadius = 6,
     this.hintText = '',
-    this.borderColor = Palette.celticBlue,
+    this.borderColor = Palette.blue100,
     this.suffixIconWidget,
     this.prefixIconWidget,
     this.fillColor = Colors.white,
@@ -45,7 +45,7 @@ class CustomTextFormField extends StatelessWidget {
         if (label == '')
           Text(
             label,
-            style: TextStyle(
+            style: const TextStyle(
               fontFamily: FontFamily.fontPoppins,
             ),
           ),
@@ -88,21 +88,21 @@ class CustomTextFormField extends StatelessWidget {
               ),
               errorBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(6),
-                borderSide: BorderSide(
+                borderSide: const BorderSide(
                   color: Colors.red,
                   width: 0.5,
                 ),
               ),
-              hintStyle: TextStyle(
+              hintStyle: const TextStyle(
                 fontFamily: FontFamily.fontPoppins,
                 color: Color(0xFFd1c4df),
                 fontSize: 14,
               ),
               fillColor: fillColor,
               filled: true,
-              contentPadding: EdgeInsets.only(left: 14),
-              helperText: "",
-              errorText: (errorText == "") ? null : errorText,
+              contentPadding: const EdgeInsets.only(left: 14),
+              helperText: '',
+              errorText: (errorText == '') ? null : errorText,
               suffixIcon: suffixIconWidget,
               prefixIcon: prefixIconWidget,
             ),

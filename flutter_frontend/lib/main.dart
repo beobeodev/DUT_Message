@@ -2,8 +2,10 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_downloader/flutter_downloader.dart';
-import 'package:flutter_frontend/core/router/router.dart';
+import 'package:flutter_frontend/core/router/route_manager.dart';
+import 'package:flutter_frontend/generated/locales.g.dart';
 import 'package:flutter_frontend/injector.dart';
+import 'package:flutter_frontend/modules/base/bindings/base.binding.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -24,15 +26,19 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: Size(375, 812),
+      designSize: const Size(375, 812),
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           title: 'DUT Message',
-          getPages: GetRouter.pages,
-          initialRoute: GetRouter.splash,
+          getPages: RouteManager.pages,
+          initialRoute: RouteManager.splash,
+          initialBinding: BaseBinding(),
+          translationsKeys: AppTranslation.translations,
+          fallbackLocale: const Locale('vi', 'VN'),
+          locale: Get.deviceLocale,
         );
       },
     );

@@ -4,7 +4,7 @@ import 'package:async/async.dart';
 class LoadingDot extends StatefulWidget {
   final double size;
 
-  const LoadingDot({Key? key, this.size = 30}) : super(key: key);
+  const LoadingDot({Key? key, this.size = 20}) : super(key: key);
 
   @override
   _LoadingDotState createState() => _LoadingDotState();

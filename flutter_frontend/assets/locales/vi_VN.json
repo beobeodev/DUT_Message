@@ -1,0 +1,11 @@
+{
+  "text": {
+    "username": "Tên đăng nhập",
+    "password": "Mật khẩu",
+    "warning": "Cảnh báo",
+    "login": "Đăng nhập"
+  },
+  "error": {
+    "incorrect_ip_password": "Sai tên đăng nhập hoặc mật khẩu"
+  }
+}

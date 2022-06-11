@@ -1,0 +1,11 @@
+{
+  "text": {
+    "username": "Username",
+    "password": "Password",
+    "warning": "Warning",
+    "login": "Login"
+  },
+  "error": {
+    "incorrect_ip_password": "Incorrect username or password"
+  }
+}

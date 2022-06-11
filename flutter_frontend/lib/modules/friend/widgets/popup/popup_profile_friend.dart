@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/modules/friend/controllers/friend_controller.dart';
+import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';
 import 'package:flutter_frontend/core/constants/enum.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
@@ -9,40 +10,34 @@ import 'package:flutter_frontend/modules/friend/widgets/popup/is_friend_content.
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
-class PopUpProfileFriend extends StatelessWidget {
-  final String imageURL;
-  final String name;
-  // id's friend
-  final String friendId;
-  final FriendController friendController;
+class PopUpProfileFriend extends GetView<FriendController> {
+  final User infoFriend;
   final AddFriendStatus addFriendStatus;
 
   const PopUpProfileFriend({
-    required this.imageURL,
-    required this.name,
-    required this.friendId,
-    required this.friendController,
+    Key? key,
+    required this.infoFriend,
     required this.addFriendStatus,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Hero(
-      tag: "profile",
+      tag: 'profile',
       child: Material(
         color: Colors.white,
         borderRadius: BorderRadius.circular(8),
         child: SizedBox(
-          width: ScreenUtil().screenWidth / 2 + 100,
-          height: ScreenUtil().screenHeight / 2 - 120,
+          width: Get.width / 2 + 100,
+          height: Get.height / 2 - 120,
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                  imageURL == ""
-                      ? "https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png"
-                      : imageURL,
+                  infoFriend.avatar == ''
+                      ? 'https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png'
+                      : infoFriend.avatar,
                 ),
                 radius: 50,
               ),
@@ -50,7 +45,7 @@ class PopUpProfileFriend extends StatelessWidget {
                 height: ScreenUtil().setHeight(20),
               ),
               Text(
-                name,
+                infoFriend.name,
                 style: TextStyle(
                   fontFamily: FontFamily.fontNunito,
                   color: Palette.zodiacBlue,
@@ -62,20 +57,20 @@ class PopUpProfileFriend extends StatelessWidget {
               if (addFriendStatus == AddFriendStatus.isFriend)
                 IsFriendContent(
                   onPressButtonChat: () {
-                    friendController.onPressButtonChat(friendId);
+                    // friendController.onPressButtonChat(friendId);
                   },
-                  onPressCancelFriend: () {
-                    friendController.onPressCancelFriend(friendId);
+                  onTapButtonCancelFriend: () {
+                    controller.onTapButtonCancelFriend(infoFriend.id);
                   },
                 )
               else if (addFriendStatus ==
                   AddFriendStatus.haveSendAddFriendRequest)
-                HaveSendContent()
+                const HaveSendContent()
               else if (addFriendStatus ==
                   AddFriendStatus.haveReceiveAddFriendRequest)
                 HaveReceiveContent(
                   onTapAccept: () {
-                    friendController.onTapAcceptAddFriendRequest(friendId);
+                    // friendController.onTapAcceptAddFriendRequest(friendId);
                     Get.back();
                   },
                 )
@@ -85,12 +80,14 @@ class PopUpProfileFriend extends StatelessWidget {
                   child: TextButton(
                     style: TextButton.styleFrom(
                       primary: Colors.white,
-                      backgroundColor: Color(0xFF3570EC),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                      backgroundColor: const Color(0xFF3570EC),
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 15,
+                        vertical: 10,
+                      ),
                     ),
                     onPressed: () {
-                      friendController.onPressAddFriend(friendId);
+                      controller.onTapButtonAddFriend(infoFriend.id);
                     },
                     child: Text(
                       'Kết bạn',

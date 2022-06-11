@@ -27,7 +27,7 @@ class OnboardScreen extends StatelessWidget {
                 alignment: Alignment.centerRight,
                 child: DecoratedBox(
                   decoration: BoxDecoration(
-                    color: Palette.orangeRed,
+                    color: Palette.red200,
                     borderRadius: BorderRadius.circular(8.0),
                   ),
                   child: GestureDetector(
@@ -39,7 +39,7 @@ class OnboardScreen extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(
-                            "Skip",
+                            'Skip',
                             style: TextStyle(
                               fontSize: ScreenUtil().setSp(20),
                               color: Colors.white,
@@ -91,13 +91,13 @@ class OnboardScreen extends StatelessWidget {
                             : onboardController.onBackPage,
                         child: DecoratedBox(
                           decoration: BoxDecoration(
-                            color: Palette.americanSilver,
+                            color: Palette.gray300,
                             borderRadius: BorderRadius.circular(50),
                           ),
                           child: SizedBox(
                             width: ScreenUtil().setWidth(50),
                             height: ScreenUtil().setWidth(50),
-                            child: Icon(
+                            child: const Icon(
                               FontAwesomeIcons.arrowLeft,
                               color: Colors.white,
                             ),
@@ -114,13 +114,13 @@ class OnboardScreen extends StatelessWidget {
                           : onboardController.onSkip,
                       child: DecoratedBox(
                         decoration: BoxDecoration(
-                          color: Palette.orangeRed,
+                          color: Palette.red200,
                           borderRadius: BorderRadius.circular(50),
                         ),
                         child: SizedBox(
                           width: ScreenUtil().setWidth(50),
                           height: ScreenUtil().setWidth(50),
-                          child: Icon(
+                          child: const Icon(
                             FontAwesomeIcons.arrowRight,
                             color: Colors.white,
                           ),

@@ -1,6 +1,6 @@
 import 'package:http/http.dart' as http;
 
-class HttpProvider {
+abstract class HttpProvider {
   static Future<http.Response> getRequest(
     String apiLink, {
     Map<String, String> header = const <String, String>{},

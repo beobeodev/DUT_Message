@@ -16,7 +16,7 @@ class HaveReceiveContent extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Đã gửi lời mời đến bạn",
+            'Đã gửi lời mời đến bạn',
             style: TextStyle(
               fontFamily: FontFamily.fontNunito,
               color: Palette.zodiacBlue,
@@ -34,8 +34,9 @@ class HaveReceiveContent extends StatelessWidget {
               TextButton(
                 style: TextButton.styleFrom(
                   primary: Colors.white,
-                  backgroundColor: Palette.sweetRed,
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  backgroundColor: Palette.red100,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
                 onPressed: () {},
                 child: Text(
@@ -52,8 +53,9 @@ class HaveReceiveContent extends StatelessWidget {
               TextButton(
                 style: TextButton.styleFrom(
                   primary: Colors.white,
-                  backgroundColor: Color(0xFF3570EC),
-                  padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+                  backgroundColor: const Color(0xFF3570EC),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
                 ),
                 onPressed: onTapAccept,
                 child: Text(

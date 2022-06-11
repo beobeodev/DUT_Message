@@ -13,7 +13,7 @@ class HaveSendContent extends StatelessWidget {
       child: Column(
         children: [
           Text(
-            "Bạn đã gửi lời mời kết ",
+            'Bạn đã gửi lời mời kết ',
             style: TextStyle(
               fontFamily: FontFamily.fontNunito,
               color: Palette.zodiacBlue,
@@ -28,8 +28,8 @@ class HaveSendContent extends StatelessWidget {
           TextButton(
             style: TextButton.styleFrom(
               primary: Colors.white,
-              backgroundColor: Palette.sweetRed,
-              padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+              backgroundColor: Palette.red100,
+              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
             ),
             onPressed: () {},
             child: Text(

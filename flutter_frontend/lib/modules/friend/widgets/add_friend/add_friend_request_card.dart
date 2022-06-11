@@ -4,18 +4,19 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class RequestAddFriendCard extends StatelessWidget {
+class AddFriendRequestCard extends StatelessWidget {
   final String avatar;
   final String name;
   final void Function() onTapAccept;
   final void Function() onTapRefuse;
 
-  const RequestAddFriendCard({
+  const AddFriendRequestCard({
+    Key? key,
     required this.avatar,
     required this.name,
     required this.onTapAccept,
     required this.onTapRefuse,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,14 +24,14 @@ class RequestAddFriendCard extends StatelessWidget {
       // margin: EdgeInsets.only(top: 10.0),
       decoration: BoxDecoration(
         border: Border.all(
-          color: Palette.crayolaBlue,
+          color: Palette.blue200,
         ),
         color: Colors.white,
         borderRadius: BorderRadius.circular(10),
       ),
       width: double.infinity,
       height: ScreenUtil().setHeight(55),
-      padding: EdgeInsets.symmetric(
+      padding: const EdgeInsets.symmetric(
         horizontal: 10,
       ),
       child: Row(
@@ -59,14 +60,14 @@ class RequestAddFriendCard extends StatelessWidget {
           IconButton(
             onPressed: onTapRefuse,
             color: Colors.red,
-            icon: Icon(
+            icon: const Icon(
               FontAwesomeIcons.times,
             ),
           ),
           IconButton(
             onPressed: onTapAccept,
             color: Colors.green,
-            icon: Icon(
+            icon: const Icon(
               FontAwesomeIcons.check,
             ),
           )
