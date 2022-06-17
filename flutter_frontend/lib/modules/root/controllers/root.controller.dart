@@ -1,14 +1,12 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:socket_io_client/socket_io_client.dart' as io;
 
 class RootController extends GetxController {
@@ -26,7 +24,7 @@ class RootController extends GetxController {
 
   final RxInt currentIndexPage = 0.obs;
 
-  late User currentUser;
+  late UserModel currentUser;
 
   //This list to store title and icon of menu item
   final List<Map<String, dynamic>> listMenuItem = [
@@ -67,7 +65,7 @@ class RootController extends GetxController {
         log('HAS CONNECTED to socket');
       });
     } catch (e) {
-      log(e.toString());
+      log('Error in setUpSocket from RootController: ${e.toString()}');
       rethrow;
     }
   }
@@ -99,24 +97,24 @@ class RootController extends GetxController {
     Get.offAllNamed(RouteManager.login);
   }
 
-  Future<void> onPressFacebookButton() async {
-    String fbProtocolUrl;
-    if (Platform.isIOS) {
-      fbProtocolUrl = 'fb://profile/145408438926727';
-    } else {
-      fbProtocolUrl = 'fb://page/145408438926727';
-    }
+  // Future<void> onPressFacebookButton() async {
+  //   String fbProtocolUrl;
+  //   if (Platform.isIOS) {
+  //     fbProtocolUrl = 'fb://profile/145408438926727';
+  //   } else {
+  //     fbProtocolUrl = 'fb://page/145408438926727';
+  //   }
 
-    const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
+  //   const String fallbackUrl = 'https://www.facebook.com/bachkhoaDUT';
 
-    try {
-      final bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
+  //   try {
+  //     final bool launched = await launch(fbProtocolUrl, forceSafariVC: false);
 
-      if (!launched) {
-        await launch(fallbackUrl, forceSafariVC: false);
-      }
-    } catch (e) {
-      await launch(fallbackUrl, forceSafariVC: false);
-    }
-  }
+  //     if (!launched) {
+  //       await launch(fallbackUrl, forceSafariVC: false);
+  //     }
+  //   } catch (e) {
+  //     await launch(fallbackUrl, forceSafariVC: false);
+  //   }
+  // }
 }

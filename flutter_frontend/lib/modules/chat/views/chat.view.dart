@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/data/models/message.model.dart';
 import 'package:flutter_frontend/modules/chat/controllers/chat.controller.dart';
-import 'package:flutter_frontend/modules/chat/widgets/app_bar_chat.widget.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/app_bar_chat.widget.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/chat/widgets/bottom_chat.widget.dart';
-import 'package:flutter_frontend/modules/chat/widgets/chat_item/chat_item.widget.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/bottom_chat.widget.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/chat_item/chat_item.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -22,11 +22,11 @@ class ChatScreen extends GetView<ChatController> {
           Expanded(
             child: Obx(
               () => ListView.builder(
-                controller: controller.scrollController,
+                controller: controller.messageScrollController,
                 padding: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
                 itemCount: controller.currentConversation.messages.length,
                 itemBuilder: (context, index) {
-                  final Message currentMessage =
+                  final MessageModel currentMessage =
                       controller.currentConversation.messages[index];
                   final bool isSender = currentMessage.author.id ==
                       controller.authController.currentUser!.id;
@@ -39,7 +39,7 @@ class ChatScreen extends GetView<ChatController> {
                           controller.authController.currentUser!.id ==
                                   currentMessage.author.id
                               ? 'Bạn đã tạo nhóm này'
-                              : currentMessage.content,
+                              : currentMessage.realContent,
                           style: TextStyle(
                             fontSize: ScreenUtil().setSp(13),
                             color: Palette.zodiacBlue,

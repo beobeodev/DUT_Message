@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enums/request_status.enum.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
@@ -21,48 +22,50 @@ class ListConversation extends GetView<HomeController> {
             topRight: Radius.circular(60.0),
           ),
         ),
-        child: FutureBuilder(
-          future: controller.getData(),
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.waiting) {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            } else if (snapshot.hasError) {
-              return const Center(
-                child: Text('Lỗi'),
-              );
-            } else if (snapshot.connectionState == ConnectionState.done) {
-              return Obx(
-                () => ListView.builder(
-                  itemCount: controller.conversations.length,
-                  padding: const EdgeInsets.only(
-                    left: 20,
-                    right: 20,
-                    top: 30,
-                  ),
-                  itemBuilder: (context, index) {
-                    final ConversationModel currentConversation =
-                        controller.conversations[index];
-                    if (currentConversation.messages.isNotEmpty) {
-                      return ConversationItem(
-                        currentConversation: currentConversation,
-                        onTap: () {
-                          controller
-                              .onTapConversationItem(currentConversation.id);
-                        },
-                      );
-                    } else {
-                      return const SizedBox();
-                    }
-                  },
-                ),
-              );
-            }
-            return const SizedBox();
-          },
-        ),
+        child: Obx(() {
+          return _buildGetConversations();
+        }),
       ),
     );
+  }
+
+  Widget _buildGetConversations() {
+    switch (controller.getConversationsStatus) {
+      case RequestStatus.loading:
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      case RequestStatus.hasData:
+        return Obx(
+          () => ListView.builder(
+            itemCount: controller.conversations.length,
+            padding: const EdgeInsets.only(
+              left: 20,
+              right: 20,
+              top: 30,
+            ),
+            itemBuilder: (context, index) {
+              final ConversationModel currentConversation =
+                  controller.conversations[index];
+              if (currentConversation.messages.isNotEmpty) {
+                return ConversationItem(
+                  currentConversation: currentConversation,
+                  onTap: () {
+                    controller.onTapConversationItem(currentConversation.id);
+                  },
+                );
+              } else {
+                return const SizedBox();
+              }
+            },
+          ),
+        );
+      case RequestStatus.hasError:
+        return const Center(
+          child: Text('Lỗi không thể lấy dữ liệu'),
+        );
+      default:
+        return const SizedBox();
+    }
   }
 }

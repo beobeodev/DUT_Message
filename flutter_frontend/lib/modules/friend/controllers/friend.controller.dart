@@ -8,10 +8,10 @@ import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/friend/widgets/popup/popup_profile_friend.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
-import 'package:flutter_frontend/core/constants/enum.dart';
+import 'package:flutter_frontend/core/constants/enums/add_friend_status.enum.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
-import 'package:flutter_frontend/data/models/friend_request.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/friend_request.model.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:get/get.dart';
@@ -37,22 +37,40 @@ class FriendController extends GetxController {
 
   final RxInt currentTabIndex = 0.obs;
 
-  final RxList<FriendRequest> addFriendRequests = <FriendRequest>[].obs;
-  final RxList<User> friends = <User>[].obs;
-  final RxList<User> filteredFriends = <User>[].obs;
+  final RxList<FriendRequestModel> addFriendRequests =
+      <FriendRequestModel>[].obs;
+  final RxList<UserModel> friends = <UserModel>[].obs;
+  final RxList<UserModel> filteredFriends = <UserModel>[].obs;
+
+  Future<void> getData() async {
+    try {
+      friends.value = await userRepository.getFriends();
+      filteredFriends.value = friends;
+      addFriendRequests.value = await userRepository.getAddFriendRequests();
+
+      listenChangeOfFriends();
+      onReceiveAddFriendRequest();
+      onNotifyAcceptAddFriendRequest();
+      onRemoveFriendRequest();
+      onReceiveCancelFriend();
+    } on DioError catch (dioError) {
+      log('Error in getData() from Friend Controller: ${dioError.response.toString()}');
+    } catch (e) {
+      log('Error in getData() from Friend Controller: ${e.toString()}');
+      rethrow;
+    }
+  }
 
   void onReceiveAddFriendRequest() {
     try {
       final String currentUserId = authController.currentUser!.id;
       rootController.socket.on(SocketEvent.receiveAddFriendRequest, (data) {
-        final FriendRequest friendRequest = FriendRequest(
+        final FriendRequestModel friendRequest = FriendRequestModel(
           friendRequestId: data['_id'],
           fromId: data['from']['_id'],
           toId: currentUserId,
           name: data['from']['name'],
-          avatar: data['from']['avatar'] == ''
-              ? 'https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png'
-              : data['from']['avatar'],
+          avatar: data['from']['avatar'],
         );
         addFriendRequests.add(friendRequest);
       });
@@ -65,7 +83,7 @@ class FriendController extends GetxController {
     try {
       rootController.socket.on(SocketEvent.notifyAcceptAddFriendRequest,
           (data) {
-        final User user = User.fromJson(data['infoFriend']);
+        final UserModel user = UserModel.fromJson(data['infoFriend']);
         final ConversationModel conversation =
             ConversationModel.fromJson(data['conver']);
         homeController.conversations.add(conversation);
@@ -73,16 +91,6 @@ class FriendController extends GetxController {
       });
     } catch (e) {
       log('Error in notifyAcceptAddFriendRequest() $e');
-    }
-  }
-
-  void onReceiveCancelFriend() {
-    try {
-      rootController.socket.on(SocketEvent.receiveCancelFriend, (data) {
-        friends.removeWhere((element) => element.id == data);
-      });
-    } catch (e) {
-      log('Error in onReceiveCancelFriend() $e');
     }
   }
 
@@ -97,28 +105,20 @@ class FriendController extends GetxController {
     }
   }
 
-  void listenChangeOfListFriend() {
+  void onReceiveCancelFriend() {
+    try {
+      rootController.socket.on(SocketEvent.receiveCancelFriend, (data) {
+        friends.removeWhere((element) => element.id == data);
+      });
+    } catch (e) {
+      log('Error in onReceiveCancelFriend() $e');
+    }
+  }
+
+  void listenChangeOfFriends() {
     friends.listen((p0) {
       filteredFriends.value = p0;
     });
-  }
-
-  Future<void> getData() async {
-    try {
-      friends.value = await userRepository.getFriends();
-      filteredFriends.value = friends;
-      addFriendRequests.value = await userRepository.getAddFriendRequests();
-
-      listenChangeOfListFriend();
-      onReceiveAddFriendRequest();
-      onNotifyAcceptAddFriendRequest();
-      onRemoveFriendRequest();
-      onReceiveCancelFriend();
-    } on DioError catch (dioError) {
-      log(dioError.response.toString());
-    } catch (e) {
-      log(e.toString());
-    }
   }
 
   void onPressTab(int index) {
@@ -147,11 +147,12 @@ class FriendController extends GetxController {
       return;
     } else {
       try {
-        final User searchedUser =
+        final UserModel searchedUser =
             await userRepository.getUserByPhoneNumber(phoneTextController.text);
         await showPopup(searchedUser);
       } on DioError catch (dioError) {
-        log(dioError.toString());
+        log('Error in onTapButtonFind() from Friend Controller: ${dioError.toString()}');
+
         if (dioError.response?.statusCode == 404) {
           errorPhoneNumber.value = 'Số điện thoại này chưa được đăng ký';
         }
@@ -159,7 +160,7 @@ class FriendController extends GetxController {
     }
   }
 
-  Future<void> showPopup(User searchedUser) async {
+  Future<void> showPopup(UserModel searchedUser) async {
     final Map<String, dynamic> responseCheckAddFriendRequest =
         await userRepository.checkAddFriendRequest(searchedUser.id);
 

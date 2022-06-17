@@ -4,30 +4,39 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 
 class RoundedTextFormField extends StatelessWidget {
   final TextEditingController? textController;
-  final String? Function(String?)? validator;
+
   final bool isObscure;
+
   final String? hintText;
   final String? errorText;
+
   final double borderRadius;
+
   final Color borderColor;
-  final Widget? suffixIconWidget;
-  final Widget? prefixIconWidget;
+  final Color fillColor;
+
+  final Widget? suffixIcon;
+  final Widget? prefixIcon;
+
   final TextInputType? keyboardType;
+
+  final String? Function(String?)? validator;
   final void Function()? onTap;
   final void Function(String)? onChanged;
 
   const RoundedTextFormField({
     Key? key,
     this.textController,
-    this.validator,
     this.isObscure = false,
     this.hintText,
     this.errorText,
     this.borderRadius = 6,
     this.borderColor = Palette.blue200,
-    this.suffixIconWidget,
-    this.prefixIconWidget,
+    this.fillColor = Colors.white,
+    this.suffixIcon,
+    this.prefixIcon,
     this.keyboardType,
+    this.validator,
     this.onTap,
     this.onChanged,
   }) : super(key: key);
@@ -78,11 +87,11 @@ class RoundedTextFormField extends StatelessWidget {
           color: Palette.gray300,
           fontSize: 14,
         ),
-        fillColor: Colors.white,
+        fillColor: fillColor,
         filled: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-        suffixIcon: suffixIconWidget,
-        prefixIcon: prefixIconWidget,
+        suffixIcon: suffixIcon,
+        prefixIcon: prefixIcon,
         errorText: errorText == '' || errorText == null ? null : errorText,
       ),
     );

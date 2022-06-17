@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enums/message_type.enum.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/data/models/message.model.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class ConversationItem extends GetView<HomeController> {
   }) : super(key: key);
 
   String getConversationAvatar() {
-    final User friend = currentConversation.userIns.firstWhere(
+    final UserModel friend = currentConversation.userIns.firstWhere(
       (element) => controller.authController.currentUser!.id != element.id,
     );
     String conversationAvatar = friend.avatar;
@@ -30,7 +31,7 @@ class ConversationItem extends GetView<HomeController> {
   }
 
   String getConversationName() {
-    final User friend = currentConversation.userIns.firstWhere(
+    final UserModel friend = currentConversation.userIns.firstWhere(
       (element) => controller.authController.currentUser!.id != element.id,
     );
 
@@ -44,11 +45,11 @@ class ConversationItem extends GetView<HomeController> {
   }
 
   String getLastContentMessage() {
-    final Message lastMessage = currentConversation.lastMessage;
+    final MessageModel lastMessage = currentConversation.lastMessage;
 
-    String lastText = 'Bạn: ${lastMessage.content}';
+    String lastText = 'Bạn: ${lastMessage.realContent}';
     if (lastMessage.author.id == controller.authController.currentUser!.id) {
-      if (lastMessage.isImage) {
+      if (lastMessage.messageType != MessageType.text) {
         lastText = 'Bạn đã gửi một tệp đính kèm';
       } else if (currentConversation.messageLength == 1 &&
           currentConversation.isRoom) {
@@ -56,24 +57,24 @@ class ConversationItem extends GetView<HomeController> {
       } else if (lastMessage.isDeleted) {
         lastText = 'Bạn đã gỡ một tin nhắn';
       } else {
-        lastText = 'Bạn: ${lastMessage.content}';
+        lastText = 'Bạn: ${lastMessage.realContent}';
       }
     } else {
       if (currentConversation.isRoom) {
-        if (lastMessage.isImage) {
+        if (lastMessage.messageType != MessageType.text) {
           lastText = '${lastMessage.author.name}: đã gửi một tệp đính kèm';
         } else if (currentConversation.messageLength == 1) {
           lastText = '${lastMessage.author.name} đã tạo nhóm này';
         } else if (lastMessage.isDeleted) {
           lastText = '${lastMessage.author.name}: đã gỡ một tin nhắn';
         } else {
-          lastText = '${lastMessage.author.name}: ${lastMessage.content}';
+          lastText = '${lastMessage.author.name}: ${lastMessage.realContent}';
         }
       } else {
-        if (lastMessage.isImage) {
+        if (lastMessage.messageType != MessageType.text) {
           lastText = 'Đã gửi một tệp đính kèm';
         } else {
-          lastText = lastMessage.content;
+          lastText = lastMessage.realContent;
         }
       }
     }

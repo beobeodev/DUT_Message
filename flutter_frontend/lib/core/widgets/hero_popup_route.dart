@@ -11,27 +11,21 @@ class HeroPopupRoute<T> extends PageRoute<T> {
         super(settings: settings, fullscreenDialog: fullscreenDialog);
 
   @override
-  // TODO: implement opaque
   bool get opaque => false;
 
   @override
-  // TODO: implement barrierDismissible
   bool get barrierDismissible => true;
 
   @override
-  // TODO: implement barrierColor
   Color get barrierColor => Colors.black54;
 
   @override
-  // TODO: implement barrierLabel
-  String get barrierLabel => "Popup route open";
+  String get barrierLabel => 'Popup route open';
 
   @override
-  // TODO: implement maintainState
   bool get maintainState => true;
 
   @override
-  // TODO: implement transitionDuration
   Duration get transitionDuration => const Duration(milliseconds: 100);
 
   @override

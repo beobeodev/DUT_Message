@@ -1,7 +1,10 @@
 {
   "text": {
+    "name": "Name",
     "username": "Username",
+    "phone": "Phone number",
     "password": "Password",
+    "confirm_password": "Confirm password",
     "warning": "Warning",
     "login": "Login"
   },

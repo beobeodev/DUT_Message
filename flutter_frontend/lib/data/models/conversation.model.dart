@@ -1,12 +1,12 @@
 import 'package:flutter_frontend/data/models/message.model.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 
 class ConversationModel {
   String id;
   String name;
   String avatarRoom;
-  List<User> userIns;
-  List<Message> messages;
+  List<UserModel> userIns;
+  List<MessageModel> messages;
   bool isRoom;
 
   ConversationModel({
@@ -14,23 +14,23 @@ class ConversationModel {
     this.name = '',
     this.avatarRoom = '',
     this.userIns = const [],
-    this.messages = const <Message>[],
+    this.messages = const <MessageModel>[],
     this.isRoom = false,
   });
 
-  Message get lastMessage => messages.last;
+  MessageModel get lastMessage => messages.last;
   int get messageLength => messages.length;
 
   factory ConversationModel.fromJson(Map<String, dynamic> json) =>
       ConversationModel(
         id: json['_id'],
-        userIns: List<User>.from(
+        userIns: List<UserModel>.from(
           (json['userIns'] as List<dynamic>)
-              .map((e) => User.fromJson(e['userIn'])),
+              .map((e) => UserModel.fromJson(e['userIn'])),
         ).toList(),
-        messages: List<Message>.from(
+        messages: List<MessageModel>.from(
           (json['list_message'] as List<dynamic>)
-              .map((e) => Message.fromJson(e)),
+              .map((e) => MessageModel.fromJson(e)),
         ).toList(),
       );
 
@@ -39,12 +39,13 @@ class ConversationModel {
         id: json['_id'],
         name: json['name'],
         avatarRoom: json['avatar'],
-        userIns: List<User>.from(
-          (json['members'] as List<dynamic>).map((e) => User.fromJsonRoom(e)),
+        userIns: List<UserModel>.from(
+          (json['members'] as List<dynamic>)
+              .map((e) => UserModel.fromJson(e['member'])),
         ).toList(),
-        messages: List<Message>.from(
+        messages: List<MessageModel>.from(
           (json['list_message'] as List<dynamic>)
-              .map((e) => Message.fromJson(e)),
+              .map((e) => MessageModel.fromJson(e)),
         ).toList(),
         isRoom: true,
       );

@@ -2,7 +2,7 @@ import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/injector.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
-import 'package:flutter_frontend/modules/profile/controllers/profile_controller.dart';
+import 'package:flutter_frontend/modules/profile/controllers/profile.controller.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:get/get.dart';
 

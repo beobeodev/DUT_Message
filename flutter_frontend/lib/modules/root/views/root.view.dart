@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
-import 'package:flutter_frontend/modules/root/widgets/build_page.dart';
-import 'package:flutter_frontend/modules/root/widgets/drawer_side.dart';
+import 'package:flutter_frontend/modules/root/widgets/build_page.widget.dart';
+import 'package:flutter_frontend/modules/root/widgets/drawer_side.widget.dart';
 import 'package:get/get.dart';
 
 class RootScreen extends StatelessWidget {

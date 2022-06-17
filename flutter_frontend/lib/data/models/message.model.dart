@@ -1,40 +1,45 @@
 import 'package:flutter_frontend/core/utils/encrypt_message.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 
-class Message {
+class MessageModel {
   String id;
-  User author;
+  UserModel author;
   String content;
-  String status;
-  bool isImage;
+  String messageType;
   bool isDeleted;
+  bool? isNotify;
   DateTime timeSend;
   List<String>? deleteBy;
 
-  Message({
+  MessageModel({
     required this.id,
     required this.author,
     required this.content,
-    required this.status,
-    this.isImage = false,
+    required this.messageType,
     this.isDeleted = false,
+    this.isNotify = false,
     required this.timeSend,
     this.deleteBy,
   });
 
-  factory Message.fromJson(Map<String, dynamic> json) {
-    String decryptMessage = json['content'].toString();
-    if (!json['content'].toString().contains(' ')) {
-      decryptMessage = EncryptMessage.decryptAES(json['content'].toString());
+  String get realContent {
+    if (isDeleted) {
+      return 'Đã gỡ tin nhắn';
     }
+    if (!content.contains(' ')) {
+      return EncryptMessage.decryptAES(content);
+    }
+    return content;
+  }
 
-    return Message(
-      id: json['_id'].toString(),
-      author: User.fromJson(json['author']),
-      content: decryptMessage,
-      status: json['status'].toString(),
-      isImage: json['isImg'] as bool,
+  factory MessageModel.fromJson(Map<String, dynamic> json) {
+    return MessageModel(
+      id: json['_id'] as String,
+      author: UserModel.fromJson(json['author']),
+      content: json['content'] as String,
+      messageType: json['message_type'] as String,
       isDeleted: json['deleted'] as bool,
+      isNotify: json['isNotify'] as bool?,
       timeSend: DateTime.parse(json['createdAt'].toString()).toLocal(),
       deleteBy: (json['deleteBy'] as List<dynamic>?)
           ?.map((dynamic x) => x.toString())
@@ -46,7 +51,6 @@ class Message {
         '_id': id,
         'author': author,
         'content': content,
-        'status': status,
         'createdAt': timeSend,
         'deleted_by': deleteBy,
       };

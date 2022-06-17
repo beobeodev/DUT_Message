@@ -11,14 +11,6 @@ void initDependencies() {
   getIt.registerLazySingleton(() => HiveLocalRepository());
   getIt.registerLazySingleton(() => AuthRepository());
   getIt.registerLazySingleton(() => FirebaseRepository());
-  getIt.registerLazySingleton(
-    () => ConversationRepository(
-      localRepository: getIt.get<HiveLocalRepository>(),
-    ),
-  );
-  getIt.registerLazySingleton(
-    () => UserRepository(
-      localRepository: getIt.get<HiveLocalRepository>(),
-    ),
-  );
+  getIt.registerLazySingleton(() => ConversationRepository());
+  getIt.registerLazySingleton(() => UserRepository());
 }

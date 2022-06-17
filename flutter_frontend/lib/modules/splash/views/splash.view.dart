@@ -3,7 +3,7 @@ import 'package:flutter_frontend/modules/splash/controllers/splash.controller.da
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/constants/image_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/splash/widgets/dut_message_logo.dart';
+import 'package:flutter_frontend/modules/splash/widgets/dut_message_logo.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -66,7 +66,7 @@ class SplashScreen extends GetView<SplashController> {
                 ],
               ),
             ),
-            DUTMessageLogo(),
+            const DUTMessageLogo(),
           ],
         ),
       ),

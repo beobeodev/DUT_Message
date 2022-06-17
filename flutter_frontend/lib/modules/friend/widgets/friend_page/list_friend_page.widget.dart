@@ -35,7 +35,7 @@ class ListFriendPage extends GetView<FriendController> {
                   hintText: 'Nhập tên cần tìm',
                   borderRadius: 50,
                   borderColor: Colors.white,
-                  suffixIconWidget: const Icon(
+                  suffixIcon: const Icon(
                     Icons.search,
                     color: Palette.red100,
                   ),

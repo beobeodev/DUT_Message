@@ -3,20 +3,17 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/auth.repository.dart';
-import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
   final AuthRepository authRepository;
-  final HiveLocalRepository localRepository;
   final AuthController authController;
 
   LoginController({
     required this.authRepository,
-    required this.localRepository,
     required this.authController,
   });
 
@@ -48,31 +45,16 @@ class LoginController extends GetxController {
   }
 
   void navigateToSignUpScreen() {
-    Get.toNamed(RouteManager.signUp);
+    Get.offAndToNamed(RouteManager.signUp);
   }
 
   Future<void> onTapLoginButton() async {
     errorText.value = '';
-    if (isLoading.value) {
-      return;
-    }
-    if (!loginFormKey.currentState!.validate()) {
+
+    if (isLoading.value || !loginFormKey.currentState!.validate()) {
       return;
     } else {
       isLoading.value = true;
-      // final CustomResponse response = await authRepository.login(
-      //   usernameEditingController.text,
-      //   passwordEditingController.text,
-      // );
-      // if (response.statusCode == 200) {
-      //   isLoading.value = false;
-      //   Get.offAllNamed(RouteManager.drawer);
-      // } else if (response.statusCode == 500) {
-      //   if (response.errorMaps!['errorPassword'] != null) {
-      //     isLoading.value = false;
-      //     errorText.value = 'Sai tên đăng nhập hoặc mật khẩu';
-      //   }
-      // }
       final Map<String, dynamic> formBody = {
         'username': usernameTextController.text,
         'password': passwordTextController.text
@@ -82,19 +64,21 @@ class LoginController extends GetxController {
         final Map<String, dynamic> rawData =
             await authRepository.login(formBody);
 
-        final User loggedUser = User.fromJson(rawData['user']);
-        await localRepository.setAllNewUserData(
+        final UserModel loggedUser = UserModel.fromJson(rawData['user']);
+        await authController.handleSuccessLogin(
+          loggedUser,
           rawData['accessToken'],
           rawData['refreshToken'],
-          loggedUser.toJson(),
         );
-        await authController.getAllUserData();
+
         Get.offAllNamed(RouteManager.drawer);
       } on DioError catch (dioError) {
-        log(dioError.response.toString());
+        log('Error in onTapLoginButton: ${dioError.response.toString()}');
+        if (dioError.response?.statusCode == 401) {
+          errorText.value = 'Sai tên đăng nhập hoặc mật khẩu';
+        }
       } catch (e) {
-        errorText.value = 'Sai tên đăng nhập hoặc mật khẩu';
-        log(e.toString());
+        log('Error in onTapLoginButton: ${e.toString()}');
       }
       isLoading.value = false;
     }

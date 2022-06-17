@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/router/route_manager.dart';
 import 'package:flutter_frontend/generated/locales.g.dart';
 import 'package:flutter_frontend/modules/login/controllers/login.controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
@@ -64,7 +65,27 @@ class LoginScreen extends GetView<LoginController> {
                   ),
                   const LoginForm(),
                   SizedBox(
-                    height: 30.h,
+                    height: 6.h,
+                  ),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      onTap: () {
+                        Get.offAndToNamed(RouteManager.forgotPassword);
+                      },
+                      child: Text(
+                        'Quên mật khẩu?',
+                        style: TextStyle(
+                          fontFamily: FontFamily.fontNunito,
+                          color: Palette.red200,
+                          fontSize: 15.sp,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: 20.h,
                   ),
                   Obx(
                     () => RoundedButton(

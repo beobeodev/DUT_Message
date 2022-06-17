@@ -18,7 +18,7 @@ class LoginForm extends GetView<LoginController> {
             RoundedTextFormField(
               textController: controller.usernameTextController,
               hintText: LocaleKeys.text_username.tr,
-              suffixIconWidget: const Icon(
+              suffixIcon: const Icon(
                 Icons.mail,
                 color: Palette.blue100,
               ),
@@ -30,7 +30,7 @@ class LoginForm extends GetView<LoginController> {
             RoundedTextFormField(
               textController: controller.passwordTextController,
               hintText: LocaleKeys.text_password.tr,
-              suffixIconWidget: GestureDetector(
+              suffixIcon: GestureDetector(
                 onTap: controller.onUpdateShowPassword,
                 child: Icon(
                   controller.showPassword.value

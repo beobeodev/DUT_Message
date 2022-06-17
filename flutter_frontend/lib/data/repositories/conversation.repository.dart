@@ -1,27 +1,21 @@
+import 'package:flutter_frontend/core/utils/authorization.util.dart';
 import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/data/models/message.model.dart';
-import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 // import 'package:http/http.dart' as http;
 
 class ConversationRepository {
-  final HiveLocalRepository localRepository;
-
   // late List<ConversationModel> listConversation;
   // late List<ConversationModel> listRoom;
   // late List<ConversationModel> listConversationAndRoom;
 
-  ConversationRepository({required this.localRepository});
+  ConversationRepository();
 
   Future<List<ConversationModel>> getFriendConversations() async {
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
-    };
-
-    final List<dynamic> rawData =
-        await DioProvider.get(url: '/conversation', headers: header);
+    final List<dynamic> rawData = await DioProvider.get(
+      url: '/conversation',
+      headers: AuthorizationUtil.header,
+    );
 
     final List<ConversationModel> result =
         rawData.map((e) => ConversationModel.fromJson(e)).toList();
@@ -29,14 +23,8 @@ class ConversationRepository {
   }
 
   Future<List<ConversationModel>> getRoomConversations() async {
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
-    };
-
     final List<dynamic> rawData =
-        await DioProvider.get(url: '/room', headers: header);
+        await DioProvider.get(url: '/room', headers: AuthorizationUtil.header);
 
     final List<ConversationModel> result =
         rawData.map((e) => ConversationModel.fromJsonRoom(e)).toList();
@@ -60,8 +48,8 @@ class ConversationRepository {
     ];
 
     allConversationTemps.sort((b, a) {
-      final Message messagePrevious = a.messages.last;
-      final Message messageAfter = b.messages.last;
+      final MessageModel messagePrevious = a.messages.last;
+      final MessageModel messageAfter = b.messages.last;
       return messagePrevious.timeSend.compareTo(messageAfter.timeSend);
     });
 

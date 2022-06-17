@@ -1,4 +1,5 @@
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/core/utils/authorization.util.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 import 'package:get/get.dart';
 
@@ -9,23 +10,49 @@ class AuthController extends GetxController {
 
   String? accessToken;
   String? refreshToken;
-  User? currentUser;
+  UserModel? currentUser;
   bool? isNewUser;
 
   @override
   Future<void> onInit() async {
-    await getAllUserData();
+    await _getAllUserData();
     super.onInit();
   }
 
-  Future<void> getAllUserData() async {
+  Future<void> _getAllUserData() async {
     accessToken = await localRepository.getAccessToken();
     refreshToken = await localRepository.getRefreshToken();
     currentUser = await localRepository.getCurrentUser();
     isNewUser = await localRepository.getNewUser();
+    _setHeader();
   }
 
-  Future<void> setCurrentUser(User newUser) async {
+  void _setHeader() {
+    AuthorizationUtil.header = {
+      'accessToken': accessToken,
+      'refreshToken': refreshToken,
+      'id': currentUser?.id,
+    };
+  }
+
+  Future<void> handleSuccessLogin(
+    UserModel loggedUser,
+    String newAccessToken,
+    String newRefreshToken,
+  ) async {
+    await localRepository.setAllNewUserData(
+      newAccessToken,
+      newRefreshToken,
+      loggedUser.toJson(),
+    );
+
+    accessToken = newAccessToken;
+    refreshToken = newRefreshToken;
+    currentUser = loggedUser;
+    _setHeader();
+  }
+
+  Future<void> setCurrentUser(UserModel newUser) async {
     currentUser = newUser;
     await localRepository.setCurrentUser(newUser.toJson());
   }

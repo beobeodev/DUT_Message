@@ -1,7 +1,10 @@
 {
   "text": {
+    "name": "Tên",
     "username": "Tên đăng nhập",
+    "phone": "Số điện thoại",
     "password": "Mật khẩu",
+    "confirm_password": "Xác nhận mật khẩu",
     "warning": "Cảnh báo",
     "login": "Đăng nhập"
   },

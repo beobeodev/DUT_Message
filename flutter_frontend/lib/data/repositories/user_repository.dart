@@ -1,100 +1,71 @@
+import 'package:flutter_frontend/core/utils/authorization.util.dart';
 import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
-import 'package:flutter_frontend/data/models/friend_request.dart';
-import 'package:flutter_frontend/data/models/user.dart';
-import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
+import 'package:flutter_frontend/data/models/friend_request.model.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 
 class UserRepository {
-  final HiveLocalRepository localRepository;
+  UserRepository();
 
-  UserRepository({required this.localRepository});
-
-  Future<User> getUserByPhoneNumber(String phoneNumber) async {
+  Future<UserModel> getUserByPhoneNumber(String phoneNumber) async {
     final Map<String, String> body = {'phone': phoneNumber};
-
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
-    };
 
     final Map<String, dynamic> rawData = await DioProvider.post(
       url: '/user/find-by-phone',
       formBody: body,
-      headers: header,
+      headers: AuthorizationUtil.header,
     );
 
-    return User.fromJson(rawData);
+    return UserModel.fromJson(rawData);
   }
 
   Future<Map<String, dynamic>> checkAddFriendRequest(String toId) async {
     final Map<String, String> body = {'toId': toId};
 
-    final Map<String, String> header = {
-      'id': localRepository.currentUser!.id,
-    };
-
     final Map<String, dynamic> responseGetUser = await DioProvider.post(
       url: '/user/checkFriendRequest',
       formBody: body,
-      headers: header,
+      headers: AuthorizationUtil.header,
     );
 
     return responseGetUser;
   }
 
-  Future<List<FriendRequest>> getAddFriendRequests() async {
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
-    };
-
+  Future<List<FriendRequestModel>> getAddFriendRequests() async {
     final List<dynamic> rawData = await DioProvider.get(
       url: '/user/friend-request',
-      headers: header,
+      headers: AuthorizationUtil.header,
     );
 
-    final List<FriendRequest> result =
-        rawData.map((e) => FriendRequest.fromMap(e)).toList();
+    final List<FriendRequestModel> result =
+        rawData.map((e) => FriendRequestModel.fromMap(e)).toList();
     return result;
   }
 
-  Future<List<User>> getFriends() async {
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
-    };
-
+  Future<List<UserModel>> getFriends() async {
     final List<dynamic> rawData = await DioProvider.get(
       url: '/user/friends',
-      headers: header,
+      headers: AuthorizationUtil.header,
     );
 
-    final List<User> userFriends =
-        rawData.map((e) => User.fromJson(e)).toList();
+    final List<UserModel> userFriends =
+        rawData.map((e) => UserModel.fromJson(e)).toList();
 
     return userFriends;
   }
 
-  Future<Map<String, dynamic>> updateProfile(User newUser) async {
+  Future<Map<String, dynamic>> updateProfile(UserModel newUser) async {
     final Map<String, String> body = {
       'name': newUser.name,
       'avatar': newUser.avatar,
-      'email': newUser.email,
-    };
-
-    final Map<String, String> header = {
-      'accessToken': localRepository.accessToken!,
-      'refreshToken': localRepository.refreshToken!,
-      'id': localRepository.currentUser!.id,
+      'email': newUser.email ?? '',
     };
 
     final Map<String, dynamic> rawData = await DioProvider.post(
       url: '/user/update-info',
       formBody: body,
-      headers: header,
+      headers: AuthorizationUtil.header,
     );
+
     return rawData;
   }
 }

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/data/models/friend_request.dart';
+import 'package:flutter_frontend/data/models/friend_request.model.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
@@ -26,7 +26,7 @@ class AddFriendPage extends GetView<FriendController> {
                   hintText: 'Nhập số điện thoại cần tìm',
                   borderRadius: 50,
                   borderColor: Colors.white,
-                  suffixIconWidget: const Icon(
+                  suffixIcon: const Icon(
                     Icons.search,
                     color: Palette.red100,
                   ),
@@ -80,7 +80,7 @@ class AddFriendPage extends GetView<FriendController> {
             child: ListView.builder(
               itemCount: controller.addFriendRequests.length,
               itemBuilder: (context, index) {
-                final FriendRequest currentFriendRequest =
+                final FriendRequestModel currentFriendRequest =
                     controller.addFriendRequests[index];
                 return AddFriendRequestCard(
                   avatar: currentFriendRequest.avatar,

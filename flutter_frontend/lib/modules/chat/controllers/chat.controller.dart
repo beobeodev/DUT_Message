@@ -1,16 +1,24 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enums/message_type.enum.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/utils/encrypt_message.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/bottom_sheet_select/bottom_sheet_select.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/focus_menu/focus_menu.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/focus_menu/focus_menu_item.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
+import 'package:flutter_frontend/widgets/rounded_alert_dialog.widget.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class ChatController extends GetxController {
@@ -34,10 +42,10 @@ class ChatController extends GetxController {
 
   bool get isRoomConversation => currentConversation.isRoom;
 
-  final ScrollController scrollController = ScrollController();
+  final ScrollController messageScrollController = ScrollController();
   final TextEditingController inputTextController = TextEditingController();
 
-  late User friendUser;
+  late UserModel friendUser;
 
   @override
   void onInit() {
@@ -61,20 +69,22 @@ class ChatController extends GetxController {
   void onReady() {
     super.onReady();
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
-      if (scrollController.hasClients) {
-        scrollController.jumpTo(scrollController.position.maxScrollExtent);
+      if (messageScrollController.hasClients) {
+        messageScrollController
+            .jumpTo(messageScrollController.position.maxScrollExtent);
       }
     });
-    scrollController.jumpTo(scrollController.position.maxScrollExtent);
+    messageScrollController
+        .jumpTo(messageScrollController.position.maxScrollExtent);
     homeController.conversations.listen(
       (p0) {
         Timer(
           const Duration(milliseconds: 200),
           () => {
-            if (scrollController.hasClients)
+            if (messageScrollController.hasClients)
               {
-                scrollController
-                    .jumpTo(scrollController.position.maxScrollExtent)
+                messageScrollController
+                    .jumpTo(messageScrollController.position.maxScrollExtent)
               }
           },
         );
@@ -89,126 +99,99 @@ class ChatController extends GetxController {
   void onTapButtonSendMessage() {
     if (inputTextController.text != '') {
       if (isRoomConversation) {
-        emitSendRoomConversationMessage();
+        emitSendRoomConversationMessage(content: inputTextController.text);
       } else {
-        emitSendFriendConversationMessage();
+        emitSendFriendConversationMessage(content: inputTextController.text);
       }
       inputTextController.clear();
     }
   }
 
   void emitSendRoomConversationMessage({
-    bool isImg = false,
+    required String content,
+    String messageType = MessageType.text,
   }) {
     try {
-      final String encryptContent =
-          EncryptMessage.encryptAES(inputTextController.text);
+      final String encryptContent = EncryptMessage.encryptAES(content);
 
       rootController.socket.emit(SocketEvent.sendRoomMessage, {
         'roomId': currentConversation.id,
         'content': encryptContent,
         'fromUserId': authController.currentUser!.id,
-        'isImg': isImg,
+        'message_type': messageType,
       });
     } catch (e) {
-      log('ERROR in emitSendRoomMessage(): $e');
+      log('Error in emitSendRoomMessage(): $e');
     }
   }
 
   void emitSendFriendConversationMessage({
-    bool isImg = false,
+    required String content,
+    String messageType = MessageType.text,
   }) {
     try {
-      final String encryptContent =
-          EncryptMessage.encryptAES(inputTextController.text);
+      final String encryptContent = EncryptMessage.encryptAES(content);
 
       rootController.socket.emit(SocketEvent.sendConversationMessage, {
         'converId': currentConversation.id,
         'fromUserId': authController.currentUser!.id,
         'toUserId': friendUser.id,
         'content': encryptContent,
-        'isImg': isImg,
+        'message_type': messageType,
       });
     } catch (e) {
       log('Error in emitSendConversationMessage(): $e');
     }
   }
 
-  // Future<void> showFilePicker(FileType fileType) async {
-  //   final FilePickerResult? result =
-  //       await FilePicker.platform.pickFiles(type: fileType);
-  //   if (result != null) {
-  //     final File file = File(result.files.single.path!);
-  //     final int sizeInBytes = file.lengthSync();
-  //     final double sizeInMb = sizeInBytes / (1024 * 1024);
-  //     if (sizeInMb > 15) {
-  //       Get.dialog(
-  //         AlertDialog(
-  //           shape: RoundedRectangleBorder(
-  //             borderRadius: BorderRadius.circular(10),
-  //           ),
-  //           content: Wrap(
-  //             alignment: WrapAlignment.center,
-  //             crossAxisAlignment: WrapCrossAlignment.center,
-  //             direction: Axis.vertical,
-  //             children: [
-  //               Icon(
-  //                 FontAwesomeIcons.exclamationTriangle,
-  //                 color: Colors.yellow,
-  //                 size: ScreenUtil().setSp(72),
-  //               ),
-  //               const SizedBox(
-  //                 height: 20,
-  //               ),
-  //               Text(
-  //                 'Vui lòng chọn tệp có kích thước nhỏ hơn 15 MB!',
-  //                 style: TextStyle(
-  //                   fontFamily: FontFamily.fontNunito,
-  //                   color: Palette.zodiacBlue,
-  //                   fontWeight: FontWeight.w700,
-  //                   fontSize: ScreenUtil().setSp(25),
-  //                 ),
-  //                 textAlign: TextAlign.center,
-  //               )
-  //             ],
-  //           ),
-  //         ),
-  //       );
-  //     } else {
-  //       final String url =
-  //           await firebaseRepository.uploadToFireStorage(fileType, file);
-  //       if (isRoom) {
-  //         socketController.emitSendRoomConversationMessage(
-  //           roomId: currentConversation.id,
-  //           content: url,
-  //           isImg: true,
-  //         );
-  //       } else {
-  //         socketController.emitSendFriendConversationMessage(
-  //           conversationId: currentConversation.id,
-  //           fromId: localRepository.currentUser.id,
-  //           toId: friendUser.id,
-  //           content: url,
-  //           isImg: true,
-  //         );
-  //       }
-  //     }
-  //   }
-  // }
+  Future<void> showFilePicker(FileType fileType) async {
+    final FilePickerResult? result =
+        await FilePicker.platform.pickFiles(type: fileType);
 
-  // Future<void> showSelectModalBottom() async {
-  //   await showModalBottomSheet(
-  //     context: Get.context!,
-  //     barrierColor: Colors.black26,
-  //     backgroundColor: Colors.transparent,
-  //     isScrollControlled: true,
-  //     builder: (BuildContext context) {
-  //       return SelectBottomSheet(
-  //         onPressItem: showFilePicker,
-  //       );
-  //     },
-  //   );
-  // }
+    if (result != null) {
+      final File file = File(result.files.single.path!);
+      final int sizeInBytes = file.lengthSync();
+      final double sizeInMb = sizeInBytes / (1024 * 1024);
+
+      if (sizeInMb > 15) {
+        Get.dialog(
+          const RoundedAlertDialog(
+            icon: FontAwesomeIcons.exclamationTriangle,
+            iconColor: Colors.yellow,
+            content: 'Vui lòng chọn tệp có kích thước nhỏ hơn 15 MB!',
+          ),
+        );
+      } else {
+        final String url =
+            await firebaseRepository.uploadToFireStorage(fileType, file);
+        if (isRoomConversation) {
+          emitSendRoomConversationMessage(
+            content: url,
+            messageType: fileType.toString(),
+          );
+        } else {
+          emitSendFriendConversationMessage(
+            content: url,
+            messageType: fileType.toString(),
+          );
+        }
+      }
+    }
+  }
+
+  Future<void> showSelectModalBottom() async {
+    await showModalBottomSheet(
+      context: Get.context!,
+      barrierColor: Colors.black26,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return SelectBottomSheet(
+          onPressItem: showFilePicker,
+        );
+      },
+    );
+  }
 
   void openMenuChatScreen() {
     if (isRoomConversation) {
@@ -218,7 +201,6 @@ class ChatController extends GetxController {
     }
   }
 
-  // this function to handle event 'GỚ TIN NHẮN'
   void removeMessage(String messageId) {
     if (isRoomConversation) {
       sendRemoveRoomConversationMessage(
@@ -255,93 +237,66 @@ class ChatController extends GetxController {
     }
   }
 
-  //
-  // Future<void> onOpenFocusMenu(
-  //   GlobalKey testKey, {
-  //   bool isFile = false,
-  //   bool isSender = true,
-  //   String? urlDownload,
-  //   required String messageId,
-  // }) async {
-  //   Offset childOffset = const Offset(0, 0);
-  //   Size childSize;
-  //   final RenderBox renderBox =
-  //       testKey.currentContext?.findRenderObject() as RenderBox;
-  //   final Size size = renderBox.size;
-  //   final Offset offset = renderBox.localToGlobal(Offset.zero);
-  //   childOffset = Offset(offset.dx, offset.dy);
-  //   childSize = size;
+  Future<void> onOpenFocusMenu(
+    GlobalKey testKey, {
+    bool isFile = false,
+    bool isSender = true,
+    String? urlDownload,
+    required String messageId,
+  }) async {
+    final RenderBox renderBox =
+        testKey.currentContext?.findRenderObject() as RenderBox;
+    final Offset childOffset = renderBox.localToGlobal(Offset.zero);
 
-  //   const double menuWidth = 200;
-  //   const double menuHeight = 100;
+    final Size childSize = renderBox.size;
 
-  //   final leftMargin = (childOffset.dx + menuWidth) < ScreenUtil().screenWidth
-  //       ? childOffset.dx + 10
-  //       : (ScreenUtil().screenWidth - menuWidth - 20);
-  //   final topMargin = (childOffset.dy + menuHeight + childSize.height + 50) <
-  //           ScreenUtil().screenHeight
-  //       ? childOffset.dy + childSize.height + 8
-  //       : childOffset.dy - menuHeight;
+    const double menuWidth = 200;
+    const double menuHeight = 100;
 
-  //   await Navigator.of(Get.context!).push(
-  //     PageRouteBuilder(
-  //       transitionDuration: const Duration(milliseconds: 100),
-  //       barrierDismissible: true,
-  //       pageBuilder: (context, animation, secondaryAnimation) {
-  //         return FadeTransition(
-  //           opacity: animation,
-  //           child: FocusMenuDetail(
-  //             leftMargin: leftMargin,
-  //             topMargin: topMargin,
-  //             listFocusMenuItem: <FocusMenuItem>[
-  //               if (isSender)
-  //                 FocusMenuItem(
-  //                   title: Text(
-  //                     isSender ? 'Gỡ tin nhắn' : 'Xoá tin nhắn',
-  //                     style: TextStyle(
-  //                       color: Palette.zodiacBlue,
-  //                       fontFamily: FontFamily.fontNunito,
-  //                       fontSize: ScreenUtil().setSp(13),
-  //                     ),
-  //                   ),
-  //                   icon: const Icon(
-  //                     FontAwesomeIcons.trash,
-  //                     color: Colors.red,
-  //                     size: 18,
-  //                   ),
-  //                   onTapItem: () {
-  //                     removeMessage(messageId);
-  //                     Get.back();
-  //                   },
-  //                 ),
-  //               if (isFile)
-  //                 FocusMenuItem(
-  //                   title: Text(
-  //                     'Tải về',
-  //                     style: TextStyle(
-  //                       color: Palette.zodiacBlue,
-  //                       fontFamily: FontFamily.fontNunito,
-  //                       fontSize: ScreenUtil().setSp(13),
-  //                     ),
-  //                   ),
-  //                   icon: const Icon(
-  //                     FontAwesomeIcons.download,
-  //                     color: Palette.metallicViolet,
-  //                     size: 18,
-  //                   ),
-  //                   onTapItem: () async {
-  //                     await implementDownload(urlDownload);
-  //                   },
-  //                 ),
-  //             ],
-  //           ),
-  //         );
-  //       },
-  //       fullscreenDialog: true,
-  //       opaque: false,
-  //     ),
-  //   );
-  // }
+    final leftMargin = (childOffset.dx + menuWidth) < Get.width
+        ? childOffset.dx + 10
+        : (Get.width - menuWidth - 10);
+    final topMargin =
+        (childOffset.dy + menuHeight + childSize.height + 50) < Get.height
+            ? childOffset.dy + childSize.height + 8
+            : childOffset.dy - menuHeight;
+
+    await Navigator.of(Get.context!).push(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 100),
+        barrierDismissible: true,
+        pageBuilder: (context, animation, secondaryAnimation) {
+          return FadeTransition(
+            opacity: animation,
+            child: FocusMenu(
+              leftMargin: leftMargin,
+              topMargin: topMargin,
+              focusMenuItems: <FocusMenuItem>[
+                // if (isSender)
+                FocusMenuItem(
+                  title: isSender ? 'Gỡ tin nhắn' : 'Xoá tin nhắn',
+                  icon: FontAwesomeIcons.trash,
+                  onTapItem: () {
+                    removeMessage(messageId);
+                    Get.back();
+                  },
+                ),
+                if (isFile)
+                  FocusMenuItem(
+                    title: 'Tải về',
+                    icon: FontAwesomeIcons.download,
+                    onTapItem: () async {
+                      // await implementDownload(urlDownload);
+                    },
+                  ),
+              ],
+            ),
+          );
+        },
+        opaque: false,
+      ),
+    );
+  }
 
   // Future<bool> _requestPermissions() async {
   //   Permission permission = Permission.storage;

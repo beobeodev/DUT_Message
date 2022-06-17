@@ -1,12 +1,8 @@
 import 'package:flutter_frontend/core/constants/key_hive.dart';
-import 'package:flutter_frontend/data/models/user.dart';
+import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:hive/hive.dart';
 
 class HiveLocalRepository {
-  String? accessToken;
-  String? refreshToken;
-  User? currentUser;
-
   Box? _authBox;
 
   Future<Box> openAuthBox() async {
@@ -21,12 +17,6 @@ class HiveLocalRepository {
     return _authBox!;
   }
 
-  Future<void> getAllNewUserData() async {
-    accessToken = await getAccessToken();
-    refreshToken = await getRefreshToken();
-    currentUser = await getCurrentUser();
-  }
-
   Future<void> setAllNewUserData(
     String accessToken,
     String refreshToken,
@@ -36,10 +26,6 @@ class HiveLocalRepository {
     await atBox.put(KeyHive.accessToken, accessToken);
     await atBox.put(KeyHive.refreshToken, refreshToken);
     await atBox.put(KeyHive.currentUser, userData);
-
-    accessToken = accessToken;
-    refreshToken = refreshToken;
-    currentUser = User.fromJson(userData);
   }
 
   //
@@ -88,13 +74,13 @@ class HiveLocalRepository {
     await atBox.put(KeyHive.currentUser, data);
   }
 
-  Future<User?> getCurrentUser() async {
+  Future<UserModel?> getCurrentUser() async {
     final Box atBox = await authBox;
 
     if (atBox.get(KeyHive.currentUser) != null) {
       final Map<String, dynamic> userData =
           Map<String, dynamic>.from(atBox.get(KeyHive.currentUser));
-      return User.fromJson(userData);
+      return UserModel.fromJson(userData);
     }
     return null;
   }
