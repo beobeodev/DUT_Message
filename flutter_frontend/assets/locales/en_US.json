@@ -6,7 +6,8 @@
     "password": "Password",
     "confirm_password": "Confirm password",
     "warning": "Warning",
-    "login": "Login"
+    "login": "Login",
+    "skip": "Skip"
   },
   "error": {
     "incorrect_ip_password": "Incorrect username or password"

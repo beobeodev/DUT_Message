@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/core/theme/text_styles.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class PageItem extends StatelessWidget {
-  const PageItem({
+class OnboardPageItem extends StatelessWidget {
+  const OnboardPageItem({
     Key? key,
     required this.imagePath,
     required this.title,
@@ -19,34 +18,25 @@ class PageItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
       children: [
         Lottie.asset(
           imagePath,
           width: double.infinity,
         ),
         SizedBox(
-          height: ScreenUtil().setHeight(40),
+          height: 40.h,
         ),
         Text(
           title,
-          style: TextStyle(
-            fontFamily: FontFamily.fontPoppins,
-            fontWeight: FontWeight.w700,
-            color: Palette.zodiacBlue,
-            fontSize: ScreenUtil().setSp(22),
-          ),
+          style: TextStyles.largeBoldText.copyWith(fontSize: 28.sp),
         ),
         SizedBox(
-          height: ScreenUtil().setHeight(15),
+          height: 15.h,
         ),
         Text(
           content,
-          style: TextStyle(
-            fontFamily: FontFamily.fontNunito,
-            fontWeight: FontWeight.w700,
-            color: Palette.zodiacBlue,
-            fontSize: ScreenUtil().setSp(18),
-          ),
+          style: TextStyles.largeBoldText,
           textAlign: TextAlign.center,
         ),
       ],

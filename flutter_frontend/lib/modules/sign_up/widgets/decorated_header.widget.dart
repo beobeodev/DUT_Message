@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/constants/image_path.dart';
+import 'package:flutter_frontend/core/constants/asset_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -16,7 +16,7 @@ class DecoratedHeader extends StatelessWidget {
           width: double.infinity,
           height: 120.h,
           child: SvgPicture.asset(
-            ImagePath.profileSignUp,
+            AssetPath.profileSignUp,
             fit: BoxFit.fill,
           ),
         ),

@@ -21,18 +21,22 @@ class AddFriendPage extends GetView<FriendController> {
           children: [
             Expanded(
               child: Obx(
-                () => RoundedTextFormField(
-                  textController: controller.phoneTextController,
-                  hintText: 'Nhập số điện thoại cần tìm',
-                  borderRadius: 50,
-                  borderColor: Colors.white,
-                  suffixIcon: const Icon(
-                    Icons.search,
-                    color: Palette.red100,
+                () => Form(
+                  key: controller.formPhoneNumber,
+                  child: RoundedTextFormField(
+                    textController: controller.phoneTextController,
+                    hintText: 'Nhập số điện thoại cần tìm',
+                    borderRadius: 50,
+                    borderColor: Colors.white,
+                    suffixIcon: const Icon(
+                      Icons.search,
+                      color: Palette.red100,
+                    ),
+                    keyboardType: TextInputType.number,
+                    errorText: controller.errorPhoneNumber.value,
+                    onTap: controller.onTapPhoneField,
+                    validator: controller.validatePhoneNumber,
                   ),
-                  keyboardType: TextInputType.number,
-                  errorText: controller.errorPhoneNumber.value,
-                  onTap: controller.onTapPhoneField,
                 ),
               ),
             ),

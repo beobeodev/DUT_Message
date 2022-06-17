@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_frontend/core/constants/image_path.dart';
+import 'package:flutter_frontend/core/constants/asset_path.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
 import 'package:flutter_frontend/data/repositories/hive_local.repository.dart';
 import 'package:get/get.dart';
@@ -12,36 +12,29 @@ class OnboardController extends GetxController {
   //This is list data include of imagepath, title, content in onboard screen
   final List<Map<String, String>> pageData = [
     {
-      'imagePath': ImagePath.chatLottie,
+      'imagePath': AssetPath.chatLottie,
       'title': 'Trò chuyện',
       'content':
           'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
     },
     {
-      'imagePath': ImagePath.chatLottie,
-      'title': 'Trò chuyện',
-      'content':
-          'Với DUT Message, bạn có thể thỏa thích trò chuyện cùng bạn bè',
-    },
-    {
-      'imagePath': ImagePath.transitionLottie,
+      'imagePath': AssetPath.transitionLottie,
       'title': 'Trao đổi dữ liệu',
       'content':
           'Bên cạnh việc nhắn tin, trò chuyện cùng nhau, DUT Message còn cung cấp tính năng gửi dữ liệu như file, ảnh,...',
-    }
+    },
+    {
+      'imagePath': AssetPath.securityLottie,
+      'title': 'Bảo mật thôngtin',
+      'content':
+          'Tất cả thông tin cá nhân và tin nhắn của người dùng đều sẽ được mã hóa để tăng cường bảo mật',
+    },
   ];
 
   final PageController pageController = PageController();
 
   //This variable to store current index of PageView
-  late RxInt currentIndex;
-
-  //Init data
-  @override
-  void onInit() {
-    super.onInit();
-    currentIndex = 0.obs;
-  }
+  RxInt currentIndex = 0.obs;
 
   //This function to listen onchange pageview and to change index of page
   void onPageChange(int index) {

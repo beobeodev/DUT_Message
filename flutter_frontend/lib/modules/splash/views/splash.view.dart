@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/modules/splash/controllers/splash.controller.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/constants/image_path.dart';
+import 'package:flutter_frontend/core/constants/asset_path.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/modules/splash/widgets/dut_message_logo.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -40,7 +40,7 @@ class SplashScreen extends GetView<SplashController> {
                     decoration: const BoxDecoration(
                       image: DecorationImage(
                         image: AssetImage(
-                          ImagePath.dutLogo,
+                          AssetPath.dutLogo,
                         ),
                         fit: BoxFit.fill,
                       ),

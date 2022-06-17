@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/widgets/hero_popup_route.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
@@ -14,7 +15,6 @@ import 'package:flutter_frontend/data/models/friend_request.model.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
-import 'package:get/get.dart';
 
 class FriendController extends GetxController {
   final UserRepository userRepository;
@@ -36,6 +36,8 @@ class FriendController extends GetxController {
   final PageController pageController = PageController();
 
   final RxInt currentTabIndex = 0.obs;
+
+  final GlobalKey<FormState> formPhoneNumber = GlobalKey<FormState>();
 
   final RxList<FriendRequestModel> addFriendRequests =
       <FriendRequestModel>[].obs;
@@ -134,28 +136,35 @@ class FriendController extends GetxController {
     errorPhoneNumber.value = '';
   }
 
+  String? validatePhoneNumber(String? value) {
+    if (value == '') {
+      return 'Vui lòng nhập số điện thoại cần tìm';
+    } else if (value!.length != 10) {
+      return 'Số điện thoại không hợp lệ';
+    } else if (value == authController.currentUser!.phone) {
+      return 'Đây là số điện thoại của bạn';
+    }
+
+    return null;
+  }
+
   Future<void> onTapButtonFind() async {
     errorPhoneNumber.value = '';
-    if (phoneTextController.text == '') {
-      errorPhoneNumber.value = 'Vui lòng nhập số điện thoại cần tìm';
-      return;
-    } else if (phoneTextController.text.length != 10) {
-      errorPhoneNumber.value = 'Số điện thoại không hợp lệ';
-      return;
-    } else if (phoneTextController.text == authController.currentUser!.phone) {
-      errorPhoneNumber.value = 'Đây là số điện thoại của bạn';
-      return;
-    } else {
-      try {
-        final UserModel searchedUser =
-            await userRepository.getUserByPhoneNumber(phoneTextController.text);
-        await showPopup(searchedUser);
-      } on DioError catch (dioError) {
-        log('Error in onTapButtonFind() from Friend Controller: ${dioError.toString()}');
 
-        if (dioError.response?.statusCode == 404) {
-          errorPhoneNumber.value = 'Số điện thoại này chưa được đăng ký';
-        }
+    if (!formPhoneNumber.currentState!.validate()) {
+      return;
+    }
+
+    try {
+      final UserModel searchedUser =
+          await userRepository.getUserByPhoneNumber(phoneTextController.text);
+
+      await showPopup(searchedUser);
+    } on DioError catch (dioError) {
+      log('Error in onTapButtonFind() from Friend Controller: ${dioError.toString()}');
+
+      if (dioError.response?.statusCode == 404) {
+        errorPhoneNumber.value = 'Số điện thoại này chưa được đăng ký';
       }
     }
   }
@@ -203,6 +212,7 @@ class FriendController extends GetxController {
     } catch (e) {
       log('Error in emitAddFriend(): $e');
     }
+
     Get.back();
   }
 
@@ -212,6 +222,7 @@ class FriendController extends GetxController {
         'fromId': friendId,
         'toId': authController.currentUser!.id,
       });
+
       addFriendRequests.removeWhere((element) => element.fromId == friendId);
     } catch (e) {
       log('Error in onTapButtonAcceptAddFriendRequest(): $e');

@@ -7,7 +7,7 @@ class LoadingDot extends StatefulWidget {
   const LoadingDot({Key? key, this.size = 20}) : super(key: key);
 
   @override
-  _LoadingDotState createState() => _LoadingDotState();
+  State<LoadingDot> createState() => _LoadingDotState();
 }
 
 class _LoadingDotState extends State<LoadingDot> with TickerProviderStateMixin {

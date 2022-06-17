@@ -18,6 +18,7 @@ class LocaleKeys {
   static const text_confirm_password = 'text_confirm_password';
   static const text_warning = 'text_warning';
   static const text_login = 'text_login';
+  static const text_skip = 'text_skip';
   static const error_incorrect_ip_password = 'error_incorrect_ip_password';
 }
 
@@ -30,6 +31,7 @@ class Locales {
     'text_confirm_password': 'Confirm password',
     'text_warning': 'Warning',
     'text_login': 'Login',
+    'text_skip': 'Skip',
     'error_incorrect_ip_password': 'Incorrect username or password',
   };
   static const vi_VN = {
@@ -40,6 +42,7 @@ class Locales {
     'text_confirm_password': 'Xác nhận mật khẩu',
     'text_warning': 'Cảnh báo',
     'text_login': 'Đăng nhập',
+    'text_skip': 'Bỏ qua',
     'error_incorrect_ip_password': 'Sai tên đăng nhập hoặc mật khẩu',
   };
 }

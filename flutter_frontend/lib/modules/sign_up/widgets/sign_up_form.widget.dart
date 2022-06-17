@@ -13,6 +13,7 @@ class SignUpForm extends GetView<SignUpController> {
   @override
   Widget build(BuildContext context) {
     return Form(
+      key: controller.signUpFormKey,
       child: Obx(() {
         return Column(
           children: [
@@ -21,7 +22,7 @@ class SignUpForm extends GetView<SignUpController> {
               hintText: LocaleKeys.text_name.tr,
               prefixIcon: const Icon(
                 FontAwesomeIcons.user,
-                color: Palette.blue100,
+                color: Palette.blue200,
                 size: 18,
               ),
               validator: controller.validateName,
@@ -35,7 +36,7 @@ class SignUpForm extends GetView<SignUpController> {
               errorText: controller.errorUsername.value,
               prefixIcon: const Icon(
                 FontAwesomeIcons.user,
-                color: Palette.blue100,
+                color: Palette.blue200,
                 size: 18,
               ),
               validator: controller.validateUsername,
@@ -49,10 +50,23 @@ class SignUpForm extends GetView<SignUpController> {
               errorText: controller.errorPhoneNumber.value,
               prefixIcon: const Icon(
                 FontAwesomeIcons.phone,
-                color: Palette.blue100,
+                color: Palette.blue200,
                 size: 18,
               ),
               validator: controller.validatePhoneNumber,
+            ),
+            SizedBox(
+              height: 15.h,
+            ),
+            RoundedTextFormField(
+              textController: controller.emailTextController,
+              hintText: 'Email',
+              prefixIcon: const Icon(
+                FontAwesomeIcons.envelope,
+                color: Palette.blue200,
+                size: 18,
+              ),
+              validator: controller.validateEmail,
             ),
             SizedBox(
               height: 15.h,
@@ -62,18 +76,22 @@ class SignUpForm extends GetView<SignUpController> {
               hintText: LocaleKeys.text_password.tr,
               prefixIcon: const Icon(
                 FontAwesomeIcons.lock,
-                color: Palette.blue100,
+                color: Palette.blue200,
                 size: 18,
               ),
               suffixIcon: GestureDetector(
-                onTap: () {},
-                child: const Icon(
-                  FontAwesomeIcons.solidEyeSlash,
-                  color: Palette.gray300,
+                onTap: controller.changeShowPassword,
+                child: Icon(
+                  controller.showPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: controller.showPassword
+                      ? Palette.blue200
+                      : Palette.gray300,
                   size: 18,
                 ),
               ),
-              isObscure: true,
+              isObscure: !controller.showPassword,
               validator: controller.validatePassword,
             ),
             SizedBox(
@@ -84,18 +102,22 @@ class SignUpForm extends GetView<SignUpController> {
               hintText: LocaleKeys.text_confirm_password.tr,
               prefixIcon: const Icon(
                 FontAwesomeIcons.lock,
-                color: Palette.blue100,
+                color: Palette.blue200,
                 size: 18,
               ),
               suffixIcon: GestureDetector(
-                onTap: () {},
-                child: const Icon(
-                  FontAwesomeIcons.solidEyeSlash,
-                  color: Palette.gray300,
+                onTap: controller.changeShowConfirmPassword,
+                child: Icon(
+                  controller.showConfirmPassword
+                      ? Icons.visibility
+                      : Icons.visibility_off,
+                  color: controller.showConfirmPassword
+                      ? Palette.blue200
+                      : Palette.gray300,
                   size: 18,
                 ),
               ),
-              isObscure: true,
+              isObscure: !controller.showConfirmPassword,
               validator: controller.validateConfirmPassword,
             ),
           ],

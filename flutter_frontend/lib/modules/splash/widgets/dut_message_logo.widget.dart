@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/core/constants/image_path.dart';
+import 'package:flutter_frontend/core/constants/asset_path.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -55,7 +55,7 @@ class _DUTMessageLogoState extends State<DUTMessageLogo>
           width: ScreenUtil().setWidth(220),
           height: ScreenUtil().setWidth(210),
           child: SvgPicture.asset(
-            ImagePath.appLogo,
+            AssetPath.appLogo,
             fit: BoxFit.cover,
           ),
         ),

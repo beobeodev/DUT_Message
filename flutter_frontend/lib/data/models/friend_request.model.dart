@@ -19,8 +19,9 @@ class FriendRequestModel {
         fromId: data['from']['_id'],
         toId: data['to']['_id'],
         name: data['from']['name'],
-        avatar: data['from']['avatar'] == null || data['from']['avatar'] == ''
-            ? 'https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png'
-            : data['from']['avatar'],
+        avatar: data['from']['avatar'],
+        // avatar: data['from']['avatar'] == null || data['from']['avatar'] == ''
+        //     ? 'https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png'
+        //     : data['from']['avatar'],
       );
 }

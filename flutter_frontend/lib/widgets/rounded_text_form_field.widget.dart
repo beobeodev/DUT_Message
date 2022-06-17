@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
+import 'package:flutter_frontend/core/theme/text_styles.dart';
 
 class RoundedTextFormField extends StatelessWidget {
   final TextEditingController? textController;
 
   final bool isObscure;
+  final bool readOnly;
 
   final String? hintText;
   final String? errorText;
@@ -28,6 +30,7 @@ class RoundedTextFormField extends StatelessWidget {
     Key? key,
     this.textController,
     this.isObscure = false,
+    this.readOnly = false,
     this.hintText,
     this.errorText,
     this.borderRadius = 6,
@@ -44,12 +47,14 @@ class RoundedTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      // focusNode: focusNode,
       controller: textController,
       textInputAction: TextInputAction.done,
       onChanged: onChanged,
       onTap: onTap,
       validator: validator,
       obscureText: isObscure,
+      readOnly: readOnly,
       keyboardType: keyboardType,
       style: const TextStyle(
         fontFamily: FontFamily.fontNunito,
@@ -58,6 +63,11 @@ class RoundedTextFormField extends StatelessWidget {
       ),
       decoration: InputDecoration(
         hintText: hintText,
+        hintStyle: const TextStyle(
+          fontFamily: FontFamily.fontNunito,
+          color: Palette.gray300,
+          fontSize: 14,
+        ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(borderRadius),
           borderSide: BorderSide(
@@ -82,17 +92,15 @@ class RoundedTextFormField extends StatelessWidget {
             color: Colors.red,
           ),
         ),
-        hintStyle: const TextStyle(
-          fontFamily: FontFamily.fontNunito,
-          color: Palette.gray300,
-          fontSize: 14,
-        ),
+
+        // errorStyle: ,
         fillColor: fillColor,
         filled: true,
         contentPadding: const EdgeInsets.symmetric(horizontal: 20),
         suffixIcon: suffixIcon,
         prefixIcon: prefixIcon,
         errorText: errorText == '' || errorText == null ? null : errorText,
+        errorStyle: TextStyles.mediumRegularText.copyWith(color: Colors.red),
       ),
     );
   }

@@ -52,7 +52,7 @@ class TabNavigationBar extends GetView<FriendController> {
                         color: controller.currentTabIndex.value != index
                             ? Palette.blue300
                             : Colors.white,
-                        fontSize: ScreenUtil().setSp(17),
+                        fontSize: 17.sp,
                         fontFamily: FontFamily.fontNunito,
                         fontWeight: FontWeight.w700,
                       ),

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/theme/text_styles.dart';
+import 'package:flutter_frontend/generated/locales.g.dart';
 import 'package:flutter_frontend/modules/onboard/controllers/onboard.controller.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/onboard/widgets/page_item.widget.dart';
+import 'package:flutter_frontend/modules/onboard/widgets/onboard_page_item.widget.dart';
+import 'package:flutter_frontend/modules/onboard/widgets/row_arrow_button.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -25,49 +27,43 @@ class OnboardScreen extends GetView<OnboardController> {
             children: [
               Align(
                 alignment: Alignment.centerRight,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Palette.red200,
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: GestureDetector(
-                    onTap: controller.onSkip,
-                    child: SizedBox(
-                      width: 100.w,
-                      height: 50.h,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: [
-                          Text(
-                            'Skip',
-                            style: TextStyle(
-                              fontSize: 20.sp,
-                              color: Colors.white,
-                              fontFamily: FontFamily.fontPoppins,
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const Icon(
-                            FontAwesomeIcons.arrowRight,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ],
-                      ),
+                child: TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(
+                    fixedSize: Size(110.w, 40.h),
+                    minimumSize: Size(110.w, 40.h),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                     ),
+                    backgroundColor: Palette.red200,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        LocaleKeys.text_skip.tr,
+                        style: TextStyles.largeBoldText
+                            .copyWith(color: Colors.white),
+                      ),
+                      const Icon(
+                        FontAwesomeIcons.arrowRight,
+                        color: Colors.white,
+                        size: 16,
+                      ),
+                    ],
                   ),
                 ),
               ),
-              SizedBox(
-                height: ScreenUtil().setHeight(40),
-              ),
+              // SizedBox(
+              //   height: 40.h,
+              // ),
               Expanded(
                 child: PageView.builder(
                   itemCount: controller.pageData.length,
                   onPageChanged: controller.onPageChange,
                   controller: controller.pageController,
                   itemBuilder: (context, index) {
-                    return PageItem(
+                    return OnboardPageItem(
                       imagePath: controller.pageData[index]['imagePath']!,
                       title: controller.pageData[index]['title']!,
                       content: controller.pageData[index]['content']!,
@@ -78,56 +74,7 @@ class OnboardScreen extends GetView<OnboardController> {
               // const Expanded(
               //   child: SizedBox(),
               // ),
-              Obx(
-                () => Row(
-                  children: [
-                    Opacity(
-                      opacity: controller.currentIndex.value == 0 ? 0 : 1,
-                      child: GestureDetector(
-                        onTap: controller.currentIndex.value == 0
-                            ? () {}
-                            : controller.onBackPage,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            color: Palette.gray300,
-                            borderRadius: BorderRadius.circular(50),
-                          ),
-                          child: SizedBox(
-                            width: ScreenUtil().setWidth(50),
-                            height: ScreenUtil().setWidth(50),
-                            child: const Icon(
-                              FontAwesomeIcons.arrowLeft,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const Expanded(
-                      child: SizedBox(),
-                    ),
-                    GestureDetector(
-                      onTap: controller.currentIndex.value != 2
-                          ? controller.onNextPage
-                          : controller.onSkip,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          color: Palette.red200,
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: SizedBox(
-                          width: ScreenUtil().setWidth(50),
-                          height: ScreenUtil().setWidth(50),
-                          child: const Icon(
-                            FontAwesomeIcons.arrowRight,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
+              const RowArrowButton()
             ],
           ),
         ),

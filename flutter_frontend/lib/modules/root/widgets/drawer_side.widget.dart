@@ -23,9 +23,11 @@ class DrawerSide extends GetView<RootController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 30,
-                backgroundImage: NetworkImage(controller.currentUser.avatar),
+                backgroundImage: NetworkImage(
+                  'https://www.2checkout.com/docs/en/client_persons/Frank_Kong.png',
+                ),
               ),
               const SizedBox(
                 width: 15,
@@ -101,7 +103,7 @@ class DrawerSide extends GetView<RootController> {
                   ),
                   Expanded(
                     child: GestureDetector(
-                      onTap: () {},
+                      onTap: controller.onTapLogoutButton,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [

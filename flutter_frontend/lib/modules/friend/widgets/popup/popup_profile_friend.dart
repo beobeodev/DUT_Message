@@ -35,9 +35,7 @@ class PopUpProfileFriend extends GetView<FriendController> {
             children: [
               CircleAvatar(
                 backgroundImage: NetworkImage(
-                  infoFriend.avatar == ''
-                      ? 'https://www.zimlive.com/dating/wp-content/themes/gwangi/assets/images/avatars/user-avatar.png'
-                      : infoFriend.avatar,
+                  infoFriend.avatar,
                 ),
                 radius: 50,
               ),

@@ -1,16 +1,15 @@
 import 'dart:async';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_frontend/core/constants/font_family.dart';
-import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
 import 'package:flutter_frontend/data/repositories/user_repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_frontend/widgets/rounded_alert_dialog.widget.dart';
 import 'package:get/get.dart';
 
 class ProfileController extends GetxController {
@@ -32,7 +31,6 @@ class ProfileController extends GetxController {
 
   late Rx<UserModel> currentUser;
   final RxBool isUpdate = false.obs;
-  final RxBool isLoading = false.obs;
 
   final GlobalKey<FormState> profileFormKey = GlobalKey<FormState>();
 
@@ -59,6 +57,7 @@ class ProfileController extends GetxController {
     } else if (!value!.isEmail) {
       return 'Không đúng định dạng email';
     }
+
     return null;
   }
 
@@ -75,77 +74,53 @@ class ProfileController extends GetxController {
   Future<void> onTapAvatar() async {
     final FilePickerResult? result =
         await FilePicker.platform.pickFiles(type: FileType.image);
+
     if (result != null) {
-      isLoading.value = true;
       final File file = File(result.files.single.path!);
       final String url =
           await firebaseRepository.uploadToFireStorage(FileType.image, file);
-      isLoading.value = false;
+
       isUpdate.value = true;
+
       currentUser.update((val) {
         val!.avatar = url;
       });
     }
   }
 
-  Future<void> onTapUpdate() async {
+  Future<void> submitUpdateProfile() async {
     if (!profileFormKey.currentState!.validate()) {
       return;
-    } else {
-      Timer? timer;
-
-      isLoading.value = true;
-
-      await userRepository.updateProfile(currentUser.value);
-      isLoading.value = false;
-      if (true) {
-        await showDialog(
-          context: Get.context!,
-          builder: (BuildContext builderContext) {
-            timer = Timer(const Duration(milliseconds: 600), () {
-              Get.back();
-            });
-
-            return AlertDialog(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-              content: Wrap(
-                alignment: WrapAlignment.center,
-                runAlignment: WrapAlignment.center,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                direction: Axis.vertical,
-                children: [
-                  Icon(
-                    Icons.check,
-                    color: Colors.green,
-                    size: ScreenUtil().setSp(72),
-                  ),
-                  const SizedBox(
-                    height: 20,
-                  ),
-                  Text(
-                    'Thành công!',
-                    style: TextStyle(
-                      fontFamily: FontFamily.fontNunito,
-                      color: Palette.zodiacBlue,
-                      fontWeight: FontWeight.w700,
-                      fontSize: ScreenUtil().setSp(25),
-                    ),
-                    textAlign: TextAlign.center,
-                  )
-                ],
-              ),
-            );
-          },
-        ).then((val) {
-          if (timer!.isActive) {
-            timer!.cancel();
-          }
-        });
-        isUpdate.value = false;
-        await authController.setCurrentUser(currentUser.value);
-      }
     }
+
+    try {
+      await userRepository.updateProfile(currentUser.value);
+
+      await showSuccessDialog();
+      isUpdate.value = false;
+      await authController.setCurrentUser(currentUser.value);
+    } catch (e) {
+      log('Error in submitUpdateProfile() from ProfileController: $e');
+    }
+  }
+
+  Future<void> showSuccessDialog() async {
+    final Timer timer = Timer(const Duration(milliseconds: 600), () {
+      Get.back();
+    });
+
+    await showDialog(
+      context: Get.context!,
+      builder: (BuildContext builderContext) {
+        return const RoundedAlertDialog(
+          icon: Icons.check,
+          content: 'Cập nhật thành công!',
+        );
+      },
+    ).then((val) {
+      if (timer.isActive) {
+        timer.cancel();
+      }
+    });
   }
 }

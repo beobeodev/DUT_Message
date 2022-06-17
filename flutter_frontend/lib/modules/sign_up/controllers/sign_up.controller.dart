@@ -15,13 +15,21 @@ class SignUpController extends GetxController {
   final TextEditingController nameTextController = TextEditingController();
   final TextEditingController usernameTextController = TextEditingController();
   final TextEditingController phoneTextController = TextEditingController();
+  final TextEditingController emailTextController = TextEditingController();
   final TextEditingController passwordTextController = TextEditingController();
   final TextEditingController confirmPasswordTextController =
       TextEditingController();
 
   final RxString errorUsername = ''.obs;
   final RxString errorPhoneNumber = ''.obs;
-  final RxBool isLoading = false.obs;
+
+  final RxBool _isProcessing = false.obs;
+  bool get isProcessing => _isProcessing.value;
+
+  final RxBool _showPassword = false.obs;
+  bool get showPassword => _showPassword.value;
+  final RxBool _showConfirmPassword = false.obs;
+  bool get showConfirmPassword => _showConfirmPassword.value;
 
   final GlobalKey<FormState> signUpFormKey = GlobalKey<FormState>();
 
@@ -50,6 +58,13 @@ class SignUpController extends GetxController {
     return null;
   }
 
+  String? validateEmail(String? value) {
+    if (value == '') {
+      return 'Email không được để trống';
+    }
+    return null;
+  }
+
   String? validatePassword(String? value) {
     if (value == '') {
       return 'Mật khẩu không được để trống';
@@ -70,45 +85,34 @@ class SignUpController extends GetxController {
   }
 
   Future<void> onTapSignUpButton() async {
-    if (isLoading.value == true || !signUpFormKey.currentState!.validate()) {
+    if (isProcessing == true) {
       return;
     }
 
-    isLoading.value = true;
+    if (!signUpFormKey.currentState!.validate()) {
+      return;
+    }
+
+    _isProcessing.value = true;
 
     final Map<String, String> formBody = {
       'name': nameTextController.text,
       'username': usernameTextController.text,
       'phone': phoneTextController.text,
+      'email': emailTextController.text,
       'password': passwordTextController.text,
     };
     await handleSignUp(formBody);
 
-    isLoading.value = false;
+    _isProcessing.value = false;
   }
 
   Future<void> handleSignUp(Map<String, dynamic> formBody) async {
     try {
       await authRepository.signUp(formBody);
       // Show success dialog
-      Timer? timer;
-      await showDialog(
-        context: Get.context!,
-        builder: (BuildContext builderContext) {
-          timer = Timer(const Duration(milliseconds: 600), () {
-            Get.back();
-          });
+      await showSuccessDialog();
 
-          return const RoundedAlertDialog(
-            icon: Icons.check,
-            content: 'Đăng ký thành công!',
-          );
-        },
-      ).then((val) {
-        if (timer!.isActive) {
-          timer!.cancel();
-        }
-      });
       navigateToLoginScreen();
     } on DioError catch (dioError) {
       if (dioError.response?.statusCode == 400) {
@@ -122,8 +126,36 @@ class SignUpController extends GetxController {
     }
   }
 
+  Future<void> showSuccessDialog() async {
+    final Timer timer = Timer(const Duration(milliseconds: 600), () {
+      Get.back();
+    });
+
+    await showDialog(
+      context: Get.context!,
+      builder: (BuildContext builderContext) {
+        return const RoundedAlertDialog(
+          icon: Icons.check,
+          content: 'Đăng ký thành công!',
+        );
+      },
+    ).then((val) {
+      if (timer.isActive) {
+        timer.cancel();
+      }
+    });
+  }
+
   //This function to hide keyboard and unfocus textfield
   void onUnFocus() {
     FocusScope.of(Get.context!).requestFocus(FocusNode());
+  }
+
+  void changeShowPassword() {
+    _showPassword.value = !_showPassword.value;
+  }
+
+  void changeShowConfirmPassword() {
+    _showConfirmPassword.value = !_showConfirmPassword.value;
   }
 }

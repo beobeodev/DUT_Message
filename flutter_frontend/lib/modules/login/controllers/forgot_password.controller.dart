@@ -15,7 +15,7 @@ class ForgotPasswordController extends GetxController {
   final TextEditingController emailTextController = TextEditingController();
   final GlobalKey<FormState> forgotPasswordKey = GlobalKey<FormState>();
 
-  final RxBool isLoading = false.obs;
+  final RxBool isProcessing = false.obs;
   final RxString errorEmail = ''.obs;
 
   String? validateEmail(String? value) {
@@ -28,29 +28,21 @@ class ForgotPasswordController extends GetxController {
   }
 
   Future<void> onTapButtonGetPassword() async {
+    if (isProcessing.value == true) {
+      return;
+    }
+
+    if (!forgotPasswordKey.currentState!.validate()) {
+      return;
+    }
+
+    isProcessing.value = true;
+
     try {
       final Map<String, dynamic> formBody = {'email': emailTextController.text};
 
       await authRepository.forgotPassword(formBody);
-
-      Timer? timer;
-      await showDialog(
-        context: Get.context!,
-        builder: (BuildContext builderContext) {
-          timer = Timer(const Duration(milliseconds: 1000), () {
-            Get.back();
-          });
-
-          return const RoundedAlertDialog(
-            icon: Icons.check,
-            content: 'Kiểm tra email của bạn!',
-          );
-        },
-      ).then((val) {
-        if (timer!.isActive) {
-          timer!.cancel();
-        }
-      });
+      await showSuccessDialog();
 
       navigateToLoginScreen();
     } on DioError catch (dioError) {
@@ -58,9 +50,31 @@ class ForgotPasswordController extends GetxController {
         errorEmail.value = 'Email không tồn tại';
       }
     }
+
+    isProcessing.value = false;
   }
 
   void navigateToLoginScreen() {
     Get.offAndToNamed(RouteManager.login);
+  }
+
+  Future<void> showSuccessDialog() async {
+    final Timer timer = Timer(const Duration(milliseconds: 1000), () {
+      Get.back();
+    });
+
+    await showDialog(
+      context: Get.context!,
+      builder: (BuildContext builderContext) {
+        return const RoundedAlertDialog(
+          icon: Icons.check,
+          content: 'Kiểm tra email của bạn!',
+        );
+      },
+    ).then((val) {
+      if (timer.isActive) {
+        timer.cancel();
+      }
+    });
   }
 }

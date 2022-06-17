@@ -40,7 +40,7 @@ class LoginController extends GetxController {
     return null;
   }
 
-  void onUpdateShowPassword() {
+  void changeShowPassword() {
     showPassword.value = !showPassword.value;
   }
 
@@ -51,36 +51,38 @@ class LoginController extends GetxController {
   Future<void> onTapLoginButton() async {
     errorText.value = '';
 
-    if (isLoading.value || !loginFormKey.currentState!.validate()) {
+    if (isLoading.value) {
       return;
-    } else {
-      isLoading.value = true;
-      final Map<String, dynamic> formBody = {
-        'username': usernameTextController.text,
-        'password': passwordTextController.text
-      };
-
-      try {
-        final Map<String, dynamic> rawData =
-            await authRepository.login(formBody);
-
-        final UserModel loggedUser = UserModel.fromJson(rawData['user']);
-        await authController.handleSuccessLogin(
-          loggedUser,
-          rawData['accessToken'],
-          rawData['refreshToken'],
-        );
-
-        Get.offAllNamed(RouteManager.drawer);
-      } on DioError catch (dioError) {
-        log('Error in onTapLoginButton: ${dioError.response.toString()}');
-        if (dioError.response?.statusCode == 401) {
-          errorText.value = 'Sai tên đăng nhập hoặc mật khẩu';
-        }
-      } catch (e) {
-        log('Error in onTapLoginButton: ${e.toString()}');
-      }
-      isLoading.value = false;
     }
+    if (!loginFormKey.currentState!.validate()) {
+      return;
+    }
+
+    isLoading.value = true;
+    final Map<String, dynamic> formBody = {
+      'username': usernameTextController.text,
+      'password': passwordTextController.text
+    };
+
+    try {
+      final Map<String, dynamic> rawData = await authRepository.login(formBody);
+
+      final UserModel loggedUser = UserModel.fromJson(rawData['user']);
+      await authController.handleSuccessLogin(
+        loggedUser,
+        rawData['accessToken'],
+        rawData['refreshToken'],
+      );
+
+      Get.offAllNamed(RouteManager.drawer);
+    } on DioError catch (dioError) {
+      log('Error in onTapLoginButton: ${dioError.response.toString()}');
+      if (dioError.response?.statusCode == 401) {
+        errorText.value = 'Sai tên đăng nhập hoặc mật khẩu';
+      }
+    } catch (e) {
+      log('Error in onTapLoginButton: ${e.toString()}');
+    }
+    isLoading.value = false;
   }
 }

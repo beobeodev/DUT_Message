@@ -6,7 +6,8 @@
     "password": "Mật khẩu",
     "confirm_password": "Xác nhận mật khẩu",
     "warning": "Cảnh báo",
-    "login": "Đăng nhập"
+    "login": "Đăng nhập",
+    "skip": "Bỏ qua"
   },
   "error": {
     "incorrect_ip_password": "Sai tên đăng nhập hoặc mật khẩu"
