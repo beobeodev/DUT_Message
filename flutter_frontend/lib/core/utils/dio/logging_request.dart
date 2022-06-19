@@ -1,12 +1,19 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
+import 'package:flutter_frontend/core/utils/authorization.util.dart';
 
 class LoggingRequest extends Interceptor {
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {
     log('REQUEST[${options.method}] => PATH: ${options.path}');
-    return super.onRequest(options, handler);
+
+    options.headers.addAll(
+      AuthorizationUtil.header,
+    );
+
+    // options.headers
+    return handler.next(options);
   }
 
   @override

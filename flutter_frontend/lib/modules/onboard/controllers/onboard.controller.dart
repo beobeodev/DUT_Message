@@ -53,7 +53,7 @@ class OnboardController extends GetxController {
 
   //This function to skip intro
   Future<void> onSkip() async {
-    localRepository.setNewUser();
+    await localRepository.setNewUser();
     Get.offAllNamed(RouteManager.login);
   }
 }

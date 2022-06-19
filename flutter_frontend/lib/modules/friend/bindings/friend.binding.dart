@@ -1,4 +1,4 @@
-import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/injector.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';

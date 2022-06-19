@@ -2,9 +2,19 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
+import 'package:flutter_frontend/data/datasources/remote/file.datasource.dart';
 import 'package:path/path.dart';
 
-class FirebaseRepository {
+class FileRepository {
+  final FileRemoteDataSource fileRemoteDataSource;
+
+  FileRepository({required this.fileRemoteDataSource});
+
+  Future<HttpRequestResponse> downloadFile(String url) async {
+    return await fileRemoteDataSource.downloadFile(url);
+  }
+
   Future<String> uploadToFireStorage(FileType fileType, File file) async {
     UploadTask task;
     if (fileType == FileType.image) {

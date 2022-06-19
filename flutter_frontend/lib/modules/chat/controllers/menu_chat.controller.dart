@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
-import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/chat/controllers/chat.controller.dart';
 import 'package:flutter_frontend/modules/chat/widgets/menu_chat/create_room_conversation_sheet.widget.dart';

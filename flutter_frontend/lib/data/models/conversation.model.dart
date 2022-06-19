@@ -28,10 +28,12 @@ class ConversationModel {
           (json['userIns'] as List<dynamic>)
               .map((e) => UserModel.fromJson(e['userIn'])),
         ).toList(),
-        messages: List<MessageModel>.from(
-          (json['list_message'] as List<dynamic>)
-              .map((e) => MessageModel.fromJson(e)),
-        ).toList(),
+        messages: json['list_message'] == null
+            ? []
+            : List<MessageModel>.from(
+                (json['list_message'] as List<dynamic>)
+                    .map((e) => MessageModel.fromJson(e)),
+              ).toList(),
       );
 
   factory ConversationModel.fromJsonRoom(Map<String, dynamic> json) =>

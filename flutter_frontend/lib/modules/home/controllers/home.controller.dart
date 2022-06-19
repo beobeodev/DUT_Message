@@ -47,14 +47,18 @@ class HomeController extends GetxController {
   Future<void> getAllConversations() async {
     try {
       _getConversationsStatus.value = RequestStatus.loading;
+
       conversations.value = await conversationRepository.getAllConversations();
+
       _getConversationsStatus.value = RequestStatus.hasData;
     } on DioError catch (dioError) {
       _getConversationsStatus.value = RequestStatus.hasError;
+
       log('Error in getAllConversations() from HomeController ${dioError.response.toString()}');
       rethrow;
     } catch (e) {
       _getConversationsStatus.value = RequestStatus.hasError;
+
       log('Error in getAllConversations() from HomeController: ${e.toString()}');
       rethrow;
     }

@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_frontend/core/constants/enums/request_status.enum.dart';
 import 'package:get/get.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/widgets/hero_popup_route.dart';
@@ -13,7 +14,7 @@ import 'package:flutter_frontend/core/constants/enums/add_friend_status.enum.dar
 import 'package:flutter_frontend/core/router/route_manager.dart';
 import 'package:flutter_frontend/data/models/friend_request.model.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
-import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 
 class FriendController extends GetxController {
@@ -44,8 +45,19 @@ class FriendController extends GetxController {
   final RxList<UserModel> friends = <UserModel>[].obs;
   final RxList<UserModel> filteredFriends = <UserModel>[].obs;
 
+  final Rx<RequestStatus> _getDataStatus = RequestStatus.done.obs;
+  RequestStatus get getDataStatus => _getDataStatus.value;
+
+  @override
+  Future<void> onInit() async {
+    super.onInit();
+    await getData();
+  }
+
   Future<void> getData() async {
     try {
+      _getDataStatus.value = RequestStatus.loading;
+
       friends.value = await userRepository.getFriends();
       filteredFriends.value = friends;
       addFriendRequests.value = await userRepository.getAddFriendRequests();
@@ -55,14 +67,22 @@ class FriendController extends GetxController {
       onNotifyAcceptAddFriendRequest();
       onRemoveFriendRequest();
       onReceiveCancelFriend();
+
+      _getDataStatus.value = RequestStatus.hasData;
     } on DioError catch (dioError) {
+      _getDataStatus.value = RequestStatus.hasError;
+
       log('Error in getData() from Friend Controller: ${dioError.response.toString()}');
+      rethrow;
     } catch (e) {
+      _getDataStatus.value = RequestStatus.hasError;
+
       log('Error in getData() from Friend Controller: ${e.toString()}');
       rethrow;
     }
   }
 
+  //* Socket: on receive add friend request
   void onReceiveAddFriendRequest() {
     try {
       final String currentUserId = authController.currentUser!.id;
@@ -79,13 +99,15 @@ class FriendController extends GetxController {
     } catch (e) {
       log('Error in onReceiveAddFriendRequest(): $e');
     }
-  }
+  } //
 
+  //* Socket: on accept add friend request
   void onNotifyAcceptAddFriendRequest() {
     try {
       rootController.socket.on(SocketEvent.notifyAcceptAddFriendRequest,
           (data) {
         final UserModel user = UserModel.fromJson(data['infoFriend']);
+        // log(data['conver'].toString());
         final ConversationModel conversation =
             ConversationModel.fromJson(data['conver']);
         homeController.conversations.add(conversation);
@@ -94,8 +116,9 @@ class FriendController extends GetxController {
     } catch (e) {
       log('Error in notifyAcceptAddFriendRequest() $e');
     }
-  }
+  } //
 
+  //* Socket: on remove add friend request
   void onRemoveFriendRequest() {
     try {
       rootController.socket.on(SocketEvent.removeFriendRequest, (data) {
@@ -107,6 +130,7 @@ class FriendController extends GetxController {
     }
   }
 
+  //* Socket: on receive cancel friend
   void onReceiveCancelFriend() {
     try {
       rootController.socket.on(SocketEvent.receiveCancelFriend, (data) {
@@ -201,6 +225,7 @@ class FriendController extends GetxController {
     phoneTextController.clear();
   }
 
+  //* Socket: emit send add friend request
   void onTapButtonAddFriend(String friendId) {
     try {
       final String fromId = authController.currentUser!.id;
@@ -214,8 +239,9 @@ class FriendController extends GetxController {
     }
 
     Get.back();
-  }
+  } //
 
+  //* Socket: emit accept add friend request
   void onTapButtonAcceptAddFriendRequest(String friendId) {
     try {
       rootController.socket.emit(SocketEvent.acceptAddFriendRequest, {
@@ -227,8 +253,9 @@ class FriendController extends GetxController {
     } catch (e) {
       log('Error in onTapButtonAcceptAddFriendRequest(): $e');
     }
-  }
+  } //
 
+  //* Socket: emit refuse add friend request
   void onTapButtonRefuseAddFriendRequest(
     String friendRequestId,
     String friendId,
@@ -242,8 +269,9 @@ class FriendController extends GetxController {
     } catch (e) {
       log('Error in onTapButtonRefuseAddFriendRequest(): $e');
     }
-  }
+  } //
 
+  //* Socket: emit cancel friend
   void onTapButtonCancelFriend(String friendId) {
     Get.back();
     try {
@@ -276,19 +304,18 @@ class FriendController extends GetxController {
     );
   }
 
-  void onPressButtonChat(String friendId) {
+  void onTapButtonChat(String friendId) {
     Get.back();
     // final int indexConversation = homeController.listConversationAndRoom.indexWhere((element) => element.listUserIn.any((element) => element.id == friendId) && element.listUserIn.length == 2);
     Get.toNamed(
       RouteManager.chat,
-      arguments: [
-        homeController.conversations.firstWhere(
-          (element) =>
-              element.userIns.any((element) => element.id == friendId) &&
-              element.userIns.length == 2,
-        ),
-        false
-      ],
+      arguments: homeController.conversations
+          .firstWhere(
+            (element) =>
+                element.userIns.any((element) => element.id == friendId) &&
+                element.userIns.length == 2,
+          )
+          .id,
     );
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter_frontend/core/utils/authorization.util.dart';
 import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
 import 'package:flutter_frontend/data/models/friend_request.model.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
@@ -12,7 +11,7 @@ class UserRepository {
     final Map<String, dynamic> rawData = await DioProvider.post(
       url: '/user/find-by-phone',
       formBody: body,
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     return UserModel.fromJson(rawData);
@@ -24,7 +23,7 @@ class UserRepository {
     final Map<String, dynamic> responseGetUser = await DioProvider.post(
       url: '/user/checkFriendRequest',
       formBody: body,
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     return responseGetUser;
@@ -33,7 +32,7 @@ class UserRepository {
   Future<List<FriendRequestModel>> getAddFriendRequests() async {
     final List<dynamic> rawData = await DioProvider.get(
       url: '/user/friend-request',
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     final List<FriendRequestModel> result =
@@ -44,7 +43,7 @@ class UserRepository {
   Future<List<UserModel>> getFriends() async {
     final List<dynamic> rawData = await DioProvider.get(
       url: '/user/friends',
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     final List<UserModel> userFriends =
@@ -63,7 +62,7 @@ class UserRepository {
     final Map<String, dynamic> rawData = await DioProvider.post(
       url: '/user/update-info',
       formBody: body,
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     return rawData;

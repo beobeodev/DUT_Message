@@ -28,7 +28,7 @@ class OnboardScreen extends GetView<OnboardController> {
               Align(
                 alignment: Alignment.centerRight,
                 child: TextButton(
-                  onPressed: () {},
+                  onPressed: controller.onSkip,
                   style: TextButton.styleFrom(
                     fixedSize: Size(110.w, 40.h),
                     minimumSize: Size(110.w, 40.h),

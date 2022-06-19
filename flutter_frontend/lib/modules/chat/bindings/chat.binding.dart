@@ -1,5 +1,5 @@
-import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
-import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/data/repositories/file_repository.dart';
+import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/injector.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/chat/controllers/chat.controller.dart';
@@ -15,7 +15,7 @@ class ChatBinding implements Bindings {
     Get.lazyPut(
       () => ChatController(
         authController: Get.find<AuthController>(),
-        firebaseRepository: getIt.get<FirebaseRepository>(),
+        fileRepository: getIt.get<FileRepository>(),
         homeController: Get.find<HomeController>(),
         rootController: Get.find<RootController>(),
       ),

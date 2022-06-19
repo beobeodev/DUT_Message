@@ -1,4 +1,3 @@
-import 'package:flutter_frontend/core/utils/authorization.util.dart';
 import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/data/models/message.model.dart';
@@ -14,7 +13,7 @@ class ConversationRepository {
   Future<List<ConversationModel>> getFriendConversations() async {
     final List<dynamic> rawData = await DioProvider.get(
       url: '/conversation',
-      headers: AuthorizationUtil.header,
+      // headers: AuthorizationUtil.header,
     );
 
     final List<ConversationModel> result =
@@ -23,8 +22,10 @@ class ConversationRepository {
   }
 
   Future<List<ConversationModel>> getRoomConversations() async {
-    final List<dynamic> rawData =
-        await DioProvider.get(url: '/room', headers: AuthorizationUtil.header);
+    final List<dynamic> rawData = await DioProvider.get(
+      url: '/room',
+      // headers: AuthorizationUtil.header,
+    );
 
     final List<ConversationModel> result =
         rawData.map((e) => ConversationModel.fromJsonRoom(e)).toList();

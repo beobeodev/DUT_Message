@@ -5,8 +5,8 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
-import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
-import 'package:flutter_frontend/data/repositories/user_repository.dart';
+import 'package:flutter_frontend/data/repositories/file_repository.dart';
+import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:flutter_frontend/widgets/rounded_alert_dialog.widget.dart';
@@ -16,7 +16,7 @@ class ProfileController extends GetxController {
   final AuthController authController;
   final RootController rootController;
   final UserRepository userRepository;
-  final FirebaseRepository firebaseRepository;
+  final FileRepository firebaseRepository;
 
   ProfileController({
     required this.authController,

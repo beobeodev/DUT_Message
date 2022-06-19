@@ -15,21 +15,21 @@ import 'package:flutter_frontend/modules/chat/widgets/chat/focus_menu/focus_menu
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
-import 'package:flutter_frontend/data/repositories/firebase_repository.dart';
+import 'package:flutter_frontend/data/repositories/file_repository.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:flutter_frontend/widgets/rounded_alert_dialog.widget.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class ChatController extends GetxController {
-  final FirebaseRepository firebaseRepository;
+  final FileRepository fileRepository;
   final AuthController authController;
   final HomeController homeController;
   final RootController rootController;
 
   ChatController({
     required this.authController,
-    required this.firebaseRepository,
+    required this.fileRepository,
     required this.homeController,
     required this.rootController,
   });
@@ -120,6 +120,8 @@ class ChatController extends GetxController {
         'fromUserId': authController.currentUser!.id,
         'message_type': messageType,
       });
+
+      log(messageType);
     } catch (e) {
       log('Error in emitSendRoomMessage(): $e');
     }
@@ -163,16 +165,16 @@ class ChatController extends GetxController {
         );
       } else {
         final String url =
-            await firebaseRepository.uploadToFireStorage(fileType, file);
+            await fileRepository.uploadToFireStorage(fileType, file);
         if (isRoomConversation) {
           emitSendRoomConversationMessage(
             content: url,
-            messageType: fileType.toString(),
+            messageType: fileType.name,
           );
         } else {
           emitSendFriendConversationMessage(
             content: url,
-            messageType: fileType.toString(),
+            messageType: fileType.name,
           );
         }
       }
@@ -278,6 +280,7 @@ class ChatController extends GetxController {
                   icon: FontAwesomeIcons.trash,
                   onTapItem: () {
                     removeMessage(messageId);
+
                     Get.back();
                   },
                 ),
@@ -286,7 +289,9 @@ class ChatController extends GetxController {
                     title: 'Tải về',
                     icon: FontAwesomeIcons.download,
                     onTapItem: () async {
-                      // await implementDownload(urlDownload);
+                      await implementDownload(urlDownload!);
+
+                      Get.back();
                     },
                   ),
               ],
@@ -311,37 +316,18 @@ class ChatController extends GetxController {
   //   return check;
   // }
 
-  // Future<void> implementDownload(String? url) async {
-  //   try {
-  //     Directory? path;
-  //     if (Platform.isIOS) {
-  //       path = await getApplicationDocumentsDirectory();
-  //     } else {
-  //       path = await getExternalStorageDirectory();
-  //     }
-  //     // final String _localPath = '${_path.absolute.path}${Platform.pathSeparator}Download';
-  //     // final savedDir = Directory(_localPath);
-  //     // final bool hasExisted = await savedDir.exists();
-  //     // if (!hasExisted) {
-  //     //   savedDir.create();
-  //     // }
+  Future<void> implementDownload(String url) async {
+    try {
+      await fileRepository.downloadFile(url);
 
-  //     // print(savedDir.path);
-  //     final status = await Permission.storage.request();
-
-  //     if (status.isGranted) {
-  //       final String? taskId = await FlutterDownloader.enqueue(
-  //         url: url!,
-  //         savedDir: path!.path,
-  //         saveInPublicStorage: true,
-  //       );
-  //     } else {
-  //       print('Permission denied!');
-  //     }
-  //   } catch (e) {
-  //     print(e);
-  //   }
-  //   print('DOWNLOAD FILE SUCCESSFUL!!');
-  //   Get.back();
-  // }
+      Get.showSnackbar(
+        const GetSnackBar(
+          message: 'Lưu thành công',
+          snackPosition: SnackPosition.TOP,
+        ),
+      );
+    } catch (e) {
+      log('Error in implementDownload() from ChatController: $e');
+    }
+  }
 }

@@ -16,7 +16,7 @@
         </intent>
     </queries>
    <application
-        android:label="flutter_frontend"
+        android:label="DUT Message"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

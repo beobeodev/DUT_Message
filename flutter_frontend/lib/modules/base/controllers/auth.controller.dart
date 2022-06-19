@@ -24,6 +24,7 @@ class AuthController extends GetxController {
     refreshToken = await localRepository.getRefreshToken();
     currentUser = await localRepository.getCurrentUser();
     isNewUser = await localRepository.getNewUser();
+
     _setHeader();
   }
 
