@@ -148,7 +148,7 @@ class HomeController extends GetxController {
             .firstWhere((element) => element.id == data['converId']);
         final MessageModel messageTemp = conversationTemp.messages
             .firstWhere((element) => element.id == data['messageId']);
-        messageTemp.isDeleted = true;
+        messageTemp.deleted = true;
 
         final List<ConversationModel> listTemp = List.from(conversations);
         listTemp.removeWhere((element) => element.id == data['converId']);
@@ -172,7 +172,7 @@ class HomeController extends GetxController {
           (element) => element.id == data['messageId'],
         );
 
-        messageTemp.isDeleted = true;
+        messageTemp.deleted = true;
         final List<ConversationModel> listTemp = List.from(
           conversations,
         );

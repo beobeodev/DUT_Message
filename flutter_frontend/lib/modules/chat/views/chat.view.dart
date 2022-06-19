@@ -31,7 +31,9 @@ class ChatScreen extends GetView<ChatController> {
                   final bool isSender = currentMessage.author.id ==
                       controller.authController.currentUser!.id;
 
-                  if (controller.isRoomConversation && index == 0) {
+                  if (controller.isRoomConversation &&
+                      currentMessage.isNotify &&
+                      index == 0) {
                     return Align(
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 15),
@@ -41,7 +43,7 @@ class ChatScreen extends GetView<ChatController> {
                               ? 'Bạn đã tạo nhóm này'
                               : currentMessage.realContent,
                           style: TextStyle(
-                            fontSize: ScreenUtil().setSp(13),
+                            fontSize: 13.sp,
                             color: Palette.zodiacBlue,
                           ),
                         ),

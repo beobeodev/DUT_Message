@@ -54,7 +54,7 @@ class ConversationItem extends GetView<HomeController> {
       } else if (currentConversation.messageLength == 1 &&
           currentConversation.isRoom) {
         lastText = 'Bạn đã tạo nhóm này';
-      } else if (lastMessage.isDeleted) {
+      } else if (lastMessage.deleted) {
         lastText = 'Bạn đã gỡ một tin nhắn';
       } else {
         lastText = 'Bạn: ${lastMessage.realContent}';
@@ -65,7 +65,7 @@ class ConversationItem extends GetView<HomeController> {
           lastText = '${lastMessage.author.name}: đã gửi một tệp đính kèm';
         } else if (currentConversation.messageLength == 1) {
           lastText = '${lastMessage.author.name} đã tạo nhóm này';
-        } else if (lastMessage.isDeleted) {
+        } else if (lastMessage.deleted) {
           lastText = '${lastMessage.author.name}: đã gỡ một tin nhắn';
         } else {
           lastText = '${lastMessage.author.name}: ${lastMessage.realContent}';

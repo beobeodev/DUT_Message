@@ -42,7 +42,7 @@ class ChatItemContent extends StatelessWidget {
   }
 
   Widget _buildContentMessage() {
-    if (message.isDeleted) {
+    if (message.deleted) {
       return TextContent(message: message, isSender: isSender);
     }
 

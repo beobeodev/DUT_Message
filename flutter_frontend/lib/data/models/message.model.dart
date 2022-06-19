@@ -6,8 +6,8 @@ class MessageModel {
   UserModel author;
   String content;
   String messageType;
-  bool isDeleted;
-  bool? isNotify;
+  bool deleted;
+  bool isNotify;
   DateTime timeSend;
   List<String>? deleteBy;
 
@@ -16,14 +16,14 @@ class MessageModel {
     required this.author,
     required this.content,
     required this.messageType,
-    this.isDeleted = false,
+    this.deleted = false,
     this.isNotify = false,
     required this.timeSend,
     this.deleteBy,
   });
 
   String get realContent {
-    if (isDeleted) {
+    if (deleted) {
       return 'Đã gỡ tin nhắn';
     }
     if (!content.contains(' ')) {
@@ -38,8 +38,8 @@ class MessageModel {
       author: UserModel.fromJson(json['author']),
       content: json['content'] as String,
       messageType: json['message_type'] as String,
-      isDeleted: json['deleted'] as bool,
-      isNotify: json['isNotify'] as bool?,
+      deleted: json['deleted'] as bool,
+      isNotify: json['isNotify'] as bool,
       timeSend: DateTime.parse(json['createdAt'].toString()).toLocal(),
       deleteBy: (json['deleteBy'] as List<dynamic>?)
           ?.map((dynamic x) => x.toString())

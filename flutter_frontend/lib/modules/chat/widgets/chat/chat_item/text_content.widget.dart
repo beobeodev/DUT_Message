@@ -22,7 +22,7 @@ class TextContent extends StatelessWidget {
         horizontal: 15,
       ),
       decoration: BoxDecoration(
-        color: message.isDeleted
+        color: message.deleted
             ? Palette.gray300
             : (isSender ? Palette.blue300 : Colors.white),
         borderRadius: isSender
@@ -43,7 +43,7 @@ class TextContent extends StatelessWidget {
           fontWeight: FontWeight.w400,
           fontSize: 17.sp,
           fontFamily: FontFamily.fontNunito,
-          color: message.isDeleted
+          color: message.deleted
               ? Colors.white
               : (isSender ? Colors.white : Palette.zodiacBlue),
         ),

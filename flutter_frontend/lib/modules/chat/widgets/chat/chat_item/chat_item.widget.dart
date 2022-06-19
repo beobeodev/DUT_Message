@@ -49,7 +49,7 @@ class ChatItem extends GetView<ChatController> {
           child: GestureDetector(
             key: testKey,
             onLongPress: () {
-              if (!message.isDeleted) {
+              if (!message.deleted) {
                 controller.onOpenFocusMenu(
                   testKey,
                   isFile:
