@@ -1,34 +1,32 @@
-import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
+import 'package:flutter_frontend/data/datasources/remote/conversation.datasource.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/data/models/message.model.dart';
 // import 'package:http/http.dart' as http;
 
 class ConversationRepository {
-  // late List<ConversationModel> listConversation;
-  // late List<ConversationModel> listRoom;
-  // late List<ConversationModel> listConversationAndRoom;
+  final ConversationRemoteDataSource remoteDataSource;
 
-  ConversationRepository();
+  ConversationRepository({required this.remoteDataSource});
 
   Future<List<ConversationModel>> getFriendConversations() async {
-    final List<dynamic> rawData = await DioProvider.get(
-      url: '/conversation',
-      // headers: AuthorizationUtil.header,
-    );
+    final List<dynamic> getFriendConversationsResponse =
+        (await remoteDataSource.getFriendConversations()).data;
 
-    final List<ConversationModel> result =
-        rawData.map((e) => ConversationModel.fromJson(e)).toList();
+    final List<ConversationModel> result = getFriendConversationsResponse
+        .map((e) => ConversationModel.fromJson(e))
+        .toList();
+
     return result;
   }
 
   Future<List<ConversationModel>> getRoomConversations() async {
-    final List<dynamic> rawData = await DioProvider.get(
-      url: '/room',
-      // headers: AuthorizationUtil.header,
-    );
+    final List<dynamic> getRoomConversationsResponse =
+        (await remoteDataSource.getRoomConversations()).data;
 
-    final List<ConversationModel> result =
-        rawData.map((e) => ConversationModel.fromJsonRoom(e)).toList();
+    final List<ConversationModel> result = getRoomConversationsResponse
+        .map((e) => ConversationModel.fromJsonRoom(e))
+        .toList();
+
     return result;
   }
 

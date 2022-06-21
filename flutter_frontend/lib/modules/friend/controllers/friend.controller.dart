@@ -8,7 +8,7 @@ import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/widgets/hero_popup_route.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
-import 'package:flutter_frontend/modules/friend/widgets/popup/popup_profile_friend.dart';
+import 'package:flutter_frontend/modules/friend/widgets/popup/popup_profile_friend.widget.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
 import 'package:flutter_frontend/core/constants/enums/add_friend_status.enum.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';

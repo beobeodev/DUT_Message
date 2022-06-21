@@ -9,7 +9,7 @@ import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/utils/encrypt_message.dart';
 import 'package:flutter_frontend/data/models/conversation.model.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
-import 'package:flutter_frontend/modules/chat/widgets/chat/bottom_sheet_select/bottom_sheet_select.dart';
+import 'package:flutter_frontend/modules/chat/widgets/chat/bottom_sheet_select/bottom_sheet_select.widget.dart';
 import 'package:flutter_frontend/modules/chat/widgets/chat/focus_menu/focus_menu.dart';
 import 'package:flutter_frontend/modules/chat/widgets/chat/focus_menu/focus_menu_item.dart';
 import 'package:flutter_frontend/modules/home/controllers/home.controller.dart';
@@ -120,8 +120,6 @@ class ChatController extends GetxController {
         'fromUserId': authController.currentUser!.id,
         'message_type': messageType,
       });
-
-      log(messageType);
     } catch (e) {
       log('Error in emitSendRoomMessage(): $e');
     }

@@ -8,7 +8,7 @@ import 'package:flutter_frontend/data/models/user.model.dart';
 import 'package:flutter_frontend/data/repositories/user.repository.dart';
 import 'package:flutter_frontend/modules/base/controllers/auth.controller.dart';
 import 'package:flutter_frontend/modules/chat/controllers/chat.controller.dart';
-import 'package:flutter_frontend/modules/chat/widgets/menu_chat/create_room_conversation_sheet.widget.dart';
+import 'package:flutter_frontend/modules/chat/widgets/menu_chat/create_room_sheet.widget.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';
 import 'package:flutter_frontend/modules/root/controllers/root.controller.dart';
 import 'package:flutter_frontend/widgets/rounded_alert_dialog.widget.dart';

@@ -95,13 +95,18 @@ class ProfileController extends GetxController {
 
     try {
       await userRepository.updateProfile(currentUser.value);
-
+      // Update current user
+      await updateCurrentUser();
+      // Show success dialog
       await showSuccessDialog();
       isUpdate.value = false;
-      await authController.setCurrentUser(currentUser.value);
     } catch (e) {
       log('Error in submitUpdateProfile() from ProfileController: $e');
     }
+  }
+
+  Future<void> updateCurrentUser() async {
+    await authController.setCurrentUser(currentUser.value);
   }
 
   Future<void> showSuccessDialog() async {

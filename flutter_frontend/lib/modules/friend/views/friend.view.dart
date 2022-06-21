@@ -4,7 +4,7 @@ import 'package:flutter_frontend/core/theme/palette.dart';
 import 'package:flutter_frontend/modules/friend/controllers/friend.controller.dart';
 import 'package:flutter_frontend/modules/friend/widgets/add_friend/add_friend_page.widget.dart';
 import 'package:flutter_frontend/modules/friend/widgets/friend_page/list_friend_page.widget.dart';
-import 'package:flutter_frontend/modules/friend/widgets/tab_bar.dart';
+import 'package:flutter_frontend/modules/friend/widgets/tab_bar.widget.dart';
 import 'package:get/get.dart';
 
 class FriendScreen extends GetView<FriendController> {

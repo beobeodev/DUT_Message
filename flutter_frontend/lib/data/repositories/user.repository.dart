@@ -1,53 +1,46 @@
 import 'package:flutter_frontend/core/utils/dio/dio_provider.dart';
+import 'package:flutter_frontend/data/datasources/remote/user.datasource.dart';
 import 'package:flutter_frontend/data/models/friend_request.model.dart';
 import 'package:flutter_frontend/data/models/user.model.dart';
 
 class UserRepository {
-  UserRepository();
+  final UserRemoteDataSource remoteDataSource;
+
+  UserRepository({required this.remoteDataSource});
 
   Future<UserModel> getUserByPhoneNumber(String phoneNumber) async {
     final Map<String, String> body = {'phone': phoneNumber};
 
-    final Map<String, dynamic> rawData = await DioProvider.post(
-      url: '/user/find-by-phone',
-      formBody: body,
-      // headers: AuthorizationUtil.header,
-    );
+    final HttpRequestResponse requestResponse =
+        await remoteDataSource.getUserByPhoneNumber(body);
 
-    return UserModel.fromJson(rawData);
+    return UserModel.fromJson(requestResponse.data);
   }
 
   Future<Map<String, dynamic>> checkAddFriendRequest(String toId) async {
     final Map<String, String> body = {'toId': toId};
 
-    final Map<String, dynamic> responseGetUser = await DioProvider.post(
-      url: '/user/checkFriendRequest',
-      formBody: body,
-      // headers: AuthorizationUtil.header,
-    );
+    final HttpRequestResponse requestResponse =
+        await remoteDataSource.checkAddFriendRequest(body);
 
-    return responseGetUser;
+    return requestResponse.data;
   }
 
   Future<List<FriendRequestModel>> getAddFriendRequests() async {
-    final List<dynamic> rawData = await DioProvider.get(
-      url: '/user/friend-request',
-      // headers: AuthorizationUtil.header,
-    );
+    final List<dynamic> addFriendRequests =
+        (await remoteDataSource.getAddFriendRequests()).data;
 
     final List<FriendRequestModel> result =
-        rawData.map((e) => FriendRequestModel.fromMap(e)).toList();
+        addFriendRequests.map((e) => FriendRequestModel.fromMap(e)).toList();
     return result;
   }
 
   Future<List<UserModel>> getFriends() async {
-    final List<dynamic> rawData = await DioProvider.get(
-      url: '/user/friends',
-      // headers: AuthorizationUtil.header,
-    );
+    final List<dynamic> getFriendsReponse =
+        (await remoteDataSource.getFriends()).data;
 
     final List<UserModel> userFriends =
-        rawData.map((e) => UserModel.fromJson(e)).toList();
+        getFriendsReponse.map((e) => UserModel.fromJson(e)).toList();
 
     return userFriends;
   }
@@ -59,12 +52,9 @@ class UserRepository {
       'email': newUser.email ?? '',
     };
 
-    final Map<String, dynamic> rawData = await DioProvider.post(
-      url: '/user/update-info',
-      formBody: body,
-      // headers: AuthorizationUtil.header,
-    );
+    final HttpRequestResponse updateProfileResponse =
+        await remoteDataSource.updateProfile(body);
 
-    return rawData;
+    return updateProfileResponse.data;
   }
 }

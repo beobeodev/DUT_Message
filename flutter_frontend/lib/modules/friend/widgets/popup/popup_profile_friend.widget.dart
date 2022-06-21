@@ -4,9 +4,9 @@ import 'package:flutter_frontend/modules/friend/controllers/friend.controller.da
 import 'package:flutter_frontend/core/constants/enums/add_friend_status.enum.dart';
 import 'package:flutter_frontend/core/constants/font_family.dart';
 import 'package:flutter_frontend/core/theme/palette.dart';
-import 'package:flutter_frontend/modules/friend/widgets/popup/have_receive_content.dart';
-import 'package:flutter_frontend/modules/friend/widgets/popup/have_send_content.dart';
-import 'package:flutter_frontend/modules/friend/widgets/popup/is_friend_content.dart';
+import 'package:flutter_frontend/modules/friend/widgets/popup/have_receive_content.widget.dart';
+import 'package:flutter_frontend/modules/friend/widgets/popup/have_send_content.widget.dart';
+import 'package:flutter_frontend/modules/friend/widgets/popup/is_friend_content.widget.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 

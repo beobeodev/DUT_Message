@@ -23,35 +23,42 @@ class HttpRequestResponse {
 abstract class DioProvider {
   static final Dio _dio = Dio()..interceptors.add(LoggingRequest());
 
-  static Future<dynamic> get({
+  static Future<HttpRequestResponse> get({
     required String url,
     Map<String, dynamic>? queryParams,
-    Map<String, dynamic>? headers,
   }) async {
     final String endpoint = '${dotenv.env[KeyEnv.apiUrl]}$url';
+
     final Response response = await _dio.get(
       endpoint,
       queryParameters: queryParams,
-      options: Options(headers: headers),
     );
-    return response.data;
+
+    return HttpRequestResponse(
+      data: response.data,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+    );
   }
 
-  static Future<dynamic> post({
+  static Future<HttpRequestResponse> post({
     required String url,
     Map<String, dynamic>? formBody,
     Map<String, dynamic>? queryParams,
-    Map<String, dynamic>? headers,
   }) async {
     final String endpoint = '${dotenv.env['API_URL']}$url';
+
     final Response response = await _dio.post(
       endpoint,
       data: formBody,
       queryParameters: queryParams,
-      options: Options(headers: headers),
     );
 
-    return response.data;
+    return HttpRequestResponse(
+      data: response.data,
+      statusCode: response.statusCode,
+      statusMessage: response.statusMessage,
+    );
   }
 
   static Future<dynamic> patch({
