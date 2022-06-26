@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -83,8 +82,6 @@ abstract class DioProvider {
     } else {
       savedPath ??= (await getApplicationDocumentsDirectory()).path;
     }
-
-    log(savedPath);
 
     final Response response =
         await _dio.download(url, join(savedPath, fileName));

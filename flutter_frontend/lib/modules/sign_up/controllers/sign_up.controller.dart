@@ -85,6 +85,8 @@ class SignUpController extends GetxController {
   }
 
   Future<void> onTapSignUpButton() async {
+    FocusManager.instance.primaryFocus?.unfocus();
+
     if (isProcessing == true) {
       return;
     }

@@ -1,7 +1,7 @@
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_frontend/core/constants/enums/request_status.enum.dart';
 import 'package:flutter_frontend/core/constants/socket_event.dart';
 import 'package:flutter_frontend/core/router/route_manager.dart';
@@ -127,11 +127,13 @@ class HomeController extends GetxController {
             ConversationModel.fromJsonRoom(data);
         conversations.value = [roomConversation, ...conversations];
 
-        Get.offNamedUntil(
-          RouteManager.chat,
-          ModalRoute.withName(RouteManager.drawer),
-          arguments: roomConversation.id,
-        );
+        if (roomConversation.userIns[0].id == authController.currentUser!.id) {
+          Get.offNamedUntil(
+            RouteManager.chat,
+            ModalRoute.withName(RouteManager.drawer),
+            arguments: roomConversation.id,
+          );
+        }
       });
     } catch (e) {
       log('Error in onReceiveCreateRoomConversation(): $e');

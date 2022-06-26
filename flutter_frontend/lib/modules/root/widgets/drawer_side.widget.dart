@@ -23,10 +23,10 @@ class DrawerSide extends GetView<RootController> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const CircleAvatar(
+              CircleAvatar(
                 radius: 30,
                 backgroundImage: NetworkImage(
-                  'https://www.2checkout.com/docs/en/client_persons/Frank_Kong.png',
+                  controller.currentUser.avatar,
                 ),
               ),
               const SizedBox(

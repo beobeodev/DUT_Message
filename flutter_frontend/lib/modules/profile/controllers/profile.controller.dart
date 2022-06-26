@@ -34,6 +34,9 @@ class ProfileController extends GetxController {
 
   final GlobalKey<FormState> profileFormKey = GlobalKey<FormState>();
 
+  final RxBool _isUploadingAvatar = false.obs;
+  bool get isUploadingAvatar => _isUploadingAvatar.value;
+
   @override
   void onInit() {
     super.onInit();
@@ -76,6 +79,8 @@ class ProfileController extends GetxController {
         await FilePicker.platform.pickFiles(type: FileType.image);
 
     if (result != null) {
+      _isUploadingAvatar.value = true;
+
       final File file = File(result.files.single.path!);
       final String url =
           await firebaseRepository.uploadToFireStorage(FileType.image, file);
@@ -85,6 +90,8 @@ class ProfileController extends GetxController {
       currentUser.update((val) {
         val!.avatar = url;
       });
+
+      _isUploadingAvatar.value = false;
     }
   }
 

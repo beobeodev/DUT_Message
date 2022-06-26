@@ -287,9 +287,9 @@ class ChatController extends GetxController {
                     title: 'Tải về',
                     icon: FontAwesomeIcons.download,
                     onTapItem: () async {
-                      await implementDownload(urlDownload!);
-
                       Get.back();
+
+                      await implementDownload(urlDownload!);
                     },
                   ),
               ],
@@ -317,11 +317,11 @@ class ChatController extends GetxController {
   Future<void> implementDownload(String url) async {
     try {
       await fileRepository.downloadFile(url);
-
       Get.showSnackbar(
         const GetSnackBar(
           message: 'Lưu thành công',
           snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 2),
         ),
       );
     } catch (e) {
